@@ -60,5 +60,14 @@ namespace LibraryManagementSystem
                 login.Show();
             }
         }
+        private void lblWelcome_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblTotalMembers_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
