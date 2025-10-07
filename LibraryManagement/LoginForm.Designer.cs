@@ -5,7 +5,6 @@
         private System.ComponentModel.IContainer components = null;
         private Label lblTitle;
         private Label lblUser;
-        private Label lblPass;
         private TextBox txtUsername;
         private TextBox txtPassword;
         private Button btnLogin;
@@ -13,64 +12,96 @@
 
         private void InitializeComponent()
         {
-            this.lblTitle = new Label();
-            this.lblUser = new Label();
-            this.lblPass = new Label();
-            this.txtUsername = new TextBox();
-            this.txtPassword = new TextBox();
-            this.btnLogin = new Button();
-            this.btnExit = new Button();
-            this.SuspendLayout();
-
+            lblTitle = new Label();
+            lblUser = new Label();
+            txtUsername = new TextBox();
+            txtPassword = new TextBox();
+            btnLogin = new Button();
+            btnExit = new Button();
+            lblPass = new Label();
+            SuspendLayout();
+            // 
             // lblTitle
-            this.lblTitle.AutoSize = true;
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.Location = new System.Drawing.Point(80, 30);
-            this.lblTitle.Text = "Library Management System";
-
+            // 
+            lblTitle.AutoSize = true;
+            lblTitle.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            lblTitle.Location = new Point(12, 29);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(311, 30);
+            lblTitle.TabIndex = 0;
+            lblTitle.Text = "Library Management System";
+            lblTitle.Click += lblTitle_Click;
+            // 
             // lblUser
-            this.lblUser.AutoSize = true;
-            this.lblUser.Location = new System.Drawing.Point(50, 100);
-            this.lblUser.Text = "Username:";
-
-            // lblPass
-            this.lblPass.AutoSize = true;
-            this.lblPass.Location = new System.Drawing.Point(50, 140);
-            this.lblPass.Text = "Password:";
-
+            // 
+            lblUser.AutoSize = true;
+            lblUser.Location = new Point(9, 132);
+            lblUser.Name = "lblUser";
+            lblUser.Size = new Size(63, 15);
+            lblUser.TabIndex = 1;
+            lblUser.Text = "Username:";
+            // 
             // txtUsername
-            this.txtUsername.Location = new System.Drawing.Point(140, 100);
-            this.txtUsername.Width = 180;
-
+            // 
+            txtUsername.Location = new Point(78, 132);
+            txtUsername.Name = "txtUsername";
+            txtUsername.PlaceholderText = "username";
+            txtUsername.Size = new Size(180, 23);
+            txtUsername.TabIndex = 3;
+            // 
             // txtPassword
-            this.txtPassword.Location = new System.Drawing.Point(140, 140);
-            this.txtPassword.Width = 180;
-            this.txtPassword.PasswordChar = '*';
-
+            // 
+            txtPassword.Location = new Point(78, 175);
+            txtPassword.Name = "txtPassword";
+            txtPassword.PasswordChar = '*';
+            txtPassword.PlaceholderText = "password";
+            txtPassword.Size = new Size(180, 23);
+            txtPassword.TabIndex = 4;
+            // 
             // btnLogin
-            this.btnLogin.Text = "Login";
-            this.btnLogin.Location = new System.Drawing.Point(140, 190);
-            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
-
+            // 
+            btnLogin.Location = new Point(65, 256);
+            btnLogin.Name = "btnLogin";
+            btnLogin.Size = new Size(81, 39);
+            btnLogin.TabIndex = 5;
+            btnLogin.Text = "Login";
+            btnLogin.Click += btnLogin_Click;
+            // 
             // btnExit
-            this.btnExit.Text = "Exit";
-            this.btnExit.Location = new System.Drawing.Point(240, 190);
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
-
+            // 
+            btnExit.Location = new Point(165, 256);
+            btnExit.Name = "btnExit";
+            btnExit.Size = new Size(81, 39);
+            btnExit.TabIndex = 6;
+            btnExit.Text = "Exit";
+            btnExit.Click += btnExit_Click;
+            // 
+            // lblPass
+            // 
+            lblPass.AutoSize = true;
+            lblPass.Location = new Point(9, 178);
+            lblPass.Name = "lblPass";
+            lblPass.Size = new Size(60, 15);
+            lblPass.TabIndex = 2;
+            lblPass.Text = "Password:";
+            // 
             // LoginForm
-            this.ClientSize = new System.Drawing.Size(420, 260);
-            this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.lblUser);
-            this.Controls.Add(this.lblPass);
-            this.Controls.Add(this.txtUsername);
-            this.Controls.Add(this.txtPassword);
-            this.Controls.Add(this.btnLogin);
-            this.Controls.Add(this.btnExit);
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.Text = "Login";
-
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            // 
+            ClientSize = new Size(342, 411);
+            Controls.Add(lblTitle);
+            Controls.Add(lblUser);
+            Controls.Add(lblPass);
+            Controls.Add(txtUsername);
+            Controls.Add(txtPassword);
+            Controls.Add(btnLogin);
+            Controls.Add(btnExit);
+            Name = "LoginForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Login";
+            Load += LoginForm_Load;
+            ResumeLayout(false);
+            PerformLayout();
         }
+        private Label lblPass;
     }
 }
