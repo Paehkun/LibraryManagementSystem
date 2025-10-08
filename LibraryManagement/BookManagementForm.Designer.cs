@@ -15,6 +15,7 @@ namespace LibraryManagementSystem
         private Label lblTitle;
         private DataGridView dgvBooks;
 
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -33,12 +34,12 @@ namespace LibraryManagementSystem
             btnAddBook = new Button();
             rightPanel = new Panel();
             dgvBooks = new DataGridView();
+            lblTitle = new Label();
             dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn5 = new DataGridViewTextBoxColumn();
-            lblTitle = new Label();
             leftPanel.SuspendLayout();
             rightPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvBooks).BeginInit();
@@ -54,7 +55,7 @@ namespace LibraryManagementSystem
             leftPanel.Dock = DockStyle.Left;
             leftPanel.Location = new Point(0, 0);
             leftPanel.Name = "leftPanel";
-            leftPanel.Size = new Size(250, 1123);
+            leftPanel.Size = new Size(250, 1181);
             leftPanel.TabIndex = 1;
             // 
             // btnBack
@@ -109,7 +110,7 @@ namespace LibraryManagementSystem
             rightPanel.Dock = DockStyle.Fill;
             rightPanel.Location = new Point(250, 0);
             rightPanel.Name = "rightPanel";
-            rightPanel.Size = new Size(1758, 1123);
+            rightPanel.Size = new Size(1758, 1181);
             rightPanel.TabIndex = 0;
             // 
             // dgvBooks
@@ -117,48 +118,12 @@ namespace LibraryManagementSystem
             dgvBooks.AllowUserToAddRows = false;
             dgvBooks.AllowUserToDeleteRows = false;
             dgvBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvBooks.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn5 });
             dgvBooks.Location = new Point(283, 80);
             dgvBooks.Name = "dgvBooks";
             dgvBooks.ReadOnly = true;
             dgvBooks.RowHeadersVisible = false;
-            dgvBooks.Size = new Size(1133, 595);
+            dgvBooks.Size = new Size(1133, 872);
             dgvBooks.TabIndex = 0;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            dataGridViewTextBoxColumn1.FillWeight = 25.3807125F;
-            dataGridViewTextBoxColumn1.HeaderText = "No";
-            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            dataGridViewTextBoxColumn1.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            dataGridViewTextBoxColumn2.FillWeight = 118.654785F;
-            dataGridViewTextBoxColumn2.HeaderText = "Title";
-            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            dataGridViewTextBoxColumn2.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            dataGridViewTextBoxColumn3.FillWeight = 118.654785F;
-            dataGridViewTextBoxColumn3.HeaderText = "Author";
-            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            dataGridViewTextBoxColumn3.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            dataGridViewTextBoxColumn4.FillWeight = 118.654785F;
-            dataGridViewTextBoxColumn4.HeaderText = "Category";
-            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            dataGridViewTextBoxColumn4.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn5
-            // 
-            dataGridViewTextBoxColumn5.FillWeight = 118.654785F;
-            dataGridViewTextBoxColumn5.HeaderText = "Copies";
-            dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            dataGridViewTextBoxColumn5.ReadOnly = true;
             // 
             // lblTitle
             // 
@@ -169,9 +134,29 @@ namespace LibraryManagementSystem
             lblTitle.TabIndex = 1;
             lblTitle.Text = "📚 Book List";
             // 
+            // dataGridViewTextBoxColumn1
+            // 
+            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            // 
             // BookManagementForm
             // 
-            ClientSize = new Size(2008, 1123);
+            ClientSize = new Size(2008, 1181);
             Controls.Add(rightPanel);
             Controls.Add(leftPanel);
             Name = "BookManagementForm";
