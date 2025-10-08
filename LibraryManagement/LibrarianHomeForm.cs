@@ -21,7 +21,10 @@ namespace LibraryManagementSystem
 
         private void btnBookManagement_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Open Book Management Page");
+            BookManagementForm bookManagementForm = new BookManagementForm(username);
+            bookManagementForm.Show();
+
+            this.Hide();
         }
 
         private void btnBorrowReturn_Click(object sender, EventArgs e)
@@ -66,6 +69,11 @@ namespace LibraryManagementSystem
         }
 
         private void lblTotalMembers_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rightPanel_Paint(object sender, PaintEventArgs e)
         {
 
         }

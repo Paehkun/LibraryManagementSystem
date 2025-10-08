@@ -139,17 +139,17 @@
             // 
             // lblTotalBooks
             // 
-            lblTotalBooks.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblTotalBooks.Location = new Point(102, 83);
+            lblTotalBooks.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblTotalBooks.Location = new Point(208, 83);
             lblTotalBooks.Name = "lblTotalBooks";
-            lblTotalBooks.Size = new Size(132, 23);
+            lblTotalBooks.Size = new Size(157, 23);
             lblTotalBooks.TabIndex = 0;
             lblTotalBooks.Text = "📚 Total Books:";
             // 
             // lblTotalBooksValue
             // 
-            lblTotalBooksValue.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblTotalBooksValue.Location = new Point(102, 106);
+            lblTotalBooksValue.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblTotalBooksValue.Location = new Point(208, 106);
             lblTotalBooksValue.Name = "lblTotalBooksValue";
             lblTotalBooksValue.Size = new Size(100, 23);
             lblTotalBooksValue.TabIndex = 1;
@@ -157,17 +157,17 @@
             // 
             // lblBorrowedBooks
             // 
-            lblBorrowedBooks.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblBorrowedBooks.Location = new Point(357, 215);
+            lblBorrowedBooks.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblBorrowedBooks.Location = new Point(620, 256);
             lblBorrowedBooks.Name = "lblBorrowedBooks";
-            lblBorrowedBooks.Size = new Size(155, 23);
+            lblBorrowedBooks.Size = new Size(196, 23);
             lblBorrowedBooks.TabIndex = 2;
             lblBorrowedBooks.Text = "📖 Borrowed Books:";
             // 
             // lblBorrowedBooksValue
             // 
-            lblBorrowedBooksValue.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblBorrowedBooksValue.Location = new Point(357, 256);
+            lblBorrowedBooksValue.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblBorrowedBooksValue.Location = new Point(620, 291);
             lblBorrowedBooksValue.Name = "lblBorrowedBooksValue";
             lblBorrowedBooksValue.Size = new Size(100, 23);
             lblBorrowedBooksValue.TabIndex = 3;
@@ -175,17 +175,17 @@
             // 
             // lblLateReturnBooks
             // 
-            lblLateReturnBooks.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblLateReturnBooks.Location = new Point(102, 215);
+            lblLateReturnBooks.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblLateReturnBooks.Location = new Point(208, 256);
             lblLateReturnBooks.Name = "lblLateReturnBooks";
-            lblLateReturnBooks.Size = new Size(136, 23);
+            lblLateReturnBooks.Size = new Size(157, 23);
             lblLateReturnBooks.TabIndex = 4;
             lblLateReturnBooks.Text = "⏰ Late Return Books:";
             // 
             // lblLateReturnBooksValue
             // 
-            lblLateReturnBooksValue.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblLateReturnBooksValue.Location = new Point(102, 256);
+            lblLateReturnBooksValue.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblLateReturnBooksValue.Location = new Point(208, 291);
             lblLateReturnBooksValue.Name = "lblLateReturnBooksValue";
             lblLateReturnBooksValue.Size = new Size(100, 23);
             lblLateReturnBooksValue.TabIndex = 5;
@@ -193,18 +193,18 @@
             // 
             // lblTotalMembers
             // 
-            lblTotalMembers.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblTotalMembers.Location = new Point(357, 83);
+            lblTotalMembers.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblTotalMembers.Location = new Point(620, 83);
             lblTotalMembers.Name = "lblTotalMembers";
-            lblTotalMembers.Size = new Size(155, 23);
+            lblTotalMembers.Size = new Size(186, 23);
             lblTotalMembers.TabIndex = 6;
             lblTotalMembers.Text = "👥 Total Members:";
             lblTotalMembers.Click += lblTotalMembers_Click;
             // 
             // lblTotalMembersValue
             // 
-            lblTotalMembersValue.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblTotalMembersValue.Location = new Point(357, 106);
+            lblTotalMembersValue.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblTotalMembersValue.Location = new Point(620, 106);
             lblTotalMembersValue.Name = "lblTotalMembersValue";
             lblTotalMembersValue.Size = new Size(100, 23);
             lblTotalMembersValue.TabIndex = 7;
@@ -223,7 +223,7 @@
             leftPanel.Dock = DockStyle.Left;
             leftPanel.Location = new Point(0, 0);
             leftPanel.Name = "leftPanel";
-            leftPanel.Size = new Size(250, 500);
+            leftPanel.Size = new Size(250, 1181);
             leftPanel.TabIndex = 1;
             // 
             // rightPanel
@@ -240,16 +240,19 @@
             rightPanel.Dock = DockStyle.Fill;
             rightPanel.Location = new Point(250, 0);
             rightPanel.Name = "rightPanel";
-            rightPanel.Size = new Size(650, 500);
+            rightPanel.Size = new Size(1528, 1181);
             rightPanel.TabIndex = 0;
+            rightPanel.Paint += rightPanel_Paint;
             // 
             // LibrarianHomeForm
             // 
-            ClientSize = new Size(900, 500);
+            ClientSize = new Size(1778, 1181);
             Controls.Add(rightPanel);
             Controls.Add(leftPanel);
             Name = "LibrarianHomeForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Librarian Dashboard";
+            WindowState = FormWindowState.Maximized;
             leftPanel.ResumeLayout(false);
             rightPanel.ResumeLayout(false);
             ResumeLayout(false);

@@ -95,6 +95,9 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Library Management - Admin Dashboard";
             this.Load += new System.EventHandler(this.AdminHomeForm_Load);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.ResumeLayout(false);
         }
     }
