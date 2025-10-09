@@ -1,5 +1,6 @@
 ﻿using Npgsql;
 using System.Data;
+using System.Security.Policy;
 
 namespace LibraryManagementSystem
 {
@@ -19,7 +20,7 @@ namespace LibraryManagementSystem
             using (var conn = GetConnection())
             {
                 conn.Open();
-                string query = "SELECT id, title, author, category, copies FROM books ORDER BY id ASC";
+                string query = "SELECT id, title, author, isbn, category, publisher, year, copiesavailable, shelflocation FROM books ORDER BY id ASC";
                 using (var cmd = new NpgsqlCommand(query, conn))
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -29,18 +30,22 @@ namespace LibraryManagementSystem
             return dt;
         }
 
-        public static void AddBook(string title, string author, string category, int copies)
+        public static void AddBook(string title, string author, string isbn, string category, string publisher, int year, int copiesavailable, string shelflocation)
         {
             using (var conn = GetConnection())
             {
                 conn.Open();
-                string query = "INSERT INTO books (title, author, category, copies) VALUES (@title, @author, @category, @copies)";
+                string query = "INSERT INTO books (title, author, isbn, category, publisher, year, copiesavailable, shelflocation) VALUES (@title, @author, @isbn, @category, @publisher, @year, @copiesavailable, @shelflocation)";
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@title", title);
                     cmd.Parameters.AddWithValue("@author", author);
+                    cmd.Parameters.AddWithValue("@isbn", isbn);
                     cmd.Parameters.AddWithValue("@category", category);
-                    cmd.Parameters.AddWithValue("@copies", copies);
+                    cmd.Parameters.AddWithValue("@publisher", publisher);
+                    cmd.Parameters.AddWithValue("@year", year);
+                    cmd.Parameters.AddWithValue("@copiesavailable", copiesavailable);
+                    cmd.Parameters.AddWithValue("@shelflocation", shelflocation);
                     cmd.ExecuteNonQuery();
                 }
             }

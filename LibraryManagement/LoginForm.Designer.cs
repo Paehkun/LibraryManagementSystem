@@ -43,6 +43,7 @@
             // 
             // txtUsername
             // 
+            txtUsername.BackColor = Color.Beige;
             txtUsername.Location = new Point(78, 132);
             txtUsername.Name = "txtUsername";
             txtUsername.PlaceholderText = "username";
@@ -51,6 +52,7 @@
             // 
             // txtPassword
             // 
+            txtPassword.BackColor = Color.Beige;
             txtPassword.Location = new Point(78, 175);
             txtPassword.Name = "txtPassword";
             txtPassword.PasswordChar = '*';
@@ -60,20 +62,24 @@
             // 
             // btnLogin
             // 
+            btnLogin.BackColor = Color.White;
             btnLogin.Location = new Point(65, 256);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(81, 39);
             btnLogin.TabIndex = 5;
             btnLogin.Text = "Login";
+            btnLogin.UseVisualStyleBackColor = false;
             btnLogin.Click += btnLogin_Click;
             // 
             // btnExit
             // 
+            btnExit.BackColor = Color.White;
             btnExit.Location = new Point(165, 256);
             btnExit.Name = "btnExit";
             btnExit.Size = new Size(81, 39);
             btnExit.TabIndex = 6;
             btnExit.Text = "Exit";
+            btnExit.UseVisualStyleBackColor = false;
             btnExit.Click += btnExit_Click;
             // 
             // lblPass
@@ -87,6 +93,7 @@
             // 
             // LoginForm
             // 
+            BackColor = Color.PeachPuff;
             ClientSize = new Size(342, 411);
             Controls.Add(lblTitle);
             Controls.Add(lblUser);

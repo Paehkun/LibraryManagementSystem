@@ -212,7 +212,7 @@
             // 
             // leftPanel
             // 
-            leftPanel.BackColor = Color.LightSteelBlue;
+            leftPanel.BackColor = Color.Beige;
             leftPanel.Controls.Add(lblWelcome);
             leftPanel.Controls.Add(btnBookManagement);
             leftPanel.Controls.Add(btnMemberRecords);
@@ -228,7 +228,7 @@
             // 
             // rightPanel
             // 
-            rightPanel.BackColor = Color.WhiteSmoke;
+            rightPanel.BackColor = Color.PeachPuff;
             rightPanel.Controls.Add(lblTotalBooks);
             rightPanel.Controls.Add(lblTotalBooksValue);
             rightPanel.Controls.Add(lblBorrowedBooks);

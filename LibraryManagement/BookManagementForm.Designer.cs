@@ -40,6 +40,10 @@ namespace LibraryManagementSystem
             dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn5 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn6 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn7 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn8 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn9 = new DataGridViewTextBoxColumn();
             leftPanel.SuspendLayout();
             rightPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvBooks).BeginInit();
@@ -47,7 +51,7 @@ namespace LibraryManagementSystem
             // 
             // leftPanel
             // 
-            leftPanel.BackColor = Color.LightSteelBlue;
+            leftPanel.BackColor = Color.Beige;
             leftPanel.Controls.Add(btnBack);
             leftPanel.Controls.Add(btnDeleteBook);
             leftPanel.Controls.Add(btnEditBook);
@@ -60,51 +64,55 @@ namespace LibraryManagementSystem
             // 
             // btnBack
             // 
+            btnBack.BackColor = Color.White;
             btnBack.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnBack.Location = new Point(25, 280);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(200, 35);
             btnBack.TabIndex = 0;
             btnBack.Text = "⬅️ Back";
-            btnBack.UseVisualStyleBackColor = true;
+            btnBack.UseVisualStyleBackColor = false;
             btnBack.Click += btnBack_Click;
             // 
             // btnDeleteBook
             // 
+            btnDeleteBook.BackColor = Color.White;
             btnDeleteBook.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnDeleteBook.Location = new Point(25, 200);
             btnDeleteBook.Name = "btnDeleteBook";
             btnDeleteBook.Size = new Size(200, 40);
             btnDeleteBook.TabIndex = 1;
             btnDeleteBook.Text = "🗑️ Delete Book";
-            btnDeleteBook.UseVisualStyleBackColor = true;
+            btnDeleteBook.UseVisualStyleBackColor = false;
             btnDeleteBook.Click += btnDeleteBook_Click;
             // 
             // btnEditBook
             // 
+            btnEditBook.BackColor = Color.White;
             btnEditBook.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnEditBook.Location = new Point(25, 140);
             btnEditBook.Name = "btnEditBook";
             btnEditBook.Size = new Size(200, 40);
             btnEditBook.TabIndex = 2;
             btnEditBook.Text = "✏️ Edit Book";
-            btnEditBook.UseVisualStyleBackColor = true;
+            btnEditBook.UseVisualStyleBackColor = false;
             btnEditBook.Click += btnEditBook_Click;
             // 
             // btnAddBook
             // 
+            btnAddBook.BackColor = Color.White;
             btnAddBook.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnAddBook.Location = new Point(25, 80);
             btnAddBook.Name = "btnAddBook";
             btnAddBook.Size = new Size(200, 40);
             btnAddBook.TabIndex = 3;
             btnAddBook.Text = "➕ Add Book";
-            btnAddBook.UseVisualStyleBackColor = true;
+            btnAddBook.UseVisualStyleBackColor = false;
             btnAddBook.Click += btnAddBook_Click;
             // 
             // rightPanel
             // 
-            rightPanel.BackColor = Color.WhiteSmoke;
+            rightPanel.BackColor = Color.PeachPuff;
             rightPanel.Controls.Add(dgvBooks);
             rightPanel.Controls.Add(lblTitle);
             rightPanel.Dock = DockStyle.Fill;
@@ -112,17 +120,19 @@ namespace LibraryManagementSystem
             rightPanel.Name = "rightPanel";
             rightPanel.Size = new Size(1758, 1181);
             rightPanel.TabIndex = 0;
+            rightPanel.Paint += rightPanel_Paint;
             // 
             // dgvBooks
             // 
             dgvBooks.AllowUserToAddRows = false;
             dgvBooks.AllowUserToDeleteRows = false;
             dgvBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvBooks.Location = new Point(283, 80);
+            dgvBooks.BackgroundColor = Color.AntiqueWhite;
+            dgvBooks.Location = new Point(174, 80);
             dgvBooks.Name = "dgvBooks";
             dgvBooks.ReadOnly = true;
             dgvBooks.RowHeadersVisible = false;
-            dgvBooks.Size = new Size(1133, 872);
+            dgvBooks.Size = new Size(1356, 872);
             dgvBooks.TabIndex = 0;
             // 
             // lblTitle
@@ -154,6 +164,22 @@ namespace LibraryManagementSystem
             // 
             dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
             // 
+            // dataGridViewTextBoxColumn6
+            // 
+            dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            // 
+            // dataGridViewTextBoxColumn7
+            // 
+            dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+            // 
+            // dataGridViewTextBoxColumn8
+            // 
+            dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
+            // 
+            // dataGridViewTextBoxColumn9
+            // 
+            dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
+            // 
             // BookManagementForm
             // 
             ClientSize = new Size(2008, 1181);
@@ -174,5 +200,9 @@ namespace LibraryManagementSystem
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
     }
 }
