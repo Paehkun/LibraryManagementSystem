@@ -34,7 +34,10 @@ namespace LibraryManagementSystem
 
         private void btnMemberRecords_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Open Member Records Page");
+            MemberManagementForm memberManagementForm = new MemberManagementForm();
+            memberManagementForm.Show();
+
+            this.Hide();
         }
 
         private void btnBookCatalog_Click(object sender, EventArgs e)
