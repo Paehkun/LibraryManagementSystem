@@ -1,5 +1,7 @@
 ﻿using LibraryManagement;
+using Npgsql;
 using System;
+using System.Data;
 using System.Windows.Forms;
 
 namespace LibraryManagementSystem
@@ -7,6 +9,7 @@ namespace LibraryManagementSystem
     public partial class BookManagementForm : Form
     {
         private string username;
+        private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
         public BookManagementForm(string username)
         {
             InitializeComponent();
@@ -22,6 +25,7 @@ namespace LibraryManagementSystem
                 if (!string.IsNullOrEmpty(col.HeaderText))
                 {
                     col.HeaderText = char.ToUpper(col.HeaderText[0]) + col.HeaderText.Substring(1);
+                    col.HeaderCell.Style.Font = new Font(dgvBooks.Font, FontStyle.Bold);
                 }
             }
         }
@@ -72,20 +76,60 @@ namespace LibraryManagementSystem
         private void AdjustColumnWidths()
         {
             // Set specific widths for each column
-            dgvBooks.Columns[0].Width = 50;   // Book ID
-            dgvBooks.Columns[1].Width = 180;  // Title
-            dgvBooks.Columns[2].Width = 130;  // Author
-            dgvBooks.Columns[3].Width = 110;  // Isbn
-            dgvBooks.Columns[4].Width = 90;   //Category
-            dgvBooks.Columns[5].Width = 100;  // Publisher
-            dgvBooks.Columns[6].Width = 60;  //Year 
-            dgvBooks.Columns[7].Width = 70;  // CopiesAvail
-            dgvBooks.Columns[8].Width = 70;  //shelfloca
+            dgvBooks.Columns[0].Width = 30;   // Book ID
+            dgvBooks.Columns[1].Width = 150;  // Title
+            dgvBooks.Columns[2].Width = 90;  // Author
+            dgvBooks.Columns[3].Width = 70;  // Isbn
+            dgvBooks.Columns[4].Width = 70;   //Category
+            dgvBooks.Columns[5].Width = 80;  // Publisher
+            dgvBooks.Columns[6].Width = 40;  //Year 
+            dgvBooks.Columns[7].Width = 50;  // CopiesAvail
+            dgvBooks.Columns[8].Width = 80;  //shelfloca
         }
 
         private void rightPanel_Paint(object sender, PaintEventArgs e)
         {
 
         }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            string searchText = txtSearch.Text.Trim();
+
+            try
+            {
+                using (var conn = new NpgsqlConnection(connString))
+                {
+                    conn.Open();
+
+                    string query = @"SELECT id, title, author, isbn, category, publisher, year, copiesavailable, shelflocation 
+                             FROM books
+                             WHERE CAST(id AS TEXT) ILIKE @search
+                                OR title ILIKE @search
+                                OR author ILIKE @search
+                                OR isbn ILIKE @search
+                                OR category ILIKE @search
+                                OR publisher ILIKE @search
+                             ORDER BY id";
+
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@search", "%" + searchText + "%");
+
+                        using (var adapter = new NpgsqlDataAdapter(cmd))
+                        {
+                            var dt = new DataTable();
+                            adapter.Fill(dt);
+                            dgvBooks.DataSource = dt;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error searching: {ex.Message}");
+            }
+        }
+
     }
 }

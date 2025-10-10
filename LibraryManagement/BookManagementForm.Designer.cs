@@ -14,6 +14,7 @@ namespace LibraryManagementSystem
         private Button btnBack;
         private Label lblTitle;
         private DataGridView dgvBooks;
+        private TextBox textSearch;
 
 
         protected override void Dispose(bool disposing)
@@ -33,6 +34,7 @@ namespace LibraryManagementSystem
             btnEditBook = new Button();
             btnAddBook = new Button();
             rightPanel = new Panel();
+            txtSearch = new TextBox();
             dgvBooks = new DataGridView();
             lblTitle = new Label();
             dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
@@ -113,6 +115,7 @@ namespace LibraryManagementSystem
             // rightPanel
             // 
             rightPanel.BackColor = Color.PeachPuff;
+            rightPanel.Controls.Add(txtSearch);
             rightPanel.Controls.Add(dgvBooks);
             rightPanel.Controls.Add(lblTitle);
             rightPanel.Dock = DockStyle.Fill;
@@ -122,13 +125,22 @@ namespace LibraryManagementSystem
             rightPanel.TabIndex = 0;
             rightPanel.Paint += rightPanel_Paint;
             // 
+            // txtSearch
+            // 
+            txtSearch.Location = new Point(174, 91);
+            txtSearch.Name = "txtSearch";
+            txtSearch.PlaceholderText = "Search Book 🔍";
+            txtSearch.Size = new Size(246, 23);
+            txtSearch.TabIndex = 2;
+            txtSearch.TextChanged += txtSearch_TextChanged;
+            // 
             // dgvBooks
             // 
             dgvBooks.AllowUserToAddRows = false;
             dgvBooks.AllowUserToDeleteRows = false;
             dgvBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvBooks.BackgroundColor = Color.AntiqueWhite;
-            dgvBooks.Location = new Point(174, 80);
+            dgvBooks.Location = new Point(174, 140);
             dgvBooks.Name = "dgvBooks";
             dgvBooks.ReadOnly = true;
             dgvBooks.RowHeadersVisible = false;
@@ -192,6 +204,7 @@ namespace LibraryManagementSystem
             Load += BookManagementForm_Load;
             leftPanel.ResumeLayout(false);
             rightPanel.ResumeLayout(false);
+            rightPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvBooks).EndInit();
             ResumeLayout(false);
         }
@@ -204,5 +217,7 @@ namespace LibraryManagementSystem
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
+        private Button button1;
+        private TextBox txtSearch;
     }
 }
