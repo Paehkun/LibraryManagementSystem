@@ -30,6 +30,22 @@ namespace LibraryManagementSystem
             return dt;
         }
 
+        public static DataTable GetAllMembers()
+        {
+            DataTable dt = new DataTable();
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                string query = "SELECT memberid, name, email, phone, address, membershipdate FROM member ORDER BY memberid ASC";
+                using (var cmd = new NpgsqlCommand(query, conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    dt.Load(reader);
+                }
+            }
+            return dt;
+        }
+
         public static void AddBook(string title, string author, string isbn, string category, string publisher, int year, int copiesavailable, string shelflocation)
         {
             using (var conn = GetConnection())

@@ -75,5 +75,10 @@ namespace LibraryManagement
         {
 
         }
+
+        private void txtTitle_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -18,20 +18,6 @@ namespace LibraryManagementSystem
         private DataGridView dgvMembers;
         private TextBox txtSearch;
 
-        // New Labels and TextBoxes
-        private Label lblMemberID;
-        private TextBox txtMemberID;
-        private Label lblName;
-        private TextBox txtName;
-        private Label lblEmail;
-        private TextBox txtEmail;
-        private Label lblPhone;
-        private TextBox txtPhone;
-        private Label lblAddress;
-        private TextBox txtAddress;
-        private Label lblMembershipDate;
-        private TextBox txtMembershipDate;
-
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -53,26 +39,15 @@ namespace LibraryManagementSystem
             dgvMembers = new DataGridView();
             lblTitle = new Label();
 
-            // New Label and TextBox objects
-            lblMemberID = new Label();
-            txtMemberID = new TextBox();
-            lblName = new Label();
-            txtName = new TextBox();
-            lblEmail = new Label();
-            txtEmail = new TextBox();
-            lblPhone = new Label();
-            txtPhone = new TextBox();
-            lblAddress = new Label();
-            txtAddress = new TextBox();
-            lblMembershipDate = new Label();
-            txtMembershipDate = new TextBox();
-
-            colMemberID = new DataGridViewTextBoxColumn();
-            colName = new DataGridViewTextBoxColumn();
-            colEmail = new DataGridViewTextBoxColumn();
-            colPhone = new DataGridViewTextBoxColumn();
-            colAddress = new DataGridViewTextBoxColumn();
-            colMembershipDate = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn5 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn6 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn7 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn8 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn9 = new DataGridViewTextBoxColumn();
 
             leftPanel.SuspendLayout();
             rightPanel.SuspendLayout();
@@ -128,18 +103,6 @@ namespace LibraryManagementSystem
             // rightPanel
             // 
             rightPanel.BackColor = Color.PeachPuff;
-            rightPanel.Controls.Add(lblMemberID);
-            rightPanel.Controls.Add(txtMemberID);
-            rightPanel.Controls.Add(lblName);
-            rightPanel.Controls.Add(txtName);
-            rightPanel.Controls.Add(lblEmail);
-            rightPanel.Controls.Add(txtEmail);
-            rightPanel.Controls.Add(lblPhone);
-            rightPanel.Controls.Add(txtPhone);
-            rightPanel.Controls.Add(lblAddress);
-            rightPanel.Controls.Add(txtAddress);
-            rightPanel.Controls.Add(lblMembershipDate);
-            rightPanel.Controls.Add(txtMembershipDate);
             rightPanel.Controls.Add(txtSearch);
             rightPanel.Controls.Add(dgvMembers);
             rightPanel.Controls.Add(lblTitle);
@@ -164,48 +127,6 @@ namespace LibraryManagementSystem
             txtSearch.Size = new Size(246, 23);
             txtSearch.PlaceholderText = "Search Member 🔍";
             txtSearch.TextChanged += txtSearch_TextChanged;
-
-            // 
-            // Labels and TextBoxes for Member Info
-            // 
-            int labelX = 500, textX = 630, startY = 60, gapY = 40;
-
-            lblMemberID.Location = new Point(labelX, startY);
-            lblMemberID.Text = "Member ID:";
-            lblMemberID.Size = new Size(120, 23);
-            txtMemberID.Location = new Point(textX, startY);
-            txtMemberID.Size = new Size(200, 23);
-
-            lblName.Location = new Point(labelX, startY + gapY);
-            lblName.Text = "Name:";
-            lblName.Size = new Size(120, 23);
-            txtName.Location = new Point(textX, startY + gapY);
-            txtName.Size = new Size(200, 23);
-
-            lblEmail.Location = new Point(labelX, startY + 2 * gapY);
-            lblEmail.Text = "Email:";
-            lblEmail.Size = new Size(120, 23);
-            txtEmail.Location = new Point(textX, startY + 2 * gapY);
-            txtEmail.Size = new Size(200, 23);
-
-            lblPhone.Location = new Point(labelX, startY + 3 * gapY);
-            lblPhone.Text = "Phone:";
-            lblPhone.Size = new Size(120, 23);
-            txtPhone.Location = new Point(textX, startY + 3 * gapY);
-            txtPhone.Size = new Size(200, 23);
-
-            lblAddress.Location = new Point(labelX, startY + 4 * gapY);
-            lblAddress.Text = "Address:";
-            lblAddress.Size = new Size(120, 23);
-            txtAddress.Location = new Point(textX, startY + 4 * gapY);
-            txtAddress.Size = new Size(200, 23);
-
-            lblMembershipDate.Location = new Point(labelX, startY + 5 * gapY);
-            lblMembershipDate.Text = "Membership Date:";
-            lblMembershipDate.Size = new Size(130, 23);
-            txtMembershipDate.Location = new Point(textX, startY + 5 * gapY);
-            txtMembershipDate.Size = new Size(200, 23);
-
             // 
             // dgvMembers
             // 
@@ -213,38 +134,48 @@ namespace LibraryManagementSystem
             dgvMembers.AllowUserToDeleteRows = false;
             dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvMembers.BackgroundColor = Color.AntiqueWhite;
-            dgvMembers.Location = new Point(174, 320);
-            dgvMembers.Name = "dgvMembers";
+            dgvMembers.Location = new Point(174, 140);
+            dgvMembers.Name = "dgvBooks";
             dgvMembers.ReadOnly = true;
             dgvMembers.RowHeadersVisible = false;
-            dgvMembers.Size = new Size(1356, 700);
-            dgvMembers.Columns.AddRange(new DataGridViewColumn[] {
-                colMemberID,
-                colName,
-                colEmail,
-                colPhone,
-                colAddress,
-                colMembershipDate
-            });
+            dgvMembers.Size = new Size(1356, 872);
+            dgvMembers.TabIndex = 0;
             // 
-            // dtpMembershipDate
+            // dataGridViewTextBoxColumn1
             // 
-            dtpMembershipDate = new DateTimePicker();
-            dtpMembershipDate.Location = new Point(174, 210);   // adjust X,Y position as you like
-            dtpMembershipDate.Size = new Size(246, 23);
-            dtpMembershipDate.Format = DateTimePickerFormat.Short;
-            rightPanel.Controls.Add(dtpMembershipDate);
-
+            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             // 
-            // DataGridView Columns
+            // dataGridViewTextBoxColumn2
             // 
-            colMemberID.HeaderText = "Member ID";
-            colName.HeaderText = "Name";
-            colEmail.HeaderText = "Email";
-            colPhone.HeaderText = "Phone";
-            colAddress.HeaderText = "Address";
-            colMembershipDate.HeaderText = "Membership Date";
-
+            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            // 
+            // dataGridViewTextBoxColumn7
+            // 
+            dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+            // 
+            // dataGridViewTextBoxColumn8
+            // 
+            dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
+            // 
+            // dataGridViewTextBoxColumn9
+            // 
+            dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
             // 
             // MemberManagementForm
             // 
@@ -256,7 +187,6 @@ namespace LibraryManagementSystem
             Text = "Library Management - Member Management";
             WindowState = FormWindowState.Maximized;
             Load += MemberManagementForm_Load;
-
             leftPanel.ResumeLayout(false);
             rightPanel.ResumeLayout(false);
             rightPanel.PerformLayout();
@@ -264,13 +194,16 @@ namespace LibraryManagementSystem
             ResumeLayout(false);
         }
 
-        private DataGridViewTextBoxColumn colMemberID;
-        private DataGridViewTextBoxColumn colName;
-        private DataGridViewTextBoxColumn colEmail;
-        private DataGridViewTextBoxColumn colPhone;
-        private DataGridViewTextBoxColumn colAddress;
-        private DataGridViewTextBoxColumn colMembershipDate;
-        private DateTimePicker dtpMembershipDate;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
+
 
     }
 }

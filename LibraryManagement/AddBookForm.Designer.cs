@@ -55,6 +55,7 @@ namespace LibraryManagement
             txtTitle.Name = "txtTitle";
             txtTitle.Size = new Size(100, 23);
             txtTitle.TabIndex = 4;
+            txtTitle.TextChanged += txtTitle_TextChanged;
             // 
             // txtAuthor
             // 
