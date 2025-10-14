@@ -43,13 +43,25 @@ namespace LibraryManagementSystem
         // ✏️ Edit Member
         private void btnEditMember_Click(object sender, EventArgs e)
         {
-
+            using (EditMemberForm editmemberForm = new EditMemberForm())
+            {
+                if (editmemberForm.ShowDialog() == DialogResult.OK)
+                {
+                    LoadMembers(); // Refresh the table after editing
+                }
+            }
         }
 
         // ❌ Delete Member
         private void btnDeleteMember_Click(object sender, EventArgs e)
         {
-
+            using (DeleteMemberForm deletememberForm = new DeleteMemberForm())
+            {
+                if (deletememberForm.ShowDialog() == DialogResult.OK)
+                {
+                    LoadMembers(); // refresh the table after deleting a member
+                }
+            }
         }
 
         // 🔍 Search Members

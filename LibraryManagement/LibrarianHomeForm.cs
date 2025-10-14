@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Windows.Forms;
 
 namespace LibraryManagementSystem
@@ -6,6 +7,7 @@ namespace LibraryManagementSystem
     public partial class LibrarianHomeForm : Form
     {
         private string username;
+        string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
 
         public LibrarianHomeForm(string username)
         {
@@ -14,9 +16,40 @@ namespace LibraryManagementSystem
             lblWelcome.Text = $"Welcome, {username}";
         }
 
+        private void LoadDashboardData()
+        {
+            try
+            {
+                using (var conn = new NpgsqlConnection(connString))
+                {
+                    conn.Open();
+
+                    // 🟢 Total Books (based on total copies available)
+                    string totalBooksQuery = "SELECT COALESCE(SUM(copiesavailable), 0) FROM books";
+                    using (var cmd = new NpgsqlCommand(totalBooksQuery, conn))
+                    {
+                        var totalBooks = cmd.ExecuteScalar();
+                        lblTotalBooksValue.Text = totalBooks.ToString();
+                    }
+
+                    // 👥 Total Members
+                    string totalMembersQuery = "SELECT COUNT(*) FROM member";
+                    using (var cmd = new NpgsqlCommand(totalMembersQuery, conn))
+                    {
+                        var totalMembers = cmd.ExecuteScalar();
+                        lblTotalMembersValue.Text = totalMembers.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading dashboard data: {ex.Message}");
+            }
+        }
+
         private void LibrarianHomeForm_Load(object sender, EventArgs e)
         {
-            // You can initialize anything here if needed
+            LoadDashboardData();
         }
 
         private void btnBookManagement_Click(object sender, EventArgs e)

@@ -252,6 +252,7 @@
             Name = "LibrarianHomeForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Librarian Dashboard";
+            this.Load += new System.EventHandler(this.LibrarianHomeForm_Load);
             WindowState = FormWindowState.Maximized;
             leftPanel.ResumeLayout(false);
             rightPanel.ResumeLayout(false);
