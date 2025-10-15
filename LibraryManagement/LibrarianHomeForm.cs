@@ -113,5 +113,10 @@ namespace LibraryManagementSystem
         {
 
         }
+
+        private void lblTotalBooks_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
