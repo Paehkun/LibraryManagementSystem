@@ -16,6 +16,7 @@ namespace LibraryManagementSystem
         private Button btnBack;
         private Label lblTitle;
         private DataGridView dgvMembers;
+        private FlowLayoutPanel flowMembers;
         private TextBox txtSearch;
 
         protected override void Dispose(bool disposing)
@@ -38,22 +39,19 @@ namespace LibraryManagementSystem
             txtSearch = new TextBox();
             dgvMembers = new DataGridView();
             lblTitle = new Label();
-
-            dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn5 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn6 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn7 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn8 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn9 = new DataGridViewTextBoxColumn();
-
+            // flowMembers
+            flowMembers = new FlowLayoutPanel();
+            flowMembers.Location = new Point(174, 140);
+            flowMembers.Size = new Size(1356, 872);
+            flowMembers.AutoScroll = true;
+            flowMembers.BackColor = Color.AntiqueWhite;
+            flowMembers.WrapContents = false;
+            flowMembers.FlowDirection = FlowDirection.TopDown;
+            rightPanel.Controls.Add(flowMembers);
             leftPanel.SuspendLayout();
             rightPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvMembers).BeginInit();
+            ((ISupportInitialize)dgvMembers).BeginInit();
             SuspendLayout();
-
             // 
             // leftPanel
             // 
@@ -67,65 +65,74 @@ namespace LibraryManagementSystem
             leftPanel.Name = "leftPanel";
             leftPanel.Size = new Size(250, 1181);
             leftPanel.TabIndex = 1;
-
             // 
-            // Buttons
+            // btnBack
             // 
             btnBack.BackColor = Color.White;
             btnBack.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnBack.Location = new Point(25, 280);
+            btnBack.Name = "btnBack";
             btnBack.Size = new Size(200, 35);
+            btnBack.TabIndex = 0;
             btnBack.Text = "⬅️ Back";
+            btnBack.UseVisualStyleBackColor = false;
             btnBack.Click += btnBack_Click;
-
+            // 
+            // btnDeleteMember
+            // 
             btnDeleteMember.BackColor = Color.White;
             btnDeleteMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnDeleteMember.Location = new Point(25, 200);
+            btnDeleteMember.Name = "btnDeleteMember";
             btnDeleteMember.Size = new Size(200, 40);
+            btnDeleteMember.TabIndex = 1;
             btnDeleteMember.Text = "🗑️ Delete Member";
+            btnDeleteMember.UseVisualStyleBackColor = false;
             btnDeleteMember.Click += btnDeleteMember_Click;
-
+            // 
+            // btnEditMember
+            // 
             btnEditMember.BackColor = Color.White;
             btnEditMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnEditMember.Location = new Point(25, 140);
+            btnEditMember.Name = "btnEditMember";
             btnEditMember.Size = new Size(200, 40);
+            btnEditMember.TabIndex = 2;
             btnEditMember.Text = "✏️ Edit Member";
+            btnEditMember.UseVisualStyleBackColor = false;
             btnEditMember.Click += btnEditMember_Click;
-
+            // 
+            // btnAddMember
+            // 
             btnAddMember.BackColor = Color.White;
             btnAddMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnAddMember.Location = new Point(25, 80);
+            btnAddMember.Name = "btnAddMember";
             btnAddMember.Size = new Size(200, 40);
+            btnAddMember.TabIndex = 3;
             btnAddMember.Text = "➕ Add Member";
+            btnAddMember.UseVisualStyleBackColor = false;
             btnAddMember.Click += btnAddMember_Click;
-
             // 
             // rightPanel
             // 
             rightPanel.BackColor = Color.PeachPuff;
             rightPanel.Controls.Add(txtSearch);
-            rightPanel.Controls.Add(dgvMembers);
+            //rightPanel.Controls.Add(dgvMembers);
             rightPanel.Controls.Add(lblTitle);
             rightPanel.Dock = DockStyle.Fill;
             rightPanel.Location = new Point(250, 0);
             rightPanel.Name = "rightPanel";
             rightPanel.Size = new Size(1758, 1181);
             rightPanel.TabIndex = 0;
-
             // 
-            // lblTitle
-            // 
-            lblTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblTitle.Location = new Point(20, 20);
-            lblTitle.Size = new Size(400, 35);
-            lblTitle.Text = "👤 Member List";
-
-            // 
-            // Search Box
+            // txtSearch
             // 
             txtSearch.Location = new Point(174, 91);
-            txtSearch.Size = new Size(246, 23);
+            txtSearch.Name = "txtSearch";
             txtSearch.PlaceholderText = "Search Member 🔍";
+            txtSearch.Size = new Size(246, 23);
+            txtSearch.TabIndex = 0;
             txtSearch.TextChanged += txtSearch_TextChanged;
             // 
             // dgvMembers
@@ -135,47 +142,57 @@ namespace LibraryManagementSystem
             dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvMembers.BackgroundColor = Color.AntiqueWhite;
             dgvMembers.Location = new Point(174, 140);
-            dgvMembers.Name = "dgvBooks";
+            dgvMembers.Name = "dgvMembers";
             dgvMembers.ReadOnly = true;
             dgvMembers.RowHeadersVisible = false;
             dgvMembers.Size = new Size(1356, 872);
             dgvMembers.TabIndex = 0;
+            dgvMembers.CellContentClick += dgvMembers_CellContentClick_1;
             // 
-            // dataGridViewTextBoxColumn1
+            // lblTitle
             // 
-            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            // 
-            // dataGridViewTextBoxColumn5
-            // 
-            dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            // 
-            // dataGridViewTextBoxColumn6
-            // 
-            dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
-            // 
-            // dataGridViewTextBoxColumn7
-            // 
-            dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
-            // 
-            // dataGridViewTextBoxColumn8
-            // 
-            dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
-            // 
-            // dataGridViewTextBoxColumn9
-            // 
-            dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
+            lblTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblTitle.Location = new Point(20, 20);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(400, 35);
+            lblTitle.TabIndex = 1;
+            lblTitle.Text = "👤 Member List";
+            //// 
+            //// dataGridViewTextBoxColumn1
+            //// 
+            //dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            //// 
+            //// dataGridViewTextBoxColumn2
+            //// 
+            //dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            //// 
+            //// dataGridViewTextBoxColumn3
+            //// 
+            //dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            //// 
+            //// dataGridViewTextBoxColumn4
+            //// 
+            //dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            //// 
+            //// dataGridViewTextBoxColumn5
+            //// 
+            //dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            //// 
+            //// dataGridViewTextBoxColumn6
+            //// 
+            //dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            //// 
+            //// dataGridViewTextBoxColumn7
+            //// 
+            //dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+            //// 
+            //// dataGridViewTextBoxColumn8
+            //// 
+            //dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
+            //// 
+            //// dataGridViewTextBoxColumn9
+            //// 
+            //dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
             // 
             // MemberManagementForm
             // 
@@ -190,19 +207,19 @@ namespace LibraryManagementSystem
             leftPanel.ResumeLayout(false);
             rightPanel.ResumeLayout(false);
             rightPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvMembers).EndInit();
+            ((ISupportInitialize)dgvMembers).EndInit();
             ResumeLayout(false);
         }
 
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
+        //private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        //private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        //private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        //private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        //private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        //private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        //private DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
+        //private DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
+        //private DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
 
 
     }

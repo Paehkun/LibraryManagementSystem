@@ -12,7 +12,7 @@ namespace LibraryManagementSystem
         public LibrarianHomeForm(string username)
         {
             InitializeComponent();
-            this.username = username;
+            //this.username = username;
             lblWelcome.Text = $"Welcome, {username}";
         }
 
@@ -115,6 +115,11 @@ namespace LibraryManagementSystem
         }
 
         private void lblTotalBooks_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void leftPanel_Paint(object sender, PaintEventArgs e)
         {
 
         }

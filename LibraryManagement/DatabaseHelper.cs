@@ -45,6 +45,39 @@ namespace LibraryManagementSystem
             }
             return dt;
         }
+        public static void DeleteMember(int memberId)
+        {
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                string query = "DELETE FROM member WHERE memberid = @memberid";
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@memberid", memberId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static void EditMember(int memberId, string name, string email, string phone, string address)
+        {
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                string query = "UPDATE member SET name = @name, email = @email, phone = @phone, address = @address WHERE memberid = @memberid";
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue("@phone", phone);
+                    cmd.Parameters.AddWithValue("@address", address);
+                    cmd.Parameters.AddWithValue("@memberid", memberId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+
 
         public static void AddBook(string title, string author, string isbn, string category, string publisher, int year, int copiesavailable, string shelflocation)
         {
