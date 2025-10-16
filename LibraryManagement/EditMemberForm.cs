@@ -13,20 +13,32 @@ namespace LibraryManagement
 {
     public partial class EditMemberForm : Form
     {
+        private int _memberId;
+        private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
+        public EditMemberForm(int memberId)
+        {
+            InitializeComponent();
+            _memberId = memberId;
+        }
         public EditMemberForm()
         {
             InitializeComponent();
         }
 
+
         private void EditMemberForm_Load(object sender, EventArgs e)
         {
-
+            if (_memberId > 0)
+            {
+                LoadMemberData(_memberId);
+                txtMemberID.ReadOnly = true; // prevent editing ID
+            }
         }
         private void lblMembershipDate_Click(object sender, EventArgs e)
         {
 
         }
-        private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
+        //private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
         private void btnLoad_Click(object sender, EventArgs e)
         {
             if (!int.TryParse(txtMemberID.Text.Trim(), out int memberid))
@@ -125,6 +137,44 @@ namespace LibraryManagement
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+        private void LoadMemberData(int memberid)
+        {
+            try
+            {
+                using (var conn = new NpgsqlConnection(connString))
+                {
+                    conn.Open();
+                    string query = @"SELECT memberid, name, email, phone, address, membershipdate 
+                                 FROM member 
+                                 WHERE memberid = @memberid";
+
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@memberid", memberid);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                txtMemberID.Text = reader["memberid"].ToString();
+                                txtName.Text = reader["name"].ToString();
+                                txtEmail.Text = reader["email"].ToString();
+                                txtPhone.Text = reader["phone"].ToString();
+                                txtAddress.Text = reader["address"].ToString();
+                                dtpMembershipDate.Value = Convert.ToDateTime(reader["membershipdate"]);
+                            }
+                            else
+                            {
+                                MessageBox.Show("No member found with this ID.");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading member: {ex.Message}");
+            }
         }
     }
 }

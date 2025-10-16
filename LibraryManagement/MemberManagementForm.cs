@@ -68,11 +68,10 @@ namespace LibraryManagementSystem
                 {
                     conn.Open();
                     string query = @"
-                        SELECT memberid AS ""Member ID"", name AS ""Name"", email AS ""Email"", 
-                               phone AS ""Phone"", address AS ""Address"", membershipdate AS ""Membership Date""
-                        FROM member
-                        WHERE CAST(memberid AS TEXT) ILIKE @q OR name ILIKE @q OR email ILIKE @q
-                        ORDER BY memberid";
+                SELECT memberid, name, phone, email, address, membershipdate
+                FROM member
+                WHERE CAST(memberid AS TEXT) ILIKE @q OR name ILIKE @q OR email ILIKE @q
+                ORDER BY memberid";
 
                     using (var cmd = new NpgsqlCommand(query, conn))
                     {
@@ -81,7 +80,81 @@ namespace LibraryManagementSystem
                         {
                             var table = new DataTable();
                             da.Fill(table);
-                            dgvMembers.DataSource = table;
+
+                            // ✅ Instead of binding to dgv, we reload the FlowLayoutPanel
+                            flowMembers.Controls.Clear();
+
+                            foreach (DataRow row in table.Rows)
+                            {
+                                // Create a panel for each member card
+                                Panel card = new Panel();
+                                card.Size = new Size(1300, 80);
+                                card.BackColor = Color.White;
+                                card.Margin = new Padding(10);
+                                card.Padding = new Padding(10);
+                                card.BorderStyle = BorderStyle.FixedSingle;
+
+                                // Rounded corners
+                                card.Paint += (s2, e2) =>
+                                {
+                                    System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
+                                    int radius = 20;
+                                    Rectangle rect = card.ClientRectangle;
+                                    path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
+                                    path.AddArc(rect.Right - radius, rect.Y, radius, radius, 270, 90);
+                                    path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90);
+                                    path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90);
+                                    path.CloseAllFigures();
+                                    card.Region = new Region(path);
+                                };
+
+                                int memberId = Convert.ToInt32(row["memberid"]);
+                                string memberName = row["name"].ToString();
+                                string memberPhone = row["phone"].ToString();
+
+                                // Name label
+                                Label lblName = new Label();
+                                lblName.Text = memberName;
+                                lblName.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+                                lblName.Location = new Point(80, 20);
+                                lblName.AutoSize = true;
+
+                                // ID label
+                                Label lblID = new Label();
+                                lblID.Text = $"#{memberId}";
+                                lblID.Font = new Font("Segoe UI", 11);
+                                lblID.Location = new Point(300, 25);
+                                lblID.AutoSize = true;
+
+                                // Phone label
+                                Label lblPhone = new Label();
+                                lblPhone.Text = memberPhone;
+                                lblPhone.Font = new Font("Segoe UI", 11);
+                                lblPhone.Location = new Point(450, 25);
+                                lblPhone.AutoSize = true;
+
+                                // Edit button
+                                Button btnEdit = new Button();
+                                btnEdit.Text = "✏️";
+                                btnEdit.Size = new Size(40, 40);
+                                btnEdit.Location = new Point(1150, 20);
+                                btnEdit.Click += (s2, e2) => EditMember(memberId);
+
+                                // Delete button
+                                Button btnDelete = new Button();
+                                btnDelete.Text = "🗑️";
+                                btnDelete.Size = new Size(40, 40);
+                                btnDelete.Location = new Point(1200, 20);
+                                btnDelete.Click += (s2, e2) => DeleteMember(memberId);
+
+                                card.Controls.Add(lblName);
+                                card.Controls.Add(lblID);
+                                card.Controls.Add(lblPhone);
+                                card.Controls.Add(btnEdit);
+                                card.Controls.Add(btnDelete);
+
+                                flowMembers.Controls.Add(card);
+                            }
                         }
                     }
                 }
@@ -91,6 +164,7 @@ namespace LibraryManagementSystem
                 MessageBox.Show($"Search error: {ex.Message}");
             }
         }
+
 
         private void LoadMembers()
         {
@@ -177,7 +251,7 @@ namespace LibraryManagementSystem
         private void EditMember(int memberId)
         {
             // You can open your EditMemberForm with the selected ID here
-            using (EditMemberForm editForm = new EditMemberForm())
+            using (EditMemberForm editForm = new EditMemberForm(memberId))
             {
                 if (editForm.ShowDialog() == DialogResult.OK)
                 {
