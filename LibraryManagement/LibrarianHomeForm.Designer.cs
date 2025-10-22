@@ -50,7 +50,7 @@
             rightPanel = new Panel();
             dataGridView2 = new DataGridView();
             dataGridView1 = new DataGridView();
-            label2 = new Label();
+            lblBookRow = new Label();
             label1 = new Label();
             roundedLabel1 = new RoundedLabel();
             roundedLabel2 = new RoundedLabel();
@@ -163,6 +163,7 @@
             lblTotalBooksValue.TabIndex = 1;
             lblTotalBooksValue.Text = "0";
             lblTotalBooksValue.TextAlign = ContentAlignment.MiddleCenter;
+            lblTotalBooksValue.Click += lblTotalBooksValue_Click;
             // 
             // lblBorrowedBooks
             // 
@@ -228,7 +229,7 @@
             rightPanel.BackColor = Color.PeachPuff;
             rightPanel.Controls.Add(dataGridView2);
             rightPanel.Controls.Add(dataGridView1);
-            rightPanel.Controls.Add(label2);
+            rightPanel.Controls.Add(lblBookRow);
             rightPanel.Controls.Add(label1);
             rightPanel.Controls.Add(lblTotalBooks);
             rightPanel.Controls.Add(lblTotalBooksValue);
@@ -265,16 +266,16 @@
             dataGridView1.Size = new Size(700, 406);
             dataGridView1.TabIndex = 11;
             // 
-            // label2
+            // lblBookRow
             // 
-            label2.BackColor = Color.White;
-            label2.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(335, 118);
-            label2.Name = "label2";
-            label2.Size = new Size(111, 69);
-            label2.TabIndex = 9;
-            label2.Text = "0";
-            label2.TextAlign = ContentAlignment.MiddleCenter;
+            lblBookRow.BackColor = Color.White;
+            lblBookRow.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblBookRow.Location = new Point(335, 118);
+            lblBookRow.Name = "lblBookRow";
+            lblBookRow.Size = new Size(111, 69);
+            lblBookRow.TabIndex = 9;
+            lblBookRow.Text = "0";
+            lblBookRow.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label1
             // 
@@ -341,7 +342,7 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
         }
-        private Label label2;
+        private Label lblBookRow;
         private Label label1;
         private LibraryManagementSystem.RoundedLabel roundedLabel1;
         private DataGridView dataGridView2;

@@ -32,8 +32,17 @@ namespace LibraryManagementSystem
                         lblTotalBooksValue.Text = totalBooks.ToString();
                     }
 
-                    // 👥 Total Members
-                    string totalMembersQuery = "SELECT COUNT(*) FROM member";
+                    // 👥 Total Books Row
+                    string totalBooksRow = "SELECT COUNT(*) FROM books";
+                    using (var cmd = new NpgsqlCommand(totalBooksRow, conn))
+                    {
+                        var totalBookRow = cmd.ExecuteScalar();
+                        lblBookRow.Text = totalBookRow.ToString();
+                    }
+                
+
+                // 👥 Total Members
+                string totalMembersQuery = "SELECT COUNT(*) FROM member";
                     using (var cmd = new NpgsqlCommand(totalMembersQuery, conn))
                     {
                         var totalMembers = cmd.ExecuteScalar();
@@ -120,6 +129,11 @@ namespace LibraryManagementSystem
         }
 
         private void leftPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void lblTotalBooksValue_Click(object sender, EventArgs e)
         {
 
         }
