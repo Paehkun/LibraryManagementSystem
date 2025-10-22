@@ -1,19 +1,40 @@
 ﻿using Npgsql;
 using System;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace LibraryManagementSystem
 {
     public partial class LibrarianHomeForm : Form
     {
+        private string name;
         private string username;
         string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
 
         public LibrarianHomeForm(string username)
         {
             InitializeComponent();
-            //this.username = username;
-            lblWelcome.Text = $"Welcome, {username}";
+            this.username = username;          // ✅ assign the parameter to the field
+            FetchFullNameFromDB();
+            lblWelcome.Text = $"Welcome, {name}";
+        }
+
+        private void FetchFullNameFromDB()
+        {
+            using (var conn = new NpgsqlConnection(connString))
+            {
+                conn.Open();
+                string query = "SELECT name FROM users WHERE username = @username";
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@username", username);
+                    var result = cmd.ExecuteScalar();
+                    if (result != null)
+                    {
+                        name = result.ToString();   // ✅ store full name
+                    }
+                }
+            }
         }
 
         private void LoadDashboardData()
@@ -63,7 +84,7 @@ namespace LibraryManagementSystem
 
         private void btnBookManagement_Click(object sender, EventArgs e)
         {
-            BookManagementForm bookManagementForm = new BookManagementForm(username);
+            BookManagementForm bookManagementForm = new BookManagementForm(name);
             bookManagementForm.Show();
 
             this.Hide();

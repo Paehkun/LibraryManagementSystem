@@ -1,6 +1,6 @@
 ﻿namespace LibraryManagement
 {
-    
+
     partial class MemberForm
     {
         private System.ComponentModel.IContainer components = null;

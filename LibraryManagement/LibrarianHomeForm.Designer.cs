@@ -60,155 +60,10 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
-            // 
-            // lblWelcome
-            // 
-            lblWelcome.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblWelcome.Location = new Point(20, 20);
-            lblWelcome.Name = "lblWelcome";
-            lblWelcome.Size = new Size(200, 30);
-            lblWelcome.TabIndex = 0;
-            lblWelcome.Text = "Welcome, Librarian";
-            // 
-            // btnBookManagement
-            // 
-            btnBookManagement.BackColor = Color.White;
-            btnBookManagement.Font = new Font("Segoe UI", 10F);
-            btnBookManagement.Location = new Point(20, 83);
-            btnBookManagement.Name = "btnBookManagement";
-            btnBookManagement.Size = new Size(200, 40);
-            btnBookManagement.TabIndex = 1;
-            btnBookManagement.Text = "📖 Book Management";
-            btnBookManagement.UseVisualStyleBackColor = false;
-            btnBookManagement.Click += btnBookManagement_Click;
-            // 
-            // btnMemberRecords
-            // 
-            btnMemberRecords.BackColor = Color.White;
-            btnMemberRecords.Font = new Font("Segoe UI", 10F);
-            btnMemberRecords.Location = new Point(20, 140);
-            btnMemberRecords.Name = "btnMemberRecords";
-            btnMemberRecords.Size = new Size(200, 40);
-            btnMemberRecords.TabIndex = 2;
-            btnMemberRecords.Text = "👥 Member Management";
-            btnMemberRecords.UseVisualStyleBackColor = false;
-            btnMemberRecords.Click += btnMemberRecords_Click;
-            // 
-            // btnBookCatalog
-            // 
-            btnBookCatalog.BackColor = Color.White;
-            btnBookCatalog.Font = new Font("Segoe UI", 10F);
-            btnBookCatalog.Location = new Point(20, 198);
-            btnBookCatalog.Name = "btnBookCatalog";
-            btnBookCatalog.Size = new Size(200, 40);
-            btnBookCatalog.TabIndex = 3;
-            btnBookCatalog.Text = "📚 Catalog";
-            btnBookCatalog.UseVisualStyleBackColor = false;
-            btnBookCatalog.Click += btnBookCatalog_Click;
-            // 
-            // btnReports
-            // 
-            btnReports.BackColor = Color.White;
-            btnReports.Font = new Font("Segoe UI", 10F);
-            btnReports.Location = new Point(20, 256);
-            btnReports.Name = "btnReports";
-            btnReports.Size = new Size(200, 40);
-            btnReports.TabIndex = 4;
-            btnReports.Text = "📊 Reports";
-            btnReports.UseVisualStyleBackColor = false;
-            btnReports.Click += btnReports_Click;
-            // 
-            // btnBorrowReturn
-            // 
-            btnBorrowReturn.BackColor = Color.White;
-            btnBorrowReturn.Font = new Font("Segoe UI", 10F);
-            btnBorrowReturn.Location = new Point(20, 316);
-            btnBorrowReturn.Name = "btnBorrowReturn";
-            btnBorrowReturn.Size = new Size(200, 40);
-            btnBorrowReturn.TabIndex = 5;
-            btnBorrowReturn.Text = "🔁 Borrow / Return";
-            btnBorrowReturn.UseVisualStyleBackColor = false;
-            btnBorrowReturn.Click += btnBorrowReturn_Click;
-            // 
-            // btnLogout
-            // 
-            btnLogout.BackColor = Color.White;
-            btnLogout.Font = new Font("Segoe UI", 10F);
-            btnLogout.Location = new Point(20, 375);
-            btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(150, 40);
-            btnLogout.TabIndex = 6;
-            btnLogout.Text = "🚪 Logout";
-            btnLogout.UseVisualStyleBackColor = false;
-            btnLogout.Click += btnLogout_Click;
-            // 
-            // lblTotalBooks
-            // 
-            lblTotalBooks.BackColor = Color.White;
-            lblTotalBooks.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblTotalBooks.Location = new Point(734, 83);
-            lblTotalBooks.Name = "lblTotalBooks";
-            lblTotalBooks.Size = new Size(205, 23);
-            lblTotalBooks.TabIndex = 0;
-            lblTotalBooks.Text = "📚 Total Book Copies";
-            lblTotalBooks.Click += lblTotalBooks_Click;
-            // 
-            // lblTotalBooksValue
-            // 
-            lblTotalBooksValue.BackColor = Color.White;
-            lblTotalBooksValue.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            lblTotalBooksValue.Location = new Point(769, 124);
-            lblTotalBooksValue.Name = "lblTotalBooksValue";
-            lblTotalBooksValue.Size = new Size(111, 69);
-            lblTotalBooksValue.TabIndex = 1;
-            lblTotalBooksValue.Text = "0";
-            lblTotalBooksValue.TextAlign = ContentAlignment.MiddleCenter;
-            lblTotalBooksValue.Click += lblTotalBooksValue_Click;
-            // 
-            // lblBorrowedBooks
-            // 
-            lblBorrowedBooks.BackColor = Color.White;
-            lblBorrowedBooks.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblBorrowedBooks.Location = new Point(1100, 316);
-            lblBorrowedBooks.Name = "lblBorrowedBooks";
-            lblBorrowedBooks.Size = new Size(196, 23);
-            lblBorrowedBooks.TabIndex = 2;
-            lblBorrowedBooks.Text = "📖 Borrowed Books";
-            // 
-            // lblLateReturnBooks
-            // 
-            lblLateReturnBooks.BackColor = Color.White;
-            lblLateReturnBooks.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblLateReturnBooks.Location = new Point(335, 316);
-            lblLateReturnBooks.Name = "lblLateReturnBooks";
-            lblLateReturnBooks.Size = new Size(157, 23);
-            lblLateReturnBooks.TabIndex = 4;
-            lblLateReturnBooks.Text = "⏰ Late Return Books:";
-            // 
-            // lblTotalMembers
-            // 
-            lblTotalMembers.BackColor = Color.White;
-            lblTotalMembers.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblTotalMembers.Location = new Point(1122, 83);
-            lblTotalMembers.Name = "lblTotalMembers";
-            lblTotalMembers.Size = new Size(186, 23);
-            lblTotalMembers.TabIndex = 6;
-            lblTotalMembers.Text = "👥 Total Members";
-            lblTotalMembers.Click += lblTotalMembers_Click;
-            // 
-            // lblTotalMembersValue
-            // 
-            lblTotalMembersValue.BackColor = Color.White;
-            lblTotalMembersValue.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            lblTotalMembersValue.Location = new Point(1156, 124);
-            lblTotalMembersValue.Name = "lblTotalMembersValue";
-            lblTotalMembersValue.Size = new Size(111, 69);
-            lblTotalMembersValue.TabIndex = 7;
-            lblTotalMembersValue.Text = "0";
-            lblTotalMembersValue.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // leftPanel
-            // 
+
+            // ==============================
+            // 📌 LEFT PANEL
+            // ==============================
             leftPanel.BackColor = Color.White;
             leftPanel.Controls.Add(lblWelcome);
             leftPanel.Controls.Add(btnBookManagement);
@@ -218,15 +73,47 @@
             leftPanel.Controls.Add(btnBorrowReturn);
             leftPanel.Controls.Add(btnLogout);
             leftPanel.Dock = DockStyle.Left;
-            leftPanel.Location = new Point(0, 0);
-            leftPanel.Name = "leftPanel";
             leftPanel.Size = new Size(250, 1181);
-            leftPanel.TabIndex = 1;
-            leftPanel.Paint += leftPanel_Paint;
-            // 
-            // rightPanel
-            // 
-            rightPanel.BackColor = Color.PeachPuff;
+            leftPanel.Name = "leftPanel";
+
+            // Welcome label
+            lblWelcome.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblWelcome.ForeColor = Color.Black;
+            lblWelcome.Location = new Point(20, 20);
+            lblWelcome.Size = new Size(220, 35);
+            lblWelcome.Text = "Welcome, Librarian";
+
+            // Sidebar buttons (uniform styling)
+            int btnWidth = 200;
+            int btnHeight = 40;
+            int startY = 80;
+            int spacing = 60;
+
+            Button[] buttons = { btnBookManagement, btnMemberRecords, btnBookCatalog, btnReports, btnBorrowReturn, btnLogout };
+            string[] texts = { "📖 Book Management", "👥 Member Management", "📚 Catalog", "📊 Reports", "🔁 Borrow / Return", "🚪 Logout" };
+
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                buttons[i].BackColor = Color.White;
+                buttons[i].Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+                buttons[i].Size = new Size(btnWidth, btnHeight);
+                buttons[i].Location = new Point(20, startY + (i * spacing));
+                buttons[i].Text = texts[i];
+                buttons[i].UseVisualStyleBackColor = true;
+            }
+
+            btnBookManagement.Click += btnBookManagement_Click;
+            btnMemberRecords.Click += btnMemberRecords_Click;
+            btnBookCatalog.Click += btnBookCatalog_Click;
+            btnReports.Click += btnReports_Click;
+            btnBorrowReturn.Click += btnBorrowReturn_Click;
+            btnLogout.Click += btnLogout_Click;
+
+            // ==============================
+            // 📌 RIGHT PANEL (DASHBOARD)
+            // ==============================
+            rightPanel.BackColor = Color.WhiteSmoke;  // clean background like Book Management
+            rightPanel.Dock = DockStyle.Fill;
             rightPanel.Controls.Add(dataGridView2);
             rightPanel.Controls.Add(dataGridView1);
             rightPanel.Controls.Add(lblBookRow);
@@ -240,94 +127,91 @@
             rightPanel.Controls.Add(roundedLabel1);
             rightPanel.Controls.Add(roundedLabel2);
             rightPanel.Controls.Add(roundedLabel3);
-            rightPanel.Dock = DockStyle.Fill;
-            rightPanel.Location = new Point(250, 0);
-            rightPanel.Name = "rightPanel";
-            rightPanel.Size = new Size(1528, 1181);
-            rightPanel.TabIndex = 0;
-            rightPanel.Paint += rightPanel_Paint;
-            // 
-            // dataGridView2
-            // 
-            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Location = new Point(898, 400);
-            dataGridView2.Name = "dataGridView2";
-            dataGridView2.Size = new Size(700, 406);
-            dataGridView2.TabIndex = 12;
-            // 
-            // dataGridView1
-            // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(91, 400);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.Size = new Size(700, 406);
-            dataGridView1.TabIndex = 11;
-            // 
-            // lblBookRow
-            // 
-            lblBookRow.BackColor = Color.White;
-            lblBookRow.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblBookRow.Location = new Point(335, 118);
-            lblBookRow.Name = "lblBookRow";
-            lblBookRow.Size = new Size(111, 69);
-            lblBookRow.TabIndex = 9;
-            lblBookRow.Text = "0";
-            lblBookRow.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label1
-            // 
-            label1.BackColor = Color.White;
-            label1.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            label1.Location = new Point(312, 83);
-            label1.Name = "label1";
-            label1.Size = new Size(157, 23);
-            label1.TabIndex = 8;
-            label1.Text = "📚 Total Books";
-            // 
-            // roundedLabel1
-            // 
+
+            // ==============================
+            // 📊 CARD 1 — Total Books
+            // ==============================
             roundedLabel1.BackColor = Color.White;
             roundedLabel1.BorderColor = Color.White;
-            roundedLabel1.BorderRadius = 40;
-            roundedLabel1.BorderSize = 2;
-            roundedLabel1.ForeColor = Color.Black;
-            roundedLabel1.Location = new Point(160, 35);
-            roundedLabel1.Name = "roundedLabel1";
-            roundedLabel1.Size = new Size(1311, 192);
-            roundedLabel1.TabIndex = 10;
-            roundedLabel1.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // roundedLabel2
-            // 
+            roundedLabel1.BorderRadius = 30;
+            roundedLabel1.BorderSize = 0;
+            roundedLabel1.Location = new Point(150, 50);
+            roundedLabel1.Size = new Size(400, 160);
+
+            label1.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            label1.BackColor = Color.White;
+            label1.Location = new Point(270, 80);
+            label1.Size = new Size(200, 30);
+            label1.Text = "📚 Total Books";
+
+            lblBookRow.Font = new Font("Segoe UI", 28F, FontStyle.Bold);
+            lblBookRow.BackColor = Color.White;
+            lblBookRow.Location = new Point(310, 120);
+            lblBookRow.Size = new Size(120, 60);
+            lblBookRow.TextAlign = ContentAlignment.MiddleCenter;
+            lblBookRow.Text = "0";
+
+            // ==============================
+            // 📊 CARD 2 — Total Book Copies
+            // ==============================
+            lblTotalBooks.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblTotalBooks.BackColor = Color.White;
+            lblTotalBooks.Location = new Point(730, 80);
+            lblTotalBooks.Size = new Size(220, 30);
+            lblTotalBooks.Text = "📚 Total Book Copies";
+
+            lblTotalBooksValue.Font = new Font("Segoe UI", 28F, FontStyle.Bold);
+            lblTotalBooksValue.BackColor = Color.White;
+            lblTotalBooksValue.Location = new Point(780, 120);
+            lblTotalBooksValue.Size = new Size(120, 60);
+            lblTotalBooksValue.TextAlign = ContentAlignment.MiddleCenter;
+            lblTotalBooksValue.Text = "0";
+
             roundedLabel2.BackColor = Color.White;
             roundedLabel2.BorderColor = Color.White;
-            roundedLabel2.BorderRadius = 40;
-            roundedLabel2.BorderSize = 2;
-            roundedLabel2.ForeColor = Color.Black;
-            roundedLabel2.Location = new Point(312, 290);
-            roundedLabel2.Name = "roundedLabel2";
-            roundedLabel2.Size = new Size(195, 82);
-            roundedLabel2.TabIndex = 13;
-            roundedLabel2.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // roundedLabel3
-            // 
+            roundedLabel2.BorderRadius = 30;
+            roundedLabel2.BorderSize = 0;
+            roundedLabel2.Location = new Point(700, 50);
+            roundedLabel2.Size = new Size(300, 160);
+
+            // ==============================
+            // 📊 CARD 3 — Total Members
+            // ==============================
+            lblTotalMembers.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblTotalMembers.BackColor = Color.White;
+            lblTotalMembers.Location = new Point(1120, 80);
+            lblTotalMembers.Size = new Size(220, 30);
+            lblTotalMembers.Text = "👥 Total Members";
+
+            lblTotalMembersValue.Font = new Font("Segoe UI", 28F, FontStyle.Bold);
+            lblTotalMembersValue.BackColor = Color.White;
+            lblTotalMembersValue.Location = new Point(1160, 120);
+            lblTotalMembersValue.Size = new Size(120, 60);
+            lblTotalMembersValue.TextAlign = ContentAlignment.MiddleCenter;
+            lblTotalMembersValue.Text = "0";
+
             roundedLabel3.BackColor = Color.White;
             roundedLabel3.BorderColor = Color.White;
-            roundedLabel3.BorderRadius = 40;
-            roundedLabel3.BorderSize = 2;
-            roundedLabel3.ForeColor = Color.Black;
-            roundedLabel3.Location = new Point(1089, 290);
-            roundedLabel3.Name = "roundedLabel3";
-            roundedLabel3.Size = new Size(219, 82);
-            roundedLabel3.TabIndex = 14;
-            roundedLabel3.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // LibrarianHomeForm
-            // 
+            roundedLabel3.BorderRadius = 30;
+            roundedLabel3.BorderSize = 0;
+            roundedLabel3.Location = new Point(1100, 50);
+            roundedLabel3.Size = new Size(300, 160);
+
+            // ==============================
+            // 📋 Data Grids (Optional Section)
+            // ==============================
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.ReadOnly = true;
+            dataGridView1.Location = new Point(120, 300);
+            dataGridView1.Size = new Size(700, 400);
+
+            dataGridView2.Location = new Point(900, 300);
+            dataGridView2.Size = new Size(700, 400);
+
+            // ==============================
+            // 📌 FORM SETTINGS
+            // ==============================
             ClientSize = new Size(1778, 1181);
             Controls.Add(rightPanel);
             Controls.Add(leftPanel);
@@ -336,12 +220,14 @@
             Text = "Librarian Dashboard";
             WindowState = FormWindowState.Maximized;
             Load += LibrarianHomeForm_Load;
+
             leftPanel.ResumeLayout(false);
             rightPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
         }
+
         private Label lblBookRow;
         private Label label1;
         private LibraryManagementSystem.RoundedLabel roundedLabel1;
