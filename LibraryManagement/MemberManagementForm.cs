@@ -2,6 +2,7 @@
 using Npgsql;
 using System;
 using System.Data;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace LibraryManagementSystem
@@ -13,12 +14,15 @@ namespace LibraryManagementSystem
         public MemberManagementForm()
         {
             InitializeComponent();
+            dgvMembers.CellClick += dgvMembers_CellClick;
         }
 
         private void MemberManagementForm_Load(object sender, EventArgs e)
         {
+            SetupDataGridView();
             LoadMembers();
         }
+
         private void btnBack_Click(object sender, EventArgs e)
         {
             this.Hide();
@@ -36,265 +40,202 @@ namespace LibraryManagementSystem
                 }
             }
         }
+
         private void btnEditMember_Click(object sender, EventArgs e)
         {
-            using (EditMemberForm editmemberForm = new EditMemberForm())
+            if (dgvMembers.CurrentRow != null)
             {
-                if (editmemberForm.ShowDialog() == DialogResult.OK)
+                int memberId = Convert.ToInt32(dgvMembers.CurrentRow.Cells["memberid"].Value);
+                using (EditMemberForm editMemberForm = new EditMemberForm(memberId))
                 {
-                    LoadMembers(); // Refresh the table after editing
+                    if (editMemberForm.ShowDialog() == DialogResult.OK)
+                    {
+                        LoadMembers();
+                    }
                 }
+            }
+            else
+            {
+                MessageBox.Show("Please select a member to edit.");
             }
         }
 
         private void btnDeleteMember_Click(object sender, EventArgs e)
         {
-            using (DeleteMemberForm deletememberForm = new DeleteMemberForm())
+            if (dgvMembers.CurrentRow != null)
             {
-                if (deletememberForm.ShowDialog() == DialogResult.OK)
+                int memberId = Convert.ToInt32(dgvMembers.CurrentRow.Cells["memberid"].Value);
+                DialogResult result = MessageBox.Show("Are you sure you want to delete this member?",
+                    "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Yes)
                 {
-                    LoadMembers(); // refresh the table after deleting a member
+                    DatabaseHelper.DeleteMember(memberId);
+                    LoadMembers();
                 }
+            }
+            else
+            {
+                MessageBox.Show("Please select a member to delete.");
             }
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
-            string s = txtSearch.Text.Trim();
+            LoadMembers(txtSearch.Text.Trim());
+        }
 
+        // ✅ Style and base setup for DataGridView
+        private void SetupDataGridView()
+        {
+            dgvMembers.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+            dgvMembers.ColumnHeadersDefaultCellStyle.BackColor = Color.LightSteelBlue;
+            dgvMembers.EnableHeadersVisualStyles = false;
+            dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvMembers.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+            dgvMembers.DefaultCellStyle.ForeColor = Color.Black;
+            dgvMembers.DefaultCellStyle.BackColor = Color.White;
+            dgvMembers.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240, 248, 255);
+            dgvMembers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvMembers.MultiSelect = false;
+            dgvMembers.RowHeadersVisible = false;
+            dgvMembers.BackgroundColor = Color.White;
+            dgvMembers.BorderStyle = BorderStyle.None;
+            dgvMembers.ColumnHeadersVisible = true;
+        }
+
+        private void LoadMembers(string search = "")
+        {
             try
             {
                 using (var conn = new NpgsqlConnection(connString))
                 {
                     conn.Open();
+
                     string query = @"
-                SELECT memberid, name, phone, email, address, membershipdate
-                FROM member
-                WHERE CAST(memberid AS TEXT) ILIKE @q OR name ILIKE @q OR email ILIKE @q
-                ORDER BY memberid";
+                        SELECT memberid, name, phone, email, address, membershipdate
+                        FROM member
+                        WHERE (@search = '' 
+                            OR CAST(memberid AS TEXT) ILIKE @q 
+                            OR name ILIKE @q 
+                            OR email ILIKE @q)
+                        ORDER BY memberid;";
 
                     using (var cmd = new NpgsqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@q", "%" + s + "%");
+                        cmd.Parameters.AddWithValue("@search", search);
+                        cmd.Parameters.AddWithValue("@q", "%" + search + "%");
+
                         using (var da = new NpgsqlDataAdapter(cmd))
                         {
-                            var table = new DataTable();
-                            da.Fill(table);
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
 
-                            // ✅ Instead of binding to dgv, we reload the FlowLayoutPanel
-                            flowMembers.Controls.Clear();
+                            dgvMembers.AutoGenerateColumns = false;
+                            dgvMembers.Columns.Clear();
 
-                            foreach (DataRow row in table.Rows)
+                            // ✅ Add columns manually (headers will show)
+                            dgvMembers.Columns.Add(new DataGridViewTextBoxColumn()
                             {
-                                // Create a panel for each member card
-                                Panel card = new Panel();
-                                card.Size = new Size(1300, 80);
-                                card.BackColor = Color.White;
-                                card.Margin = new Padding(10);
-                                card.Padding = new Padding(10);
-                                card.BorderStyle = BorderStyle.FixedSingle;
+                                Name = "memberid",
+                                HeaderText = "Member ID",
+                                DataPropertyName = "memberid",
+                                ReadOnly = true
+                            });
+                            dgvMembers.Columns.Add(new DataGridViewTextBoxColumn()
+                            {
+                                Name = "name",
+                                HeaderText = "Name",
+                                DataPropertyName = "name"
+                            });
+                            dgvMembers.Columns.Add(new DataGridViewTextBoxColumn()
+                            {
+                                Name = "phone",
+                                HeaderText = "Phone",
+                                DataPropertyName = "phone"
+                            });
+                            dgvMembers.Columns.Add(new DataGridViewTextBoxColumn()
+                            {
+                                Name = "email",
+                                HeaderText = "Email",
+                                DataPropertyName = "email"
+                            });
+                            dgvMembers.Columns.Add(new DataGridViewTextBoxColumn()
+                            {
+                                Name = "address",
+                                HeaderText = "Address",
+                                DataPropertyName = "address"
+                            });
+                            dgvMembers.Columns.Add(new DataGridViewTextBoxColumn()
+                            {
+                                Name = "membershipdate",
+                                HeaderText = "Member Since",
+                                DataPropertyName = "membershipdate"
+                            });
+                            Console.WriteLine("Columns in DataTable: " + string.Join(", ", dt.Columns.Cast<DataColumn>().Select(c => c.ColumnName)));
 
-                                // Rounded corners
-                                card.Paint += (s2, e2) =>
-                                {
-                                    System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
-                                    int radius = 20;
-                                    Rectangle rect = card.ClientRectangle;
-                                    path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
-                                    path.AddArc(rect.Right - radius, rect.Y, radius, radius, 270, 90);
-                                    path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90);
-                                    path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90);
-                                    path.CloseAllFigures();
-                                    card.Region = new Region(path);
-                                };
+                            // ✅ Bind data
+                            dgvMembers.DataSource = dt;
 
-                                int memberId = Convert.ToInt32(row["memberid"]);
-                                string memberName = row["name"].ToString();
-                                string memberPhone = row["phone"].ToString();
-
-                                // Name label
-                                Label lblName = new Label();
-                                lblName.Text = memberName;
-                                lblName.Font = new Font("Segoe UI", 12, FontStyle.Bold);
-                                lblName.Location = new Point(80, 20);
-                                lblName.AutoSize = true;
-
-                                // ID label
-                                Label lblID = new Label();
-                                lblID.Text = $"#{memberId}";
-                                lblID.Font = new Font("Segoe UI", 11);
-                                lblID.Location = new Point(300, 25);
-                                lblID.AutoSize = true;
-
-                                // Phone label
-                                Label lblPhone = new Label();
-                                lblPhone.Text = memberPhone;
-                                lblPhone.Font = new Font("Segoe UI", 11);
-                                lblPhone.Location = new Point(450, 25);
-                                lblPhone.AutoSize = true;
-
-                                // Edit button
-                                Button btnEdit = new Button();
-                                btnEdit.Text = "✏️";
-                                btnEdit.Size = new Size(40, 40);
-                                btnEdit.Location = new Point(1150, 20);
-                                btnEdit.Click += (s2, e2) => EditMember(memberId);
-
-                                // Delete button
-                                Button btnDelete = new Button();
-                                btnDelete.Text = "🗑️";
-                                btnDelete.Size = new Size(40, 40);
-                                btnDelete.Location = new Point(1200, 20);
-                                btnDelete.Click += (s2, e2) => DeleteMember(memberId);
-
-                                card.Controls.Add(lblName);
-                                card.Controls.Add(lblID);
-                                card.Controls.Add(lblPhone);
-                                card.Controls.Add(btnEdit);
-                                card.Controls.Add(btnDelete);
-
-                                flowMembers.Controls.Add(card);
-                            }
+                            // ✅ Add action buttons (Edit/Delete)
+                            AddActionButtons();
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Search error: {ex.Message}");
+                MessageBox.Show($"Error loading members: {ex.Message}");
             }
         }
 
-
-        private void LoadMembers()
+        private void AddActionButtons()
         {
-            flowMembers.Controls.Clear();
+            // Remove existing buttons first
+            if (dgvMembers.Columns.Contains("Edit")) dgvMembers.Columns.Remove("Edit");
+            if (dgvMembers.Columns.Contains("Delete")) dgvMembers.Columns.Remove("Delete");
 
-            DataTable members = DatabaseHelper.GetAllMembers();
-            foreach (DataRow row in members.Rows)
+            DataGridViewButtonColumn editBtn = new DataGridViewButtonColumn()
             {
-                // Create a panel for each member card
-                Panel card = new Panel();
-                card.Size = new Size(1300, 80);
-                card.BackColor = Color.White;
-                card.Margin = new Padding(10);
-                card.Padding = new Padding(10);
-                card.BorderStyle = BorderStyle.FixedSingle;
+                HeaderText = "Edit",
+                Name = "Edit",
+                Text = "✏️ Edit",
+                UseColumnTextForButtonValue = true,
+                DefaultCellStyle = {
+                    BackColor = Color.FromArgb(235, 247, 255),
+                    ForeColor = Color.Black,
+                    SelectionBackColor = Color.FromArgb(210, 230, 255)
+                },
+                FlatStyle = FlatStyle.Flat,
+                Width = 80
+            };
+            dgvMembers.Columns.Add(editBtn);
 
-                // Rounded corners (optional)
-                card.Paint += (s, e) =>
-                {
-                    System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
-                    int radius = 20;
-                    Rectangle rect = card.ClientRectangle;
-                    path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
-                    path.AddArc(rect.Right - radius, rect.Y, radius, radius, 270, 90);
-                    path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90);
-                    path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90);
-                    path.CloseAllFigures();
-                    card.Region = new Region(path);
-                };
-
-                // ✅ Get values from DataRow
-                int memberId = Convert.ToInt32(row["memberid"]);
-                string memberName = row["name"].ToString();
-                string memberPhone = row["phone"].ToString();
-
-                // Name label
-                Label lblName = new Label();
-                lblName.Text = memberName;
-                lblName.Font = new Font("Segoe UI", 12, FontStyle.Bold);
-                lblName.Location = new Point(80, 20);
-                lblName.AutoSize = true;
-
-                // ID label
-                Label lblID = new Label();
-                lblID.Text = $"#{memberId}";
-                lblID.Font = new Font("Segoe UI", 11);
-                lblID.Location = new Point(300, 25);
-                lblID.AutoSize = true;
-
-                // Phone label
-                Label lblPhone = new Label();
-                lblPhone.Text = memberPhone;
-                lblPhone.Font = new Font("Segoe UI", 11);
-                lblPhone.Location = new Point(450, 25);
-                lblPhone.AutoSize = true;
-
-                // Edit button
-                Button btnEdit = new Button();
-                btnEdit.Text = "✏️";
-                btnEdit.Size = new Size(40, 40);
-                btnEdit.Location = new Point(1150, 20);
-                btnEdit.Click += (s, e) => EditMember(memberId);
-
-                // Delete button
-                Button btnDelete = new Button();
-                btnDelete.Text = "🗑️";
-                btnDelete.Size = new Size(40, 40);
-                btnDelete.Location = new Point(1200, 20);
-                btnDelete.Click += (s, e) => DeleteMember(memberId);
-
-                // Add controls to card
-                card.Controls.Add(lblName);
-                card.Controls.Add(lblID);
-                card.Controls.Add(lblPhone);
-                card.Controls.Add(btnEdit);
-                card.Controls.Add(btnDelete);
-
-                // Add card to flow layout panel
-                flowMembers.Controls.Add(card);
-            }
-        }
-
-
-        private void EditMember(int memberId)
-        {
-            // You can open your EditMemberForm with the selected ID here
-            using (EditMemberForm editForm = new EditMemberForm(memberId))
+            DataGridViewButtonColumn deleteBtn = new DataGridViewButtonColumn()
             {
-                if (editForm.ShowDialog() == DialogResult.OK)
-                {
-                    LoadMembers(); // Refresh after edit
-                }
-            }
+                HeaderText = "Delete",
+                Name = "Delete",
+                Text = "🗑️ Delete",
+                UseColumnTextForButtonValue = true,
+                DefaultCellStyle = {
+                    BackColor = Color.FromArgb(255, 240, 240),
+                    ForeColor = Color.Red,
+                    SelectionBackColor = Color.FromArgb(255, 220, 220)
+                },
+                FlatStyle = FlatStyle.Flat,
+                Width = 90
+            };
+            dgvMembers.Columns.Add(deleteBtn);
         }
 
-        private void DeleteMember(int memberId)
+        private void dgvMembers_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            DialogResult result = MessageBox.Show(
-                "Are you sure you want to delete this member?",
-                "Confirm Delete",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning
-            );
-
-            if (result == DialogResult.Yes)
+            if (e.RowIndex >= 0)
             {
-                DatabaseHelper.DeleteMember(memberId); // make sure you have this method
-                LoadMembers();
+                string col = dgvMembers.Columns[e.ColumnIndex].Name;
+                if (col == "Edit") btnEditMember_Click(sender, e);
+                else if (col == "Delete") btnDeleteMember_Click(sender, e);
             }
-        }
-
-
-        // 🧼 Helper - Clear Inputs
-        //private void ClearInputs()
-        //{
-        //    //txtName.Clear();
-        //    //txtEmail.Clear();
-        //    //txtPhone.Clear();
-        //    //txtAddress.Clear();
-        //    //dtpMembershipDate.Value = DateTime.Now;
-        //}
-
-        private void dgvMembers_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void dgvMembers_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
     }
 }

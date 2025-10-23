@@ -30,6 +30,7 @@ namespace LibraryManagementSystem
 
         private void InitializeComponent()
         {
+            components = new Container();
             leftPanel = new Panel();
             btnBack = new Button();
             btnDeleteMember = new Button();
@@ -39,104 +40,99 @@ namespace LibraryManagementSystem
             txtSearch = new TextBox();
             dgvMembers = new DataGridView();
             lblTitle = new Label();
-            flowMembers = new FlowLayoutPanel();
 
             // 🎨 Theme Colors
-            Color backgroundColor = Color.White;
-            Color buttonColor = Color.White;
-            Color buttonBorderColor = Color.Black;
+            Color leftPanelColor = Color.FromArgb(33, 150, 243); // Blue left panel
+            Color mainBg = Color.FromArgb(245, 247, 250);        // Light gray/white background
             Color textColor = Color.Black;
+            Font buttonFont = new Font("Segoe UI", 10F, FontStyle.Bold);
 
             // ========== LEFT PANEL ==========
-            leftPanel.BackColor = backgroundColor;
-            leftPanel.Controls.Add(btnBack);
-            leftPanel.Controls.Add(btnDeleteMember);
-            leftPanel.Controls.Add(btnEditMember);
-            leftPanel.Controls.Add(btnAddMember);
+            leftPanel.BackColor = leftPanelColor;
             leftPanel.Dock = DockStyle.Left;
             leftPanel.Size = new Size(250, 1181);
+            leftPanel.Controls.AddRange(new Control[] { btnAddMember, btnEditMember, btnDeleteMember, btnBack });
 
-            // 🔸 Reusable button styling method
             void StyleButton(Button btn, string text, int top)
             {
-                btn.BackColor = buttonColor;
-                btn.ForeColor = textColor;
-                btn.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-                btn.Location = new Point(25, top);
-                btn.Size = new Size(200, 40);
                 btn.Text = text;
+                btn.Font = buttonFont;
+                btn.BackColor = Color.White;
+                btn.ForeColor = textColor;
                 btn.FlatStyle = FlatStyle.Flat;
-                btn.FlatAppearance.BorderSize = 1;
-                btn.FlatAppearance.BorderColor = buttonBorderColor;
-                btn.UseVisualStyleBackColor = false;
+                btn.FlatAppearance.BorderSize = 0;
+                btn.Location = new Point(25, top);
+                btn.Size = new Size(200, 50);
             }
 
             StyleButton(btnAddMember, "➕ Add Member", 80);
             btnAddMember.Click += btnAddMember_Click;
 
-            StyleButton(btnEditMember, "✏️ Edit Member", 140);
+            StyleButton(btnEditMember, "✏️ Edit Member", 150);
             btnEditMember.Click += btnEditMember_Click;
 
-            StyleButton(btnDeleteMember, "🗑️ Delete Member", 200);
+            StyleButton(btnDeleteMember, "🗑️ Delete Member", 220);
             btnDeleteMember.Click += btnDeleteMember_Click;
 
-            StyleButton(btnBack, "⬅️ Back", 280);
+            StyleButton(btnBack, "⬅️ Back", 290);
             btnBack.Click += btnBack_Click;
 
             // ========== RIGHT PANEL ==========
-            rightPanel.BackColor = backgroundColor;
             rightPanel.Dock = DockStyle.Fill;
-            rightPanel.Controls.Add(txtSearch);
-            rightPanel.Controls.Add(flowMembers);
-            rightPanel.Controls.Add(lblTitle);
-
-            // ========== SEARCH BOX ==========
-            txtSearch.Location = new Point(174, 91);
-            txtSearch.PlaceholderText = "Search Member 🔍";
-            txtSearch.Size = new Size(246, 23);
-            txtSearch.ForeColor = textColor;
-            txtSearch.BackColor = backgroundColor;
-            txtSearch.BorderStyle = BorderStyle.FixedSingle;
-            txtSearch.TextChanged += txtSearch_TextChanged;
-
-            // ========== FLOW PANEL ==========
-            flowMembers.Location = new Point(174, 140);
-            flowMembers.Size = new Size(1356, 872);
-            flowMembers.AutoScroll = true;
-            flowMembers.BackColor = Color.White;
-            flowMembers.WrapContents = true;
-            flowMembers.FlowDirection = FlowDirection.LeftToRight;
-            flowMembers.Padding = new Padding(10);
-            flowMembers.AutoScrollMargin = new Size(10, 10);
+            rightPanel.BackColor = mainBg;
+            rightPanel.Controls.AddRange(new Control[] { dgvMembers, txtSearch, lblTitle });
 
             // ========== TITLE ==========
-            lblTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblTitle.ForeColor = textColor;
-            lblTitle.Location = new Point(20, 20);
-            lblTitle.Size = new Size(400, 35);
             lblTitle.Text = "👤 Member List";
+            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            lblTitle.ForeColor = textColor;
+            lblTitle.Location = new Point(60, 30);
+            lblTitle.AutoSize = true;
 
-            // ========== DATAGRIDVIEW (optional) ==========
+            // ========== SEARCH BOX ==========
+            txtSearch.Location = new Point(65, 90);
+            txtSearch.PlaceholderText = "Search Member 🔍";
+            txtSearch.Size = new Size(300, 30);
+            txtSearch.Font = new Font("Segoe UI", 10F);
+            txtSearch.TextChanged += txtSearch_TextChanged;
+
+            // ========== DATAGRIDVIEW ==========
+            dgvMembers.Location = new Point(65, 140);
+            dgvMembers.Size = new Size(1600, 850);
+            dgvMembers.ReadOnly = true;
+            dgvMembers.AllowUserToAddRows = false;
+            dgvMembers.AllowUserToDeleteRows = false;
+            dgvMembers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvMembers.RowTemplate.Height = 45; // ✅ Taller row height
+            dgvMembers.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dgvMembers.BackgroundColor = Color.White;
-            dgvMembers.ForeColor = Color.Black;
-            dgvMembers.GridColor = Color.Black;
-            dgvMembers.DefaultCellStyle.ForeColor = textColor;
-            dgvMembers.DefaultCellStyle.BackColor = backgroundColor;
-            dgvMembers.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
-            dgvMembers.ColumnHeadersDefaultCellStyle.ForeColor = textColor;
+            dgvMembers.GridColor = Color.FromArgb(240, 240, 240);
+            dgvMembers.BorderStyle = BorderStyle.None;
+            dgvMembers.DefaultCellStyle.Padding = new Padding(10, 8, 10, 8);
+            dgvMembers.DefaultCellStyle.BackColor = Color.White;
+            dgvMembers.DefaultCellStyle.SelectionBackColor = Color.FromArgb(225, 235, 255);
+            dgvMembers.DefaultCellStyle.SelectionForeColor = Color.Black;
             dgvMembers.EnableHeadersVisualStyles = false;
+            dgvMembers.ColumnHeadersDefaultCellStyle.BackColor = Color.WhiteSmoke;
+            dgvMembers.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+            dgvMembers.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dgvMembers.DefaultCellStyle.Font = new Font("Segoe UI", 10F);
+            dgvMembers.CellClick += dgvMembers_CellClick;
+
 
             // ========== FORM ==========
-            BackColor = backgroundColor;
-            ClientSize = new Size(2008, 1181);
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1900, 1100);
             Controls.Add(rightPanel);
             Controls.Add(leftPanel);
-            Name = "MemberManagementForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Library Management - Member Management";
             WindowState = FormWindowState.Maximized;
             Load += MemberManagementForm_Load;
         }
+
 
         // 🪄 Helper method to create a nice-looking card for a member
         private Panel CreateMemberCard(string name, string email, string phone)
