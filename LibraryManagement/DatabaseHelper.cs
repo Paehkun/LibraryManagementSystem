@@ -30,21 +30,39 @@ namespace LibraryManagementSystem
             return dt;
         }
 
-        public static DataTable GetAllMembers()
+        public static DataTable GetAllMembers(string search = "")
         {
             DataTable dt = new DataTable();
+
             using (var conn = GetConnection())
             {
                 conn.Open();
-                string query = "SELECT memberid, name, email, phone, address, membershipdate FROM member ORDER BY memberid ASC";
+
+                string query = @"
+            SELECT memberid, name, email, phone, address, membershipdate
+            FROM member
+            WHERE (@search = '' 
+                OR CAST(memberid AS TEXT) ILIKE @pattern
+                OR name ILIKE @pattern 
+                OR email ILIKE @pattern 
+                OR phone ILIKE @pattern) 
+            ORDER BY memberid ASC";
+
                 using (var cmd = new NpgsqlCommand(query, conn))
-                using (var reader = cmd.ExecuteReader())
                 {
-                    dt.Load(reader);
+                    cmd.Parameters.AddWithValue("@search", search);
+                    cmd.Parameters.AddWithValue("@pattern", "%" + search + "%");
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        dt.Load(reader);
+                    }
                 }
             }
+
             return dt;
         }
+
         public static void DeleteMember(int memberId)
         {
             using (var conn = GetConnection())

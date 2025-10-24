@@ -105,7 +105,9 @@ namespace LibraryManagementSystem
 
         private void btnBookCatalog_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Open Book Catalog Page");
+            BookCatalogForm bookCatalogForm = new BookCatalogForm();
+            bookCatalogForm.Show();
+            this.Hide();
         }
 
         private void btnReports_Click(object sender, EventArgs e)

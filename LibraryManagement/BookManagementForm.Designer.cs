@@ -77,7 +77,7 @@ namespace LibraryManagementSystem
             btnBack.Text = "⬅️ Back";
             btnBack.UseVisualStyleBackColor = false;
             // button colors match theme
-            btnBack.ForeColor = Color.FromArgb(33, 150, 243);
+            btnBack.ForeColor = Color.Black;
             btnBack.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
             btnBack.Click += btnBack_Click;
             // 
@@ -93,7 +93,7 @@ namespace LibraryManagementSystem
             btnDeleteBook.TabIndex = 1;
             btnDeleteBook.Text = "🗑️ Delete Book";
             btnDeleteBook.UseVisualStyleBackColor = false;
-            btnDeleteBook.ForeColor = Color.FromArgb(33, 150, 243);
+            btnDeleteBook.ForeColor = Color.Black;
             btnDeleteBook.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
             btnDeleteBook.Click += btnDeleteBook_Click;
             // 
@@ -109,7 +109,7 @@ namespace LibraryManagementSystem
             btnEditBook.TabIndex = 2;
             btnEditBook.Text = "✏️ Edit Book";
             btnEditBook.UseVisualStyleBackColor = false;
-            btnEditBook.ForeColor = Color.FromArgb(33, 150, 243);
+            btnEditBook.ForeColor = Color.Black;
             btnEditBook.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
             btnEditBook.Click += btnEditBook_Click;
             // 
@@ -125,7 +125,7 @@ namespace LibraryManagementSystem
             btnAddBook.TabIndex = 3;
             btnAddBook.Text = "➕ Add Book";
             btnAddBook.UseVisualStyleBackColor = false;
-            btnAddBook.ForeColor = Color.FromArgb(33, 150, 243);
+            btnAddBook.ForeColor = Color.Black;
             btnAddBook.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
             btnAddBook.Click += btnAddBook_Click;
             // 
