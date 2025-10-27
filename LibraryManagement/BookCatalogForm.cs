@@ -16,8 +16,38 @@ namespace LibraryManagementSystem
 
         private void BookCatalogForm_Load(object sender, EventArgs e)
         {
+            // Create Back button
+            btnBack = new Button
+            {
+                Text = "← Back",
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                BackColor = Color.SteelBlue,
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Width = 90,
+                Height = 32
+            };
+            btnBack.FlatAppearance.BorderSize = 0;
+
+            // Position: left side of the search TextBox
+            // Assuming your txtSearch is near top-right area — we'll align accordingly
+            btnBack.Location = new Point(txtSearch.Left - btnBack.Width - 10, txtSearch.Top);
+
+            // Add click event
+            btnBack.Click += BtnBack_Click;
+
+            // Add button to the form
+            this.Controls.Add(btnBack);
             LoadBooks();
         }
+
+        private void BtnBack_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            LibrarianHomeForm librarianHome = new LibrarianHomeForm("Librarian");
+            librarianHome.Show();
+        }
+
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
@@ -192,6 +222,14 @@ namespace LibraryManagementSystem
                 }
             }
             return dt;
+        }
+
+        private void btn_back_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            LibrarianHomeForm librarianHome = new LibrarianHomeForm("Librarian");
+            librarianHome.Show();
+
         }
     }
 }

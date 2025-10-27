@@ -93,7 +93,7 @@
             // 
             // LoginForm
             // 
-            BackColor = Color.PeachPuff;
+            BackColor = Color.SteelBlue;
             ClientSize = new Size(342, 411);
             Controls.Add(lblTitle);
             Controls.Add(lblUser);

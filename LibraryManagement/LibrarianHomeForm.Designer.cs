@@ -64,7 +64,7 @@
             // ==============================
             // 📌 LEFT PANEL
             // ==============================
-            leftPanel.BackColor = Color.White;
+            leftPanel.BackColor = Color.FromArgb(33, 150, 243);
             leftPanel.Controls.Add(lblWelcome);
             leftPanel.Controls.Add(btnBookManagement);
             leftPanel.Controls.Add(btnMemberRecords);
@@ -87,7 +87,7 @@
             int btnWidth = 200;
             int btnHeight = 40;
             int startY = 80;
-            int spacing = 60;
+            int spacing = 68;
 
             Button[] buttons = { btnBookManagement, btnMemberRecords, btnBookCatalog, btnReports, btnBorrowReturn, btnLogout };
             string[] texts = { "📖 Book Management", "👥 Member Management", "📚 Catalog", "📊 Reports", "🔁 Borrow / Return", "🚪 Logout" };
@@ -95,12 +95,17 @@
             for (int i = 0; i < buttons.Length; i++)
             {
                 buttons[i].BackColor = Color.White;
-                buttons[i].Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+                buttons[i].Font = new Font("Segoe UI", 10F, FontStyle.Bold);
                 buttons[i].Size = new Size(btnWidth, btnHeight);
                 buttons[i].Location = new Point(20, startY + (i * spacing));
                 buttons[i].Text = texts[i];
-                buttons[i].UseVisualStyleBackColor = true;
+                buttons[i].UseVisualStyleBackColor = false;
+                buttons[i].FlatStyle = FlatStyle.Flat; ;
+                buttons[i].FlatAppearance.BorderSize = 0;
+                buttons[i].ForeColor = Color.Black;
+                buttons[i].FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
             }
+
 
             btnBookManagement.Click += btnBookManagement_Click;
             btnMemberRecords.Click += btnMemberRecords_Click;
@@ -112,7 +117,7 @@
             // ==============================
             // 📌 RIGHT PANEL (DASHBOARD)
             // ==============================
-            rightPanel.BackColor = Color.WhiteSmoke;  // clean background like Book Management
+            rightPanel.BackColor = Color.FromArgb(245, 247, 250); // clean background like Book Management
             rightPanel.Dock = DockStyle.Fill;
             rightPanel.Controls.Add(dataGridView2);
             rightPanel.Controls.Add(dataGridView1);

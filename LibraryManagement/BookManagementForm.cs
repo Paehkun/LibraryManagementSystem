@@ -158,8 +158,8 @@ namespace LibraryManagementSystem
             dgvBooks.DefaultCellStyle.SelectionForeColor = Color.Black;
             dgvBooks.DefaultCellStyle.Padding = new Padding(12, 10, 12, 10);
 
-            dgvBooks.RowTemplate.Height = 90;
-            dgvBooks.RowTemplate.MinimumHeight = 90;
+            dgvBooks.RowTemplate.Height = 40;
+            dgvBooks.RowTemplate.MinimumHeight = 40;
             dgvBooks.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
             dgvBooks.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 248, 250);

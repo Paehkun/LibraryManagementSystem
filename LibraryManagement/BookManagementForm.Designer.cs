@@ -170,7 +170,7 @@ namespace LibraryManagementSystem
             dgvBooks.GridColor = Color.LightGray;
             dgvBooks.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             dgvBooks.DefaultCellStyle.Font = new Font("Segoe UI", 10F);
-            dgvBooks.Size = new Size(1356, 872);
+            dgvBooks.Size = new Size(1356, 950);
             dgvBooks.TabIndex = 0;
 
             // header & row appearance (safe to set in Designer)

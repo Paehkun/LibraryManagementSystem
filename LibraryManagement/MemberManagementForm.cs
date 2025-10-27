@@ -90,21 +90,13 @@ namespace LibraryManagementSystem
 
         private void btnDeleteMember_Click(object sender, EventArgs e)
         {
-            if (dgvMembers.CurrentRow != null)
+            using (var deleteForm = new DeleteMemberForm())
             {
-                int memberId = Convert.ToInt32(dgvMembers.CurrentRow.Cells["memberid"].Value);
-                DialogResult result = MessageBox.Show("Are you sure you want to delete this member?",
-                    "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if (result == DialogResult.Yes)
+                if (deleteForm.ShowDialog() == DialogResult.OK)
                 {
-                    DatabaseHelper.DeleteMember(memberId);
                     LoadMembers();
+                    ApplyCardStyle(); // 🔄
                 }
-            }
-            else
-            {
-                MessageBox.Show("Please select a member to delete.");
             }
         }
 
