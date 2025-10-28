@@ -117,5 +117,113 @@ namespace LibraryManagementSystem
                 }
             }
         }
+        public static DataTable GetBorrowRecords()
+        {
+            DataTable dt = new DataTable();
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                string query = "SELECT * FROM borrowreturn ORDER BY borrowid ASC";
+                using (var cmd = new NpgsqlCommand(query, conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    dt.Load(reader);
+                }
+            }
+            return dt;
+        }
+
+
+        public static DataRow GetMemberById(int memberId)
+        {
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                string query = "SELECT * FROM member WHERE memberid = @id";
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", memberId);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        DataTable dt = new DataTable();
+                        dt.Load(reader);
+                        return dt.Rows.Count > 0 ? dt.Rows[0] : null;
+                    }
+                }
+            }
+        }
+
+        public static DataRow GetBookByISBN(string isbn)
+        {
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                string query = "SELECT * FROM books WHERE isbn = @isbn";
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@isbn", isbn);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        DataTable dt = new DataTable();
+                        dt.Load(reader);
+                        return dt.Rows.Count > 0 ? dt.Rows[0] : null;
+                    }
+                }
+            }
+        }
+
+        public static void AddBorrowRecord(string title, string isbn, int memberid, string name, string phone, DateTime borrowdate, DateTime duedate)
+        {
+            string borrowid = GenerateUniqueBorrowId();
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                string sql = @"
+            INSERT INTO borrowreturn (borrowid, title, isbn, memberid, name, phone, borrowdate, duedate, returndate, status)
+            VALUES (@borrowid, @title, @isbn, @memberid, @name, @phone, @borrowdate, @duedate, NULL, 'Borrowed')";
+                using (var cmd = new NpgsqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("borrowid", borrowid);
+                    cmd.Parameters.AddWithValue("title", title);
+                    cmd.Parameters.AddWithValue("isbn", isbn);
+                    cmd.Parameters.AddWithValue("memberid", memberid);
+                    cmd.Parameters.AddWithValue("name", name);
+                    cmd.Parameters.AddWithValue("phone", phone);
+                    cmd.Parameters.AddWithValue("borrowdate", borrowdate.Date);
+                    cmd.Parameters.AddWithValue("duedate", duedate.Date);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public static string GenerateUniqueBorrowId()
+        {
+            var rnd = new Random();
+            string borrowId;
+
+            do
+            {
+                borrowId = rnd.Next(100000, 1000000).ToString(); // 6 digits
+            } while (CheckBorrowIdExists(borrowId));
+
+            return borrowId;
+        }
+
+
+        public static bool CheckBorrowIdExists(string borrowId)
+        {
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                string query = "SELECT COUNT(*) FROM borrowreturn WHERE borrowid = @borrowid";
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("borrowid", borrowId);
+                    long count = (long)cmd.ExecuteScalar();
+                    return count > 0;
+                }
+            }
+        }
+
     }
 }

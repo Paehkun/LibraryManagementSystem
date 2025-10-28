@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using LibraryManagement;
+using Npgsql;
 using System;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
@@ -76,10 +77,71 @@ namespace LibraryManagementSystem
                 MessageBox.Show($"Error loading dashboard data: {ex.Message}");
             }
         }
+        private void LoadBorrowedBooks()
+        {
+            try
+            {
+                using (var conn = new NpgsqlConnection(connString))
+                {
+                    conn.Open();
+
+                    string query = @"
+                SELECT 
+                    br.borrowid AS ""Borrow ID"",
+                    br.memberid AS ""Member ID"",
+                    m.name AS ""Member Name"",
+                    br.isbn AS ""Book ISBN"",
+                    b.title AS ""Book Title"",
+                    br.borrowdate AS ""Borrow Date"",
+                    br.duedate AS ""Due Date"",
+                    br.status AS ""Status""
+                FROM borrowreturn br
+                JOIN member m ON br.memberid = m.memberid
+                JOIN books b ON br.isbn = b.isbn
+                ORDER BY br.borrowdate DESC;
+            ";
+
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        var dt = new System.Data.DataTable();
+                        dt.Load(reader);
+                        dataGridView1.DataSource = dt;
+                        if (dataGridView1.Rows.Count == 1)
+                        {
+                            dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
+                            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+                            dataGridView1.BackgroundColor = Color.LightGray;
+                        }
+                        else
+                        {
+                            dataGridView1.RowsDefaultCellStyle.BackColor = Color.White;
+                            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.WhiteSmoke;
+                            dataGridView1.BackgroundColor = Color.White;
+                        }
+
+                    }
+                }
+
+                // Optional: Styling like your other forms
+                dataGridView1.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10);
+                dataGridView1.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                dataGridView1.RowTemplate.Height = 40;
+                dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                dataGridView1.MultiSelect = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading borrowed books: {ex.Message}");
+            }
+        }
+
 
         private void LibrarianHomeForm_Load(object sender, EventArgs e)
         {
             LoadDashboardData();
+            LoadBorrowedBooks();
         }
 
         private void btnBookManagement_Click(object sender, EventArgs e)
@@ -92,7 +154,10 @@ namespace LibraryManagementSystem
 
         private void btnBorrowReturn_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Open Borrow/Return Page");
+            borrowANDreturn BorrowandReturn = new borrowANDreturn();
+            BorrowandReturn.Show();
+
+            this.Hide();
         }
 
         private void btnMemberRecords_Click(object sender, EventArgs e)
@@ -131,34 +196,6 @@ namespace LibraryManagementSystem
                 login.Show();
             }
         }
-        private void lblWelcome_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblTotalMembers_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void rightPanel_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void lblTotalBooks_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void leftPanel_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void lblTotalBooksValue_Click(object sender, EventArgs e)
-        {
-
-        }
+        
     }
 }
