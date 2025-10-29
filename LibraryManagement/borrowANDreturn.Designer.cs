@@ -28,6 +28,8 @@
             txtBorrowDays = new TextBox();
             btnAdd = new Button();
             btnBack = new Button();
+            btnSelectMember = new Button();
+            btnSelectBooks = new Button();
             dataGridView1 = new DataGridView();
             panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -45,96 +47,90 @@
             lblHeader.TabIndex = 0;
             lblHeader.Text = "📚 Borrow & Return Management";
             lblHeader.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // panelTop
             // 
-            panelTop.BackColor = Color.WhiteSmoke;
-            panelTop.Controls.Add(lblMemberID);
-            panelTop.Controls.Add(txtMemberID);
-            panelTop.Controls.Add(lblISBN);
-            panelTop.Controls.Add(txtISBN);
-            panelTop.Controls.Add(lblBorrowDays);
-            panelTop.Controls.Add(txtBorrowDays);
-            panelTop.Controls.Add(btnAdd);
-            panelTop.Controls.Add(btnBack);
-            panelTop.Dock = DockStyle.Top;
-            panelTop.Location = new Point(0, 56);
-            panelTop.Name = "panelTop";
-            panelTop.Size = new Size(2645, 112);
-            panelTop.TabIndex = 1;
-            // 
-            // lblMemberID
-            // 
-            lblMemberID.Location = new Point(35, 28);
-            lblMemberID.Name = "lblMemberID";
-            lblMemberID.Size = new Size(88, 23);
-            lblMemberID.TabIndex = 0;
-            lblMemberID.Text = "Member ID:";
-            // 
-            // txtMemberID
-            // 
-            txtMemberID.Location = new Point(122, 28);
-            txtMemberID.Name = "txtMemberID";
-            txtMemberID.Size = new Size(158, 23);
-            txtMemberID.TabIndex = 1;
-            // 
-            // lblISBN
-            // 
-            lblISBN.Location = new Point(318, 28);
-            lblISBN.Name = "lblISBN";
-            lblISBN.Size = new Size(52, 23);
-            lblISBN.TabIndex = 2;
-            lblISBN.Text = "ISBN:";
-            // 
-            // txtISBN
-            // 
-            txtISBN.Location = new Point(385, 28);
-            txtISBN.Name = "txtISBN";
-            txtISBN.Size = new Size(158, 23);
-            txtISBN.TabIndex = 3;
-            // 
-            // lblBorrowDays
-            // 
-            lblBorrowDays.Location = new Point(569, 28);
-            lblBorrowDays.Name = "lblBorrowDays";
-            lblBorrowDays.Size = new Size(88, 23);
-            lblBorrowDays.TabIndex = 4;
-            lblBorrowDays.Text = "Borrow Days:";
-            // 
-            // txtBorrowDays
-            // 
-            txtBorrowDays.Location = new Point(665, 28);
-            txtBorrowDays.Name = "txtBorrowDays";
-            txtBorrowDays.Size = new Size(70, 23);
-            txtBorrowDays.TabIndex = 5;
-            // 
-            // btnAdd
-            // 
-            btnAdd.BackColor = Color.SteelBlue;
-            btnAdd.FlatStyle = FlatStyle.Flat;
-            btnAdd.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnAdd.ForeColor = Color.White;
-            btnAdd.Location = new Point(770, 23);
-            btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(131, 38);
-            btnAdd.TabIndex = 2;
-            btnAdd.Text = "➕ Add Record";
-            btnAdd.UseVisualStyleBackColor = false;
-            btnAdd.Click += btnAdd_Click;
-            // 
+            // panelTop
+            this.panelTop = new Panel();
+            this.panelTop.BackColor = Color.WhiteSmoke;
+            this.panelTop.Dock = DockStyle.Top;
+            this.panelTop.Height = 80;
+            this.panelTop.Padding = new Padding(20, 20, 0, 20);
+            this.panelTop.TabIndex = 1;
+
             // btnBack
-            // 
-            btnBack.BackColor = Color.LightGray;
-            btnBack.FlatStyle = FlatStyle.Flat;
-            btnBack.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnBack.ForeColor = Color.Black;
-            btnBack.Location = new Point(928, 23);
-            btnBack.Name = "btnBack";
-            btnBack.Size = new Size(88, 38);
-            btnBack.TabIndex = 3;
-            btnBack.Text = "← Back";
-            btnBack.UseVisualStyleBackColor = false;
-            btnBack.Click += btnBack_Click;
+            this.btnBack = new Button();
+            this.btnBack.Text = "← Back";
+            this.btnBack.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            this.btnBack.BackColor = Color.LightGray;
+            this.btnBack.ForeColor = Color.Black;
+            this.btnBack.FlatStyle = FlatStyle.Flat;
+            this.btnBack.FlatAppearance.BorderSize = 0;
+            this.btnBack.Size = new Size(100, 38);
+            this.btnBack.Location = new Point(20, 20);
+            this.btnBack.Click += new EventHandler(this.btnBack_Click);
+
+            // btnSelectMember
+            this.btnSelectMember = new Button();
+            this.btnSelectMember.Text = "Select Member";
+            this.btnSelectMember.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            this.btnSelectMember.BackColor = Color.SteelBlue;
+            this.btnSelectMember.ForeColor = Color.White;
+            this.btnSelectMember.FlatStyle = FlatStyle.Flat;
+            this.btnSelectMember.FlatAppearance.BorderSize = 0;
+            this.btnSelectMember.Size = new Size(150, 38);
+            this.btnSelectMember.Location = new Point(140, 20);
+            this.btnSelectMember.Click += new EventHandler(this.BtnSelectMember_Click);
+
+            // btnSelectBooks
+            this.btnSelectBooks = new Button();
+            this.btnSelectBooks.Text = "Select Books";
+            this.btnSelectBooks.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            this.btnSelectBooks.BackColor = Color.SteelBlue;
+            this.btnSelectBooks.ForeColor = Color.White;
+            this.btnSelectBooks.FlatStyle = FlatStyle.Flat;
+            this.btnSelectBooks.FlatAppearance.BorderSize = 0;
+            this.btnSelectBooks.Size = new Size(150, 38);
+            this.btnSelectBooks.Location = new Point(310, 20);
+            this.btnSelectBooks.Click += new EventHandler(this.BtnSelectBooks_Click);
+
+            // btnAdd
+            this.btnAdd = new Button();
+            this.btnAdd.Text = "➕ Add Record";
+            this.btnAdd.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            this.btnAdd.BackColor = Color.SteelBlue;
+            this.btnAdd.ForeColor = Color.White;
+            this.btnAdd.FlatStyle = FlatStyle.Flat;
+            this.btnAdd.FlatAppearance.BorderSize = 0;
+            this.btnAdd.Size = new Size(150, 38);
+            this.btnAdd.Location = new Point(480, 20);
+            this.btnAdd.Click += new EventHandler(this.btnAdd_Click);
+
+            // lblBorrowDays
+            this.lblBorrowDays = new Label();
+            this.lblBorrowDays.Text = "Borrow Days:";
+            this.lblBorrowDays.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            this.lblBorrowDays.ForeColor = Color.Black;
+            this.lblBorrowDays.AutoSize = true;
+            this.lblBorrowDays.Location = new Point(660, 28);
+
+            // txtBorrowDays
+            this.txtBorrowDays = new TextBox();
+            this.txtBorrowDays.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            this.txtBorrowDays.Size = new Size(80, 25);
+            this.txtBorrowDays.Location = new Point(770, 25);
+
+            // Add everything to the panel
+            this.panelTop.Controls.Add(this.btnBack);
+            this.panelTop.Controls.Add(this.btnSelectMember);
+            this.panelTop.Controls.Add(this.btnSelectBooks);
+            this.panelTop.Controls.Add(this.btnAdd);
+            this.panelTop.Controls.Add(this.lblBorrowDays);
+            this.panelTop.Controls.Add(this.txtBorrowDays);
+
+            // Add panel after header
+            this.Controls.Add(this.panelTop);
+
+
             // 
             // dataGridView1
             // 
@@ -167,7 +163,7 @@
             dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
             dataGridView1.EnableHeadersVisualStyles = false;
             dataGridView1.GridColor = Color.LightGray;
-            dataGridView1.Location = new Point(863, 377);
+            dataGridView1.Location = new Point(273, 214);
             dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
@@ -207,5 +203,10 @@
         private System.Windows.Forms.TextBox txtBorrowDays;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnBack;
+        private System.Windows.Forms.Button btnSelectMember;
+        private System.Windows.Forms.Button btnSelectBooks;
+        private System.Windows.Forms.DataGridView dataGridMembers;
+        private System.Windows.Forms.DataGridView dataGridBooks;
+
     }
 }

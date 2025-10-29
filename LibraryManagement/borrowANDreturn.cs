@@ -1,4 +1,5 @@
 ﻿using LibraryManagementSystem;
+using Microsoft.VisualBasic;
 using System;
 using System.Data;
 using System.Drawing;
@@ -9,11 +10,25 @@ namespace LibraryManagement
 {
     public partial class borrowANDreturn : Form
     {
+        private int selectedMemberId = -1;
+        private string selectedMemberName = "";
+        private string selectedPhone = "";
+        private List<(string Title, string ISBN)> selectedBooks = new List<(string, string)>();
+
+        private ListBox listBoxSelectedBooks;
+
         public borrowANDreturn()
         {
             InitializeComponent();
+            listBoxSelectedBooks = new ListBox
+            {
+                Location = new Point(300, 150),
+                Size = new Size(400, 100),
+                Font = new Font("Segoe UI", 10)
+            };
+            this.Controls.Add(listBoxSelectedBooks);
             LoadBorrowRecords();
-            StyleDataGridView(); 
+            StyleDataGridView();
             ApplyCardStyle();
             // ✅ Adjust specific column widths
             dataGridView1.Columns["borrowid"].Width = 120;
@@ -79,66 +94,91 @@ namespace LibraryManagement
         {
             try
             {
-                string isbn = txtISBN.Text.Trim();
-                string memberIdText = txtMemberID.Text.Trim();
-                string daysText = txtBorrowDays.Text.Trim();
-
-                if (string.IsNullOrEmpty(isbn) || string.IsNullOrEmpty(memberIdText) || string.IsNullOrEmpty(daysText))
+                if (selectedMemberId == -1)
                 {
-                    MessageBox.Show("Please fill in Member ID, ISBN, and Borrow Days.", "Missing Info", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Please select a member first.", "Missing Member", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                if (!int.TryParse(memberIdText, out int memberId) || !int.TryParse(daysText, out int borrowDays))
+                if (selectedBooks.Count == 0)
                 {
-                    MessageBox.Show("Invalid Member ID or Borrow Days. Please enter valid numbers.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Please select at least one book.", "Missing Books", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // 🗄 Fetch Member and Book Info
-                DataRow member = DatabaseHelper.GetMemberById(memberId);
-                DataRow book = DatabaseHelper.GetBookByISBN(isbn);
+                if (string.IsNullOrEmpty(txtBorrowDays.Text) || !int.TryParse(txtBorrowDays.Text, out int borrowDays))
+                {
+                    MessageBox.Show("Please enter valid borrow days.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
+                DataRow member = DatabaseHelper.GetMemberById(selectedMemberId);
                 if (member == null)
                 {
                     MessageBox.Show("Member not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                if (book == null)
-                {
-                    MessageBox.Show("Book not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
                 string name = member["name"].ToString();
                 string phone = member["phone"].ToString();
-                string title = book["title"].ToString();
-
                 DateTime borrowDate = DateTime.Now;
                 DateTime dueDate = borrowDate.AddDays(borrowDays);
 
-                Random random = new Random();
-                string borrowId = random.Next(100000, 999999).ToString();
-
-                // Make sure it’s unique before inserting (optional but safer)
-                while (DatabaseHelper.CheckBorrowIdExists(borrowId))
+                foreach (var book in selectedBooks)
                 {
-                    borrowId = random.Next(100000, 999999).ToString();
+                    DatabaseHelper.AddBorrowRecord(book.Title, book.ISBN, selectedMemberId, name, phone, borrowDate, dueDate);
                 }
 
-
-                // 📝 Add record
-                DatabaseHelper.AddBorrowRecord(title, isbn, memberId, name, phone, borrowDate, dueDate);
-
-                MessageBox.Show("Borrow record added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Borrow record(s) added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadBorrowRecords();
+                selectedBooks.Clear();
+                listBoxSelectedBooks.Items.Clear();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error adding record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+        private void BtnSelectMember_Click(object sender, EventArgs e)
+        {
+            using (SelectMemberForm memberForm = new SelectMemberForm())
+            {
+                if (memberForm.ShowDialog() == DialogResult.OK)
+                {
+                    selectedMemberId = int.Parse(memberForm.SelectedMemberId);
+                    selectedMemberName = memberForm.SelectedMemberName;
+                    selectedPhone = memberForm.SelectedMemberPhone;
+
+                    MessageBox.Show($"Selected Member: {selectedMemberName} (ID: {selectedMemberId})",
+                        "Member Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+
+        private void BtnSelectBooks_Click(object sender, EventArgs e)
+        {
+            using (SelectBooksForm booksForm = new SelectBooksForm())
+            {
+                if (booksForm.ShowDialog() == DialogResult.OK)
+                {
+                    selectedBooks.Clear();
+                    listBoxSelectedBooks.Items.Clear();
+
+                    foreach (var book in booksForm.SelectedBooks)
+                    {
+                        selectedBooks.Add((book.Title, book.ISBN));
+                        listBoxSelectedBooks.Items.Add($"{book.Title} ({book.ISBN})");
+                    }
+
+                    MessageBox.Show($"{selectedBooks.Count} book(s) selected.", "Books Selected",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
         private void btnBack_Click(object sender, EventArgs e)
         {
             this.Hide();
@@ -237,8 +277,6 @@ namespace LibraryManagement
 
             return path;
         }
-
-
 
     }
 }

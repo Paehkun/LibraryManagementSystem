@@ -140,6 +140,7 @@ namespace LibraryManagementSystem
 
         private void LibrarianHomeForm_Load(object sender, EventArgs e)
         {
+            LoadBorrowedBooks();
             LoadDashboardData();
             LoadBorrowedBooks();
         }
