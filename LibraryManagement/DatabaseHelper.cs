@@ -172,23 +172,26 @@ namespace LibraryManagementSystem
             }
         }
 
-        public static void AddBorrowRecord(string title, string isbn, int memberid, string name, string phone, DateTime borrowdate, DateTime duedate)
+        public static void AddBorrowRecord(string title, string isbn, int memberid, DateTime borrowdate, DateTime duedate)
         {
             string borrowid = GenerateUniqueBorrowId();
+
             using (var conn = GetConnection())
             {
                 conn.Open();
                 string sql = @"
             INSERT INTO borrowreturn (borrowid, title, isbn, memberid, name, phone, borrowdate, duedate, returndate, status)
-            VALUES (@borrowid, @title, @isbn, @memberid, @name, @phone, @borrowdate, @duedate, NULL, 'Borrowed')";
+            SELECT 
+                @borrowid, @title, @isbn, m.memberid, m.name, m.phone, @borrowdate, @duedate, NULL, 'Borrowed'
+            FROM member m
+            WHERE m.memberid = @memberid";
+
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("borrowid", borrowid);
                     cmd.Parameters.AddWithValue("title", title);
                     cmd.Parameters.AddWithValue("isbn", isbn);
                     cmd.Parameters.AddWithValue("memberid", memberid);
-                    cmd.Parameters.AddWithValue("name", name);
-                    cmd.Parameters.AddWithValue("phone", phone);
                     cmd.Parameters.AddWithValue("borrowdate", borrowdate.Date);
                     cmd.Parameters.AddWithValue("duedate", duedate.Date);
 
@@ -196,6 +199,7 @@ namespace LibraryManagementSystem
                 }
             }
         }
+
         public static string GenerateUniqueBorrowId()
         {
             var rnd = new Random();
@@ -224,6 +228,28 @@ namespace LibraryManagementSystem
                 }
             }
         }
+
+        // ✅ Generic ExecuteNonQuery for UPDATE / DELETE / INSERT
+        public static int ExecuteNonQuery(string query, object parameters = null)
+        {
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    if (parameters != null)
+                    {
+                        foreach (var prop in parameters.GetType().GetProperties())
+                        {
+                            cmd.Parameters.AddWithValue("@" + prop.Name, prop.GetValue(parameters) ?? DBNull.Value);
+                        }
+                    }
+
+                    return cmd.ExecuteNonQuery(); // returns affected row count
+                }
+            }
+        }
+
 
     }
 }

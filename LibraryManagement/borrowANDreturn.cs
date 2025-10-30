@@ -15,31 +15,23 @@ namespace LibraryManagement
         private string selectedPhone = "";
         private List<(string Title, string ISBN)> selectedBooks = new List<(string, string)>();
 
-        private ListBox listBoxSelectedBooks;
-
         public borrowANDreturn()
         {
             InitializeComponent();
-            listBoxSelectedBooks = new ListBox
-            {
-                Location = new Point(300, 150),
-                Size = new Size(400, 100),
-                Font = new Font("Segoe UI", 10)
-            };
-            this.Controls.Add(listBoxSelectedBooks);
             LoadBorrowRecords();
             StyleDataGridView();
             ApplyCardStyle();
             // ✅ Adjust specific column widths
             dataGridView1.Columns["borrowid"].Width = 120;
-            dataGridView1.Columns["title"].Width = 220;
-            dataGridView1.Columns["isbn"].Width = 150;
+            dataGridView1.Columns["title"].Width = 230;
+            dataGridView1.Columns["isbn"].Width = 140;
             dataGridView1.Columns["memberid"].Width = 120;
             dataGridView1.Columns["name"].Width = 180;
             dataGridView1.Columns["borrowdate"].Width = 150;
             dataGridView1.Columns["duedate"].Width = 150;
             dataGridView1.Columns["returndate"].Width = 150;
             dataGridView1.Columns["status"].Width = 100;
+            dataGridView1.Columns["phone"].Width = 120;
 
             // ✅ Optional: center-align some columns
             dataGridView1.Columns["borrowid"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -50,6 +42,7 @@ namespace LibraryManagement
             dataGridView1.Columns["isbn"].HeaderText = "ISBN";
             dataGridView1.Columns["memberid"].HeaderText = "Member ID";
             dataGridView1.Columns["name"].HeaderText = "Name";
+            dataGridView1.Columns["phone"].HeaderText = "Phone";
             dataGridView1.Columns["borrowdate"].HeaderText = "Borrow Date";
             dataGridView1.Columns["duedate"].HeaderText = "Due Date";
             dataGridView1.Columns["returndate"].HeaderText = "Return Date";
@@ -66,6 +59,7 @@ namespace LibraryManagement
             // Style
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+            dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
             dataGridView1.RowTemplate.Height = 35;
 
@@ -94,51 +88,69 @@ namespace LibraryManagement
         {
             try
             {
-                if (selectedMemberId == -1)
+                // 🧩 Step 1: Select Member
+                int memberId = -1;
+
+                using (SelectMemberForm memberForm = new SelectMemberForm())
                 {
-                    MessageBox.Show("Please select a member first.", "Missing Member", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    if (memberForm.ShowDialog() != DialogResult.OK)
+                        return; // Cancelled by user
+
+                    memberId = int.Parse(memberForm.SelectedMemberId);
+                }
+
+                // 🧩 Step 2: Select Books
+                List<(string Title, string ISBN)> selectedBooks = new List<(string, string)>();
+                using (SelectBooksForm booksForm = new SelectBooksForm())
+                {
+                    if (booksForm.ShowDialog() != DialogResult.OK)
+                        return; // Cancelled by user
+
+                    foreach (var book in booksForm.SelectedBooks)
+                    {
+                        selectedBooks.Add((book.Title, book.ISBN));
+                    }
                 }
 
                 if (selectedBooks.Count == 0)
                 {
-                    MessageBox.Show("Please select at least one book.", "Missing Books", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("No books selected!", "Missing Books", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                if (string.IsNullOrEmpty(txtBorrowDays.Text) || !int.TryParse(txtBorrowDays.Text, out int borrowDays))
+                // 🧩 Step 3: Ask for Borrow Days
+                string input = Interaction.InputBox("Enter number of borrow days:", "Borrow Duration", "7");
+                if (!int.TryParse(input, out int borrowDays) || borrowDays <= 0)
                 {
-                    MessageBox.Show("Please enter valid borrow days.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Please enter a valid number of days.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                DataRow member = DatabaseHelper.GetMemberById(selectedMemberId);
-                if (member == null)
-                {
-                    MessageBox.Show("Member not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                string name = member["name"].ToString();
-                string phone = member["phone"].ToString();
+                // 🧩 Step 4: Insert Borrow Records
                 DateTime borrowDate = DateTime.Now;
                 DateTime dueDate = borrowDate.AddDays(borrowDays);
 
                 foreach (var book in selectedBooks)
                 {
-                    DatabaseHelper.AddBorrowRecord(book.Title, book.ISBN, selectedMemberId, name, phone, borrowDate, dueDate);
+                    // now only send what's needed — the DB helper will fetch phone/name
+                    DatabaseHelper.AddBorrowRecord(book.Title, book.ISBN, memberId, borrowDate, dueDate);
+
+                    // Reduce available copies
+                    string query = "UPDATE Books SET copiesavailable = copiesavailable - 1 WHERE isbn = @isbn";
+                    DatabaseHelper.ExecuteNonQuery(query, new { isbn = book.ISBN });
                 }
 
-                MessageBox.Show("Borrow record(s) added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadBorrowRecords();
-                selectedBooks.Clear();
-                listBoxSelectedBooks.Items.Clear();
+                // 🧩 Step 5: Done
+                MessageBox.Show($"{selectedBooks.Count} book(s) borrowed successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadBorrowRecords(); // refresh grid
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error adding record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error while adding record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
 
 
         private void BtnSelectMember_Click(object sender, EventArgs e)
@@ -151,8 +163,8 @@ namespace LibraryManagement
                     selectedMemberName = memberForm.SelectedMemberName;
                     selectedPhone = memberForm.SelectedMemberPhone;
 
-                    MessageBox.Show($"Selected Member: {selectedMemberName} (ID: {selectedMemberId})",
-                        "Member Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //MessageBox.Show($"Selected Member: {selectedMemberName} (ID: {selectedMemberId})",
+                    //    "Member Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -171,10 +183,12 @@ namespace LibraryManagement
                     {
                         selectedBooks.Add((book.Title, book.ISBN));
                         listBoxSelectedBooks.Items.Add($"{book.Title} ({book.ISBN})");
+                        string query = "UPDATE Books SET copiesavailable = copiesavailable - 1 WHERE isbn = @isbn";
+                        DatabaseHelper.ExecuteNonQuery(query, new { isbn = book.ISBN });
                     }
 
-                    MessageBox.Show($"{selectedBooks.Count} book(s) selected.", "Books Selected",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //MessageBox.Show($"{selectedBooks.Count} book(s) selected.", "Books Selected",
+                    //    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -203,6 +217,7 @@ namespace LibraryManagement
             dataGridView1.BackgroundColor = Color.White;
             dataGridView1.BorderStyle = BorderStyle.None;
             dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView1.GridColor = Color.White;
             dataGridView1.RowHeadersVisible = false;
 
