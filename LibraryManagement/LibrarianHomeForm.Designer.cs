@@ -264,9 +264,13 @@
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.ReadOnly = true;
+            dataGridView1.RowHeadersVisible = false;
             dataGridView1.Location = new Point(80, 430);
             dataGridView1.Size = new Size(700, 400);
-
+            dataGridView2.AllowUserToAddRows = false;
+            dataGridView2.AllowUserToDeleteRows = false;
+            dataGridView2.ReadOnly = true;
+            dataGridView2.RowHeadersVisible = false;
             dataGridView2.Location = new Point(900, 430);
             dataGridView2.Size = new Size(700, 400);
 

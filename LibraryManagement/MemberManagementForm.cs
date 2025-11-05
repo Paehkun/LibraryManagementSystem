@@ -10,10 +10,11 @@ namespace LibraryManagementSystem
     public partial class MemberManagementForm : Form
     {
         private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
-
-        public MemberManagementForm()
+        private string username;
+        public MemberManagementForm(string username)
         {
             InitializeComponent();
+            this.username = username;
             dgvMembers.CellClick += dgvMembers_CellClick;
         }
 
@@ -54,8 +55,8 @@ namespace LibraryManagementSystem
         private void btnBack_Click(object sender, EventArgs e)
         {
             this.Hide();
-            LibrarianHomeForm librarianHome = new LibrarianHomeForm("Librarian");
-            librarianHome.Show();
+            LibrarianHomeForm home = new LibrarianHomeForm(username);
+            home.Show();
         }
 
         private void btnAddMember_Click(object sender, EventArgs e)

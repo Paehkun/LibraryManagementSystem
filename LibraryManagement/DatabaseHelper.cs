@@ -172,6 +172,22 @@ namespace LibraryManagementSystem
             }
         }
 
+        public static DataTable GetHistoryRecords()
+        {
+            string query = "SELECT * FROM borrowreturn WHERE status = 'Returned' ORDER BY returndate DESC";
+            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                using (NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(query, conn))
+                {
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    return dt;
+                }
+            }
+        }
+
+
         public static void AddBorrowRecord(string title, string isbn, int memberid, DateTime borrowdate, DateTime duedate)
         {
             string borrowid = GenerateUniqueBorrowId();

@@ -13,11 +13,13 @@ namespace LibraryManagement
         private int selectedMemberId = -1;
         private string selectedMemberName = "";
         private string selectedPhone = "";
+        private string username;
         private List<(string Title, string ISBN)> selectedBooks = new List<(string, string)>();
 
-        public borrowANDreturn()
+        public borrowANDreturn(string username)
         {
             InitializeComponent();
+            this.username = username;
             LoadBorrowRecords();
             StyleDataGridView();
             ApplyCardStyle();
@@ -250,8 +252,8 @@ namespace LibraryManagement
         private void btnBack_Click(object sender, EventArgs e)
         {
             this.Hide();
-            LibrarianHomeForm librarianHome = new LibrarianHomeForm("Librarian");
-            librarianHome.Show();
+            LibrarianHomeForm home = new LibrarianHomeForm(username);
+            home.Show();
         }
         private void StyleDataGridView()
         {

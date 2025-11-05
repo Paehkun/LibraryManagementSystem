@@ -221,8 +221,8 @@ namespace LibraryManagementSystem
         private void btnBack_Click(object sender, EventArgs e)
         {
             this.Hide();
-            LibrarianHomeForm librarianHome = new LibrarianHomeForm("Librarian");
-            librarianHome.Show();
+            LibrarianHomeForm home = new LibrarianHomeForm(username);
+            home.Show();
         }
 
         private void LoadBooks()

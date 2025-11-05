@@ -9,9 +9,11 @@ namespace LibraryManagementSystem
 {
     public partial class BookCatalogForm : Form
     {
-        public BookCatalogForm()
+        private string username;
+        public BookCatalogForm(string username)
         {
             InitializeComponent();
+            this.username = username;
         }
 
         private void BookCatalogForm_Load(object sender, EventArgs e)
@@ -44,9 +46,10 @@ namespace LibraryManagementSystem
         private void BtnBack_Click(object sender, EventArgs e)
         {
             this.Hide();
-            LibrarianHomeForm librarianHome = new LibrarianHomeForm("Librarian");
-            librarianHome.Show();
+            LibrarianHomeForm home = new LibrarianHomeForm(username);
+            home.Show();
         }
+
 
 
         private void btnSearch_Click(object sender, EventArgs e)

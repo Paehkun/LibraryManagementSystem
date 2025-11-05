@@ -2,7 +2,6 @@
 using Npgsql;
 using System;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace LibraryManagementSystem
 {
@@ -12,29 +11,55 @@ namespace LibraryManagementSystem
         private string username;
         string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
 
+        // ✅ Constructor now safely handles username
         public LibrarianHomeForm(string username)
         {
             InitializeComponent();
-            this.username = username;          // ✅ assign the parameter to the field
+
+            if (string.IsNullOrEmpty(username))
+            {
+                MessageBox.Show("Username not found. Please log in again.", "Error");
+                LoginForm login = new LoginForm();
+                login.Show();
+                this.Hide();
+                return;
+            }
+
+            this.username = username;
             FetchFullNameFromDB();
+
             lblWelcome.Text = $"Welcome, {name}";
         }
 
         private void FetchFullNameFromDB()
         {
-            using (var conn = new NpgsqlConnection(connString))
+            try
             {
-                conn.Open();
-                string query = "SELECT name FROM users WHERE username = @username";
-                using (var cmd = new NpgsqlCommand(query, conn))
+                using (var conn = new NpgsqlConnection(connString))
                 {
-                    cmd.Parameters.AddWithValue("@username", username);
-                    var result = cmd.ExecuteScalar();
-                    if (result != null)
+                    conn.Open();
+                    string query = "SELECT name FROM users WHERE username = @username";
+                    using (var cmd = new NpgsqlCommand(query, conn))
                     {
-                        name = result.ToString();   // ✅ store full name
+                        // ✅ Prevent InvalidOperationException by specifying type if needed
+                        cmd.Parameters.AddWithValue("@username", NpgsqlTypes.NpgsqlDbType.Varchar, username);
+
+                        var result = cmd.ExecuteScalar();
+                        if (result != null)
+                        {
+                            name = result.ToString();
+                        }
+                        else
+                        {
+                            name = "Unknown User";
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error fetching name: " + ex.Message);
+                name = "Unknown User";
             }
         }
 
@@ -46,52 +71,44 @@ namespace LibraryManagementSystem
                 {
                     conn.Open();
 
-                    // 🟢 Total Books (based on total copies available)
                     string totalBooksQuery = "SELECT COALESCE(SUM(copiesavailable), 0) FROM books";
                     using (var cmd = new NpgsqlCommand(totalBooksQuery, conn))
                     {
-                        var totalBooks = cmd.ExecuteScalar();
-                        lblTotalBooksValue.Text = totalBooks.ToString();
+                        lblTotalBooksValue.Text = cmd.ExecuteScalar().ToString();
                     }
 
-                    // 👥 Total Books Row
                     string totalBooksRow = "SELECT COUNT(*) FROM books";
                     using (var cmd = new NpgsqlCommand(totalBooksRow, conn))
                     {
-                        var totalBookRow = cmd.ExecuteScalar();
-                        lblBookRow.Text = totalBookRow.ToString();
+                        lblBookRow.Text = cmd.ExecuteScalar().ToString();
                     }
-                
 
-                // 👥 Total Members
-                string totalMembersQuery = "SELECT COUNT(*) FROM member";
+                    string totalMembersQuery = "SELECT COUNT(*) FROM member";
                     using (var cmd = new NpgsqlCommand(totalMembersQuery, conn))
                     {
-                        var totalMembers = cmd.ExecuteScalar();
-                        lblTotalMembersValue.Text = totalMembers.ToString();
+                        lblTotalMembersValue.Text = cmd.ExecuteScalar().ToString();
                     }
 
-                string totalBorrowQuery = "SELECT COUNT(*) FROM borrowreturn WHERE status = 'Borrowed'";
+                    string totalBorrowQuery = "SELECT COUNT(*) FROM borrowreturn WHERE status = 'Borrowed'";
                     using (var cmd = new NpgsqlCommand(totalBorrowQuery, conn))
                     {
-                        var totalBorrow = cmd.ExecuteScalar();
-                        lblBorrowedBooksValue.Text = totalBorrow.ToString(); 
+                        lblBorrowedBooksValue.Text = cmd.ExecuteScalar().ToString();
                     }
 
                     string totalLateReturnQuery = "SELECT COUNT(*) FROM borrowreturn WHERE duedate < CURRENT_DATE AND status = 'Borrowed'";
                     using (var cmd = new NpgsqlCommand(totalLateReturnQuery, conn))
                     {
-                        var totalLateReturn = cmd.ExecuteScalar();
-                        lblLateReturnBooksValue.Text = totalLateReturn.ToString();
+                        lblLateReturnBooksValue.Text = cmd.ExecuteScalar().ToString();
                         lblLateReturnBooksValue.BringToFront();
                     }
-                }   
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading dashboard data: {ex.Message}");
             }
         }
+
         private void LoadBorrowedBooks()
         {
             try
@@ -101,20 +118,20 @@ namespace LibraryManagementSystem
                     conn.Open();
 
                     string query = @"
-                SELECT 
-                    br.borrowid AS ""Borrow ID"",
-                    br.memberid AS ""Member ID"",
-                    m.name AS ""Member Name"",
-                    br.isbn AS ""Book ISBN"",
-                    b.title AS ""Book Title"",
-                    br.borrowdate AS ""Borrow Date"",
-                    br.duedate AS ""Due Date"",
-                    br.status AS ""Status""
-                FROM borrowreturn br
-                JOIN member m ON br.memberid = m.memberid
-                JOIN books b ON br.isbn = b.isbn
-                ORDER BY br.borrowdate DESC;
-            ";
+                        SELECT 
+                            br.borrowid AS ""Borrow ID"",
+                            br.memberid AS ""Member ID"",
+                            m.name AS ""Member Name"",
+                            br.isbn AS ""Book ISBN"",
+                            b.title AS ""Book Title"",
+                            br.borrowdate AS ""Borrow Date"",
+                            br.duedate AS ""Due Date"",
+                            br.status AS ""Status""
+                        FROM borrowreturn br
+                        JOIN member m ON br.memberid = m.memberid
+                        JOIN books b ON br.isbn = b.isbn
+                        ORDER BY br.borrowdate DESC;
+                    ";
 
                     using (var cmd = new NpgsqlCommand(query, conn))
                     using (var reader = cmd.ExecuteReader())
@@ -122,29 +139,15 @@ namespace LibraryManagementSystem
                         var dt = new System.Data.DataTable();
                         dt.Load(reader);
                         dataGridView1.DataSource = dt;
-                        if (dataGridView1.Rows.Count == 1)
-                        {
-                            dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
-                            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
-                            dataGridView1.BackgroundColor = Color.LightGray;
-                        }
-                        else
-                        {
-                            dataGridView1.RowsDefaultCellStyle.BackColor = Color.White;
-                            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.WhiteSmoke;
-                            dataGridView1.BackgroundColor = Color.White;
-                        }
 
+                        dataGridView1.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10);
+                        dataGridView1.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
+                        dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                        dataGridView1.RowTemplate.Height = 40;
+                        dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                        dataGridView1.MultiSelect = false;
                     }
                 }
-
-                // Optional: Styling like your other forms
-                dataGridView1.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10);
-                dataGridView1.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                dataGridView1.RowTemplate.Height = 40;
-                dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                dataGridView1.MultiSelect = false;
             }
             catch (Exception ex)
             {
@@ -160,17 +163,17 @@ namespace LibraryManagementSystem
                 {
                     conn.Open();
                     string query = @"
-                SELECT 
-                    borrowid AS ""Borrow ID"",
-                    memberid AS ""Member ID"",
-                    name AS ""Member Name"",
-                    isbn AS ""Book ISBN"",
-                    title AS ""Book Title"",
-                    borrowdate AS ""Borrow Date"",
-                    duedate AS ""Due Date""
-                FROM borrowreturn
-                WHERE duedate < CURRENT_DATE AND status = 'Borrowed';
-            ";
+                        SELECT 
+                            borrowid AS ""Borrow ID"",
+                            memberid AS ""Member ID"",
+                            name AS ""Member Name"",
+                            isbn AS ""Book ISBN"",
+                            title AS ""Book Title"",
+                            borrowdate AS ""Borrow Date"",
+                            duedate AS ""Due Date""
+                        FROM borrowreturn
+                        WHERE duedate < CURRENT_DATE AND status = 'Borrowed';
+                    ";
 
                     using (var cmd = new NpgsqlCommand(query, conn))
                     using (var reader = cmd.ExecuteReader())
@@ -178,18 +181,6 @@ namespace LibraryManagementSystem
                         var dt = new System.Data.DataTable();
                         dt.Load(reader);
                         dataGridView2.DataSource = dt;
-                        if (dataGridView1.Rows.Count == 1)
-                        {
-                            dataGridView2.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
-                            dataGridView2.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
-                            dataGridView2.BackgroundColor = Color.LightGray;
-                        }
-                        else
-                        {
-                            dataGridView2.RowsDefaultCellStyle.BackColor = Color.White;
-                            dataGridView2.AlternatingRowsDefaultCellStyle.BackColor = Color.WhiteSmoke;
-                            dataGridView2.BackgroundColor = Color.White;
-                        }
 
                         dataGridView2.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10);
                         dataGridView2.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
@@ -211,44 +202,42 @@ namespace LibraryManagementSystem
             LoadLateReturnedBooks();
             LoadBorrowedBooks();
             LoadDashboardData();
-            LoadBorrowedBooks();
-            LoadLateReturnedBooks();
         }
 
+        // ✅ Pass username to every new form
         private void btnBookManagement_Click(object sender, EventArgs e)
         {
-            BookManagementForm bookManagementForm = new BookManagementForm(name);
+            BookManagementForm bookManagementForm = new BookManagementForm(username);
             bookManagementForm.Show();
-
             this.Hide();
         }
 
         private void btnBorrowReturn_Click(object sender, EventArgs e)
         {
-            borrowANDreturn BorrowandReturn = new borrowANDreturn();
-            BorrowandReturn.Show();
-
+            borrowANDreturn borrowAndReturn = new borrowANDreturn(username);
+            borrowAndReturn.Show();
             this.Hide();
         }
 
         private void btnMemberRecords_Click(object sender, EventArgs e)
         {
-            MemberManagementForm memberManagementForm = new MemberManagementForm();
+            MemberManagementForm memberManagementForm = new MemberManagementForm(username);
             memberManagementForm.Show();
-
             this.Hide();
         }
 
         private void btnBookCatalog_Click(object sender, EventArgs e)
         {
-            BookCatalogForm bookCatalogForm = new BookCatalogForm();
+            BookCatalogForm bookCatalogForm = new BookCatalogForm(username);
             bookCatalogForm.Show();
             this.Hide();
         }
 
         private void btnReports_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Open Reports Page");
+            Report reportForm = new Report(username); // ✅ Pass username
+            reportForm.Show();
+            this.Hide();
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
@@ -267,6 +256,5 @@ namespace LibraryManagementSystem
                 login.Show();
             }
         }
-        
     }
 }
