@@ -186,15 +186,25 @@ namespace LibraryManagementSystem
 
         private void btnEditBook_Click(object sender, EventArgs e)
         {
-            using (EditBookForm editForm = new EditBookForm())
+            if (dgvBooks.CurrentRow != null)
             {
-                if (editForm.ShowDialog() == DialogResult.OK)
+                int id = Convert.ToInt32(dgvBooks.CurrentRow.Cells["id"].Value);
+                using (EditBookForm editForm = new EditBookForm(id))
                 {
-                    LoadBooks();
-                    ApplyCardStyle(); // 🔄
+                    if (editForm.ShowDialog() == DialogResult.OK)
+                    {
+                        LoadBooks();
+                        ApplyCardStyle(); // 🔄
+                    }
                 }
             }
+            else
+            {
+                MessageBox.Show("Please select a book to edit.");
+            }
         }
+
+        
 
         private void btnDeleteBook_Click(object sender, EventArgs e)
         {

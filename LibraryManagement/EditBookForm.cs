@@ -1,17 +1,70 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Windows.Forms;
-using Npgsql;
+using System.Xml.Linq;
 
 namespace LibraryManagementSystem
 {
     public partial class EditBookForm : Form
     {
-        public EditBookForm()
+        private int _id;
+        public EditBookForm(int id)
         {
             InitializeComponent();
+            _id = id;
         }
 
         private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
+
+        private void EditBookForm_Load(object sender, EventArgs e)
+        {
+            if (_id > 0)
+            {
+                LoadBooks(_id);
+                txtBookId.ReadOnly = false; // prevent editing ID
+            }
+        }
+        private void LoadBooks(int id)
+        {
+            try
+            {
+                using (var conn = new NpgsqlConnection(connString))
+                {
+                    conn.Open();
+                    string query = @"SELECT id, title, author, isbn, category, publisher, year, copiesavailable, shelflocation 
+                                 FROM books 
+                                 WHERE id = @id";
+
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                txtBookId.Text = reader["id"].ToString();
+                                txtTitle.Text = reader["title"].ToString();
+                                txtAuthor.Text = reader["author"].ToString();
+                                txtISBN.Text = reader["isbn"].ToString();
+                                txtCategory.Text = reader["category"].ToString();
+                                txtPublisher.Text = reader["publisher"].ToString();
+                                txtYear.Text = reader["year"].ToString();
+                                txtCopies.Text = reader["copiesavailable"].ToString();
+                                txtShelfLocation.Text = reader["shelflocation"].ToString();
+                            }
+                            else
+                            {
+                                MessageBox.Show("No book found with this ID.");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading book: {ex.Message}");
+            }
+        }
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
@@ -127,9 +180,6 @@ namespace LibraryManagementSystem
             this.Close();
         }
 
-        private void EditBookForm_Load(object sender, EventArgs e)
-        {
-
-        }
+        
     }
 }

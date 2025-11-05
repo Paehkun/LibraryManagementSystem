@@ -70,7 +70,22 @@ namespace LibraryManagementSystem
                         var totalMembers = cmd.ExecuteScalar();
                         lblTotalMembersValue.Text = totalMembers.ToString();
                     }
-                }
+
+                string totalBorrowQuery = "SELECT COUNT(*) FROM borrowreturn WHERE status = 'Borrowed'";
+                    using (var cmd = new NpgsqlCommand(totalBorrowQuery, conn))
+                    {
+                        var totalBorrow = cmd.ExecuteScalar();
+                        lblBorrowedBooksValue.Text = totalBorrow.ToString(); 
+                    }
+
+                    string totalLateReturnQuery = "SELECT COUNT(*) FROM borrowreturn WHERE duedate < CURRENT_DATE AND status = 'Borrowed'";
+                    using (var cmd = new NpgsqlCommand(totalLateReturnQuery, conn))
+                    {
+                        var totalLateReturn = cmd.ExecuteScalar();
+                        lblLateReturnBooksValue.Text = totalLateReturn.ToString();
+                        lblLateReturnBooksValue.BringToFront();
+                    }
+                }   
             }
             catch (Exception ex)
             {
@@ -137,12 +152,67 @@ namespace LibraryManagementSystem
             }
         }
 
+        private void LoadLateReturnedBooks()
+        {
+            try
+            {
+                using (var conn = new NpgsqlConnection(connString))
+                {
+                    conn.Open();
+                    string query = @"
+                SELECT 
+                    borrowid AS ""Borrow ID"",
+                    memberid AS ""Member ID"",
+                    name AS ""Member Name"",
+                    isbn AS ""Book ISBN"",
+                    title AS ""Book Title"",
+                    borrowdate AS ""Borrow Date"",
+                    duedate AS ""Due Date""
+                FROM borrowreturn
+                WHERE duedate < CURRENT_DATE AND status = 'Borrowed';
+            ";
+
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        var dt = new System.Data.DataTable();
+                        dt.Load(reader);
+                        dataGridView2.DataSource = dt;
+                        if (dataGridView1.Rows.Count == 1)
+                        {
+                            dataGridView2.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
+                            dataGridView2.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+                            dataGridView2.BackgroundColor = Color.LightGray;
+                        }
+                        else
+                        {
+                            dataGridView2.RowsDefaultCellStyle.BackColor = Color.White;
+                            dataGridView2.AlternatingRowsDefaultCellStyle.BackColor = Color.WhiteSmoke;
+                            dataGridView2.BackgroundColor = Color.White;
+                        }
+
+                        dataGridView2.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10);
+                        dataGridView2.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
+                        dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                        dataGridView2.RowTemplate.Height = 40;
+                        dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                        dataGridView2.MultiSelect = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading late returned books: {ex.Message}");
+            }
+        }
 
         private void LibrarianHomeForm_Load(object sender, EventArgs e)
         {
+            LoadLateReturnedBooks();
             LoadBorrowedBooks();
             LoadDashboardData();
             LoadBorrowedBooks();
+            LoadLateReturnedBooks();
         }
 
         private void btnBookManagement_Click(object sender, EventArgs e)

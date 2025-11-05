@@ -15,7 +15,9 @@
         private Label lblTotalBooks;
         private Label lblTotalBooksValue;
         private Label lblBorrowedBooks;
+        private Label lblBorrowedBooksValue;
         private Label lblLateReturnBooks;
+        private Label lblLateReturnBooksValue;
         private Label lblTotalMembers;
         private Label lblTotalMembersValue;
 
@@ -43,7 +45,9 @@
             lblTotalBooks = new Label();
             lblTotalBooksValue = new Label();
             lblBorrowedBooks = new Label();
+            lblBorrowedBooksValue = new Label();
             lblLateReturnBooks = new Label();
+            lblLateReturnBooksValue = new Label();
             lblTotalMembers = new Label();
             lblTotalMembersValue = new Label();
             leftPanel = new Panel();
@@ -55,6 +59,8 @@
             roundedLabel1 = new RoundedLabel();
             roundedLabel2 = new RoundedLabel();
             roundedLabel3 = new RoundedLabel();
+            roundedLabel4 = new RoundedLabel();
+            roundedLabel5 = new RoundedLabel();
             leftPanel.SuspendLayout();
             rightPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
@@ -126,12 +132,16 @@
             rightPanel.Controls.Add(lblTotalBooks);
             rightPanel.Controls.Add(lblTotalBooksValue);
             rightPanel.Controls.Add(lblBorrowedBooks);
+            rightPanel.Controls.Add(lblBorrowedBooksValue);
             rightPanel.Controls.Add(lblLateReturnBooks);
+            rightPanel.Controls.Add(lblLateReturnBooksValue);
             rightPanel.Controls.Add(lblTotalMembers);
             rightPanel.Controls.Add(lblTotalMembersValue);
             rightPanel.Controls.Add(roundedLabel1);
             rightPanel.Controls.Add(roundedLabel2);
             rightPanel.Controls.Add(roundedLabel3);
+            rightPanel.Controls.Add(roundedLabel4);
+            rightPanel.Controls.Add(roundedLabel5);
 
             // ==============================
             // 📊 CARD 1 — Total Books
@@ -140,18 +150,18 @@
             roundedLabel1.BorderColor = Color.White;
             roundedLabel1.BorderRadius = 30;
             roundedLabel1.BorderSize = 0;
-            roundedLabel1.Location = new Point(150, 50);
-            roundedLabel1.Size = new Size(400, 160);
+            roundedLabel1.Location = new Point(290, 50);
+            roundedLabel1.Size = new Size(300, 160);
 
             label1.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
             label1.BackColor = Color.White;
-            label1.Location = new Point(270, 80);
+            label1.Location = new Point(350, 80);
             label1.Size = new Size(200, 30);
             label1.Text = "📚 Total Books";
 
             lblBookRow.Font = new Font("Segoe UI", 28F, FontStyle.Bold);
             lblBookRow.BackColor = Color.White;
-            lblBookRow.Location = new Point(310, 120);
+            lblBookRow.Location = new Point(350, 120);
             lblBookRow.Size = new Size(120, 60);
             lblBookRow.TextAlign = ContentAlignment.MiddleCenter;
             lblBookRow.Text = "0";
@@ -203,15 +213,61 @@
             roundedLabel3.Size = new Size(300, 160);
 
             // ==============================
+            // 📊 CARD 4 — Borrow Books
+            // ==============================
+            lblBorrowedBooks.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblBorrowedBooks.BackColor = Color.White;
+            lblBorrowedBooks.Location = new Point(320, 270);
+            lblBorrowedBooks.Size = new Size(250, 30);
+            lblBorrowedBooks.Text = "👥 Total Borrowed Books";
+
+            lblBorrowedBooksValue.Font = new Font("Segoe UI", 28F, FontStyle.Bold);
+            lblBorrowedBooksValue.BackColor = Color.White;
+            lblBorrowedBooksValue.Location = new Point(370, 320);
+            lblBorrowedBooksValue.Size = new Size(120, 60);
+            lblBorrowedBooksValue.TextAlign = ContentAlignment.MiddleCenter;
+            lblBorrowedBooksValue.Text = "0";
+
+            roundedLabel4.BackColor = Color.White;
+            roundedLabel4.BorderColor = Color.White;
+            roundedLabel4.BorderRadius = 30;
+            roundedLabel4.BorderSize = 0;
+            roundedLabel4.Location = new Point(290, 250);
+            roundedLabel4.Size = new Size(300, 160);
+
+            // ==============================
+            // 📊 CARD 5 — Late return Books
+            // ==============================
+            lblLateReturnBooks.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblLateReturnBooks.BackColor = Color.White;
+            lblLateReturnBooks.Location = new Point(1120, 280);
+            lblLateReturnBooks.Size = new Size(220, 30);
+            lblLateReturnBooks.Text = "👥 Total Late Return";
+
+            lblLateReturnBooksValue.Font = new Font("Segoe UI", 28F, FontStyle.Bold);
+            lblLateReturnBooksValue.BackColor = Color.White;
+            lblLateReturnBooksValue.Location = new Point(1160, 320);
+            lblLateReturnBooksValue.Size = new Size(120, 60);
+            lblLateReturnBooksValue.TextAlign = ContentAlignment.MiddleCenter;
+            lblLateReturnBooksValue.Text = "0";
+
+            roundedLabel5.BackColor = Color.White;
+            roundedLabel5.BorderColor = Color.White;
+            roundedLabel5.BorderRadius = 30;
+            roundedLabel5.BorderSize = 0;
+            roundedLabel5.Location = new Point(1100, 250);
+            roundedLabel5.Size = new Size(300, 160);
+
+            // ==============================
             // 📋 Data Grids (Optional Section)
             // ==============================
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.ReadOnly = true;
-            dataGridView1.Location = new Point(120, 300);
+            dataGridView1.Location = new Point(80, 430);
             dataGridView1.Size = new Size(700, 400);
 
-            dataGridView2.Location = new Point(900, 300);
+            dataGridView2.Location = new Point(900, 430);
             dataGridView2.Size = new Size(700, 400);
 
             // ==============================
@@ -240,5 +296,8 @@
         private DataGridView dataGridView1;
         private RoundedLabel roundedLabel2;
         private RoundedLabel roundedLabel3;
+        private RoundedLabel roundedLabel4;
+        private RoundedLabel roundedLabel5;
+
     }
 }

@@ -229,6 +229,29 @@ namespace LibraryManagementSystem
             }
         }
 
+        public static DataTable ExecuteQuery(string query, object parameters = null)
+        {
+            using (var conn = GetConnection())
+            using (var cmd = new NpgsqlCommand(query, conn))
+            {
+                conn.Open();
+                if (parameters != null)
+                {
+                    foreach (var prop in parameters.GetType().GetProperties())
+                    {
+                        cmd.Parameters.AddWithValue("@" + prop.Name, prop.GetValue(parameters) ?? DBNull.Value);
+                    }
+                }
+
+                DataTable dt = new DataTable();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    dt.Load(reader);
+                }
+                return dt;
+            }
+        }
+
         // ✅ Generic ExecuteNonQuery for UPDATE / DELETE / INSERT
         public static int ExecuteNonQuery(string query, object parameters = null)
         {

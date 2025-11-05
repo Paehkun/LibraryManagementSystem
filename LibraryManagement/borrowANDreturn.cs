@@ -150,48 +150,102 @@ namespace LibraryManagement
             }
         }
 
+        //private void BtnSelectMember_Click(object sender, EventArgs e)
+        //{
+        //    using (SelectMemberForm memberForm = new SelectMemberForm())
+        //    {
+        //        if (memberForm.ShowDialog() == DialogResult.OK)
+        //        {
+        //            selectedMemberId = int.Parse(memberForm.SelectedMemberId);
+        //            selectedMemberName = memberForm.SelectedMemberName;
+        //            selectedPhone = memberForm.SelectedMemberPhone;
 
+        //            //MessageBox.Show($"Selected Member: {selectedMemberName} (ID: {selectedMemberId})",
+        //            //    "Member Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //        }
+        //    }
+        //}
 
-
-        private void BtnSelectMember_Click(object sender, EventArgs e)
+        private void btnReturnBook_Click(object sender, EventArgs e)
         {
-            using (SelectMemberForm memberForm = new SelectMemberForm())
+            try
             {
-                if (memberForm.ShowDialog() == DialogResult.OK)
-                {
-                    selectedMemberId = int.Parse(memberForm.SelectedMemberId);
-                    selectedMemberName = memberForm.SelectedMemberName;
-                    selectedPhone = memberForm.SelectedMemberPhone;
+                string input = Microsoft.VisualBasic.Interaction.InputBox(
+                    "Enter Borrow ID to return:", "Return Book", "");
 
-                    //MessageBox.Show($"Selected Member: {selectedMemberName} (ID: {selectedMemberId})",
-                    //    "Member Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    MessageBox.Show("Borrow ID is required!", "Missing Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
+
+                string borrowId = input.Trim(); // keep as string since it's VARCHAR(6)
+
+                // 🟡 1. Fetch Borrow Record
+                DataTable dt = DatabaseHelper.ExecuteQuery(
+                    "SELECT isbn, returndate, status FROM borrowreturn WHERE borrowid = @borrowid",
+                    new { borrowid = borrowId });
+
+                if (dt.Rows.Count == 0)
+                {
+                    MessageBox.Show("No record found for this Borrow ID.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string isbn = dt.Rows[0]["isbn"].ToString();
+                string status = dt.Rows[0]["status"].ToString();
+                object returndateObj = dt.Rows[0]["returndate"];
+
+                if (status == "Returned")
+                {
+                    MessageBox.Show("This book has already been returned.", "Already Returned", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // 🟢 2. Update Borrow Record
+                DateTime today = DateTime.Now.Date;
+                string updateQuery = @"UPDATE borrowreturn 
+                               SET returndate = @returndate, status = 'Returned' 
+                               WHERE borrowid = @borrowid";
+                DatabaseHelper.ExecuteNonQuery(updateQuery, new { returndate = today, borrowid = borrowId });
+
+                // 🟢 3. Increment Book Copies
+                string updateCopies = "UPDATE books SET copiesavailable = copiesavailable + 1 WHERE isbn = @isbn";
+                DatabaseHelper.ExecuteNonQuery(updateCopies, new { isbn });
+
+                // 🟢 4. Notify and Refresh
+                MessageBox.Show("Book returned successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadBorrowRecords(); // refresh DataGridView
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error returning book: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
 
-        private void BtnSelectBooks_Click(object sender, EventArgs e)
-        {
-            using (SelectBooksForm booksForm = new SelectBooksForm())
-            {
-                if (booksForm.ShowDialog() == DialogResult.OK)
-                {
-                    selectedBooks.Clear();
-                    listBoxSelectedBooks.Items.Clear();
+        //private void BtnSelectBooks_Click(object sender, EventArgs e)
+        //{
+        //    using (SelectBooksForm booksForm = new SelectBooksForm())
+        //    {
+        //        if (booksForm.ShowDialog() == DialogResult.OK)
+        //        {
+        //            selectedBooks.Clear();
+        //            listBoxSelectedBooks.Items.Clear();
 
-                    foreach (var book in booksForm.SelectedBooks)
-                    {
-                        selectedBooks.Add((book.Title, book.ISBN));
-                        listBoxSelectedBooks.Items.Add($"{book.Title} ({book.ISBN})");
-                        string query = "UPDATE Books SET copiesavailable = copiesavailable - 1 WHERE isbn = @isbn";
-                        DatabaseHelper.ExecuteNonQuery(query, new { isbn = book.ISBN });
-                    }
+        //            foreach (var book in booksForm.SelectedBooks)
+        //            {
+        //                selectedBooks.Add((book.Title, book.ISBN));
+        //                listBoxSelectedBooks.Items.Add($"{book.Title} ({book.ISBN})");
+        //                string query = "UPDATE Books SET copiesavailable = copiesavailable - 1 WHERE isbn = @isbn";
+        //                DatabaseHelper.ExecuteNonQuery(query, new { isbn = book.ISBN });
+        //            }
 
-                    //MessageBox.Show($"{selectedBooks.Count} book(s) selected.", "Books Selected",
-                    //    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-        }
+        //            //MessageBox.Show($"{selectedBooks.Count} book(s) selected.", "Books Selected",
+        //            //    MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //        }
+        //    }
+        //}
 
         private void btnBack_Click(object sender, EventArgs e)
         {

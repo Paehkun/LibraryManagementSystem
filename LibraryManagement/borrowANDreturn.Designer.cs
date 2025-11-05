@@ -24,6 +24,7 @@
             btnSelectMember = new Button();
             btnSelectBooks = new Button();
             btnAdd = new Button();
+            btnReturnBook = new Button();
             lblBorrowDays = new Label();
             txtBorrowDays = new TextBox();
             lblMemberID = new Label();
@@ -53,12 +54,13 @@
             // 
             panelTop.BackColor = Color.WhiteSmoke;
             panelTop.Controls.Add(btnBack);
-            panelTop.Controls.Add(btnSelectMember);
-            panelTop.Controls.Add(btnSelectBooks);
+            //panelTop.Controls.Add(btnSelectMember);
+            //panelTop.Controls.Add(btnSelectBooks);
             panelTop.Controls.Add(btnAdd);
-            panelTop.Controls.Add(lblBorrowDays);
-            panelTop.Controls.Add(txtBorrowDays);
-            panelTop.Controls.Add(listBoxSelectedBooks);
+            //panelTop.Controls.Add(lblBorrowDays);
+            //panelTop.Controls.Add(txtBorrowDays);
+            //panelTop.Controls.Add(listBoxSelectedBooks);
+            panelTop.Controls.Add(btnReturnBook);
             panelTop.Dock = DockStyle.Top;
             panelTop.Location = new Point(0, 56);
             panelTop.Name = "panelTop";
@@ -89,33 +91,33 @@
             // 
             // btnSelectMember
             // 
-            btnSelectMember.BackColor = Color.SteelBlue;
-            btnSelectMember.FlatAppearance.BorderSize = 0;
-            btnSelectMember.FlatStyle = FlatStyle.Flat;
-            btnSelectMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnSelectMember.ForeColor = Color.White;
-            btnSelectMember.Location = new Point(140, 20);
-            btnSelectMember.Name = "btnSelectMember";
-            btnSelectMember.Size = new Size(150, 38);
-            btnSelectMember.TabIndex = 1;
-            btnSelectMember.Text = "Select Member";
-            btnSelectMember.UseVisualStyleBackColor = false;
-            btnSelectMember.Click += BtnSelectMember_Click;
+            //btnSelectMember.BackColor = Color.SteelBlue;
+            //btnSelectMember.FlatAppearance.BorderSize = 0;
+            //btnSelectMember.FlatStyle = FlatStyle.Flat;
+            //btnSelectMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            //btnSelectMember.ForeColor = Color.White;
+            //btnSelectMember.Location = new Point(140, 20);
+            //btnSelectMember.Name = "btnSelectMember";
+            //btnSelectMember.Size = new Size(150, 38);
+            //btnSelectMember.TabIndex = 1;
+            //btnSelectMember.Text = "Select Member";
+            //btnSelectMember.UseVisualStyleBackColor = false;
+            //btnSelectMember.Click += BtnSelectMember_Click;
             // 
             // btnSelectBooks
             // 
-            btnSelectBooks.BackColor = Color.SteelBlue;
-            btnSelectBooks.FlatAppearance.BorderSize = 0;
-            btnSelectBooks.FlatStyle = FlatStyle.Flat;
-            btnSelectBooks.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnSelectBooks.ForeColor = Color.White;
-            btnSelectBooks.Location = new Point(310, 20);
-            btnSelectBooks.Name = "btnSelectBooks";
-            btnSelectBooks.Size = new Size(150, 38);
-            btnSelectBooks.TabIndex = 2;
-            btnSelectBooks.Text = "Select Books";
-            btnSelectBooks.UseVisualStyleBackColor = false;
-            btnSelectBooks.Click += BtnSelectBooks_Click;
+            //btnSelectBooks.BackColor = Color.SteelBlue;
+            //btnSelectBooks.FlatAppearance.BorderSize = 0;
+            //btnSelectBooks.FlatStyle = FlatStyle.Flat;
+            //btnSelectBooks.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            //btnSelectBooks.ForeColor = Color.White;
+            //btnSelectBooks.Location = new Point(310, 20);
+            //btnSelectBooks.Name = "btnSelectBooks";
+            //btnSelectBooks.Size = new Size(150, 38);
+            //btnSelectBooks.TabIndex = 2;
+            //btnSelectBooks.Text = "Select Books";
+            //btnSelectBooks.UseVisualStyleBackColor = false;
+            //btnSelectBooks.Click += BtnSelectBooks_Click;
             // 
             // btnAdd
             // 
@@ -131,25 +133,40 @@
             btnAdd.Text = "➕ Add Record";
             btnAdd.UseVisualStyleBackColor = false;
             btnAdd.Click += btnAdd_Click;
+            //
+            // btnReturnBook
+            //
+            btnReturnBook.Text = "Return Book";
+            btnReturnBook.BackColor = Color.SteelBlue;
+            btnReturnBook.FlatAppearance.BorderSize = 0;
+            btnReturnBook.FlatStyle = FlatStyle.Flat;
+            btnReturnBook.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnReturnBook.ForeColor = Color.White;
+            btnReturnBook.Name = "btnReturnBook";
+            btnReturnBook.Size = new Size(150, 38);
+            btnReturnBook.TabIndex = 4;
+            btnAdd.UseVisualStyleBackColor = false;
+            btnReturnBook.Location = new Point(310, 20); // adjust position
+            btnReturnBook.Click += btnReturnBook_Click;
             // 
             // lblBorrowDays
             // 
-            lblBorrowDays.AutoSize = true;
-            lblBorrowDays.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblBorrowDays.ForeColor = Color.Black;
-            lblBorrowDays.Location = new Point(660, 28);
-            lblBorrowDays.Name = "lblBorrowDays";
-            lblBorrowDays.Size = new Size(99, 19);
-            lblBorrowDays.TabIndex = 4;
-            lblBorrowDays.Text = "Borrow Days:";
+            //lblBorrowDays.AutoSize = true;
+            //lblBorrowDays.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            //lblBorrowDays.ForeColor = Color.Black;
+            //lblBorrowDays.Location = new Point(660, 28);
+            //lblBorrowDays.Name = "lblBorrowDays";
+            //lblBorrowDays.Size = new Size(99, 19);
+            //lblBorrowDays.TabIndex = 5;
+            //lblBorrowDays.Text = "Borrow Days:";
             // 
             // txtBorrowDays
             // 
-            txtBorrowDays.Font = new Font("Segoe UI", 10F);
-            txtBorrowDays.Location = new Point(770, 25);
-            txtBorrowDays.Name = "txtBorrowDays";
-            txtBorrowDays.Size = new Size(80, 25);
-            txtBorrowDays.TabIndex = 5;
+            //txtBorrowDays.Font = new Font("Segoe UI", 10F);
+            //txtBorrowDays.Location = new Point(770, 25);
+            //txtBorrowDays.Name = "txtBorrowDays";
+            //txtBorrowDays.Size = new Size(80, 25);
+            //txtBorrowDays.TabIndex = 6;
             // 
             // dataGridView1
             // 
@@ -224,6 +241,7 @@
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Button btnSelectMember;
         private System.Windows.Forms.Button btnSelectBooks;
+        private System.Windows.Forms.Button btnReturnBook;
         private System.Windows.Forms.ListBox listBoxSelectedBooks;
         private System.Windows.Forms.DataGridView dataGridMembers;
         private System.Windows.Forms.DataGridView dataGridBooks;
