@@ -50,7 +50,7 @@ namespace LibraryManagement
             // 
             // txtTitle
             // 
-            txtTitle.BackColor = Color.Beige;
+            txtTitle.BackColor = Color.White;
             txtTitle.Location = new Point(100, 20);
             txtTitle.Name = "txtTitle";
             txtTitle.Size = new Size(100, 23);
@@ -59,7 +59,7 @@ namespace LibraryManagement
             // 
             // txtAuthor
             // 
-            txtAuthor.BackColor = Color.Beige;
+            txtAuthor.BackColor = Color.White;
             txtAuthor.Location = new Point(100, 60);
             txtAuthor.Name = "txtAuthor";
             txtAuthor.Size = new Size(100, 23);
@@ -67,7 +67,7 @@ namespace LibraryManagement
             // 
             // txtCategory
             // 
-            txtCategory.BackColor = Color.Beige;
+            txtCategory.BackColor = Color.White;
             txtCategory.Location = new Point(100, 100);
             txtCategory.Name = "txtCategory";
             txtCategory.Size = new Size(100, 23);
@@ -75,7 +75,7 @@ namespace LibraryManagement
             // 
             // txtCopies
             // 
-            txtCopies.BackColor = Color.Beige;
+            txtCopies.BackColor = Color.White;
             txtCopies.Location = new Point(100, 140);
             txtCopies.Name = "txtCopies";
             txtCopies.Size = new Size(100, 23);
@@ -83,7 +83,7 @@ namespace LibraryManagement
             // 
             // txtISBN
             // 
-            txtISBN.BackColor = Color.Beige;
+            txtISBN.BackColor = Color.White;
             txtISBN.Location = new Point(223, 20);
             txtISBN.Name = "txtISBN";
             txtISBN.Size = new Size(100, 23);
@@ -91,7 +91,7 @@ namespace LibraryManagement
             // 
             // txtPublisher
             // 
-            txtPublisher.BackColor = Color.Beige;
+            txtPublisher.BackColor = Color.White;
             txtPublisher.Location = new Point(223, 60);
             txtPublisher.Name = "txtPublisher";
             txtPublisher.Size = new Size(100, 23);
@@ -99,7 +99,7 @@ namespace LibraryManagement
             // 
             // txtYear
             // 
-            txtYear.BackColor = Color.Beige;
+            txtYear.BackColor = Color.White;
             txtYear.Location = new Point(223, 100);
             txtYear.Name = "txtYear";
             txtYear.Size = new Size(100, 23);
@@ -107,7 +107,7 @@ namespace LibraryManagement
             // 
             // txtShelfLocation
             // 
-            txtShelfLocation.BackColor = Color.Beige;
+            txtShelfLocation.BackColor = Color.White;
             txtShelfLocation.Location = new Point(223, 143);
             txtShelfLocation.Name = "txtShelfLocation";
             txtShelfLocation.Size = new Size(100, 23);
@@ -209,7 +209,7 @@ namespace LibraryManagement
             // 
             // AddBookForm
             // 
-            BackColor = Color.PeachPuff;
+            BackColor = Color.FromArgb(33, 150, 243);
             ClientSize = new Size(470, 291);
             Controls.Add(lblTitle);
             Controls.Add(lblAuthor);

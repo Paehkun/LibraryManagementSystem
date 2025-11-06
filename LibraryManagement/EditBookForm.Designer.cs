@@ -61,7 +61,7 @@
             // 
             // txtBookId
             // 
-            txtBookId.BackColor = Color.Beige;
+            txtBookId.BackColor = Color.White;
             txtBookId.Location = new Point(120, 17);
             txtBookId.Name = "txtBookId";
             txtBookId.Size = new Size(70, 23);
@@ -69,7 +69,7 @@
             // 
             // txtTitle
             // 
-            txtTitle.BackColor = Color.Beige;
+            txtTitle.BackColor = Color.White;
             txtTitle.Location = new Point(120, 55);
             txtTitle.Name = "txtTitle";
             txtTitle.Size = new Size(168, 23);
@@ -77,7 +77,7 @@
             // 
             // txtAuthor
             // 
-            txtAuthor.BackColor = Color.Beige;
+            txtAuthor.BackColor = Color.White;
             txtAuthor.Location = new Point(120, 90);
             txtAuthor.Name = "txtAuthor";
             txtAuthor.Size = new Size(168, 23);
@@ -85,7 +85,7 @@
             // 
             // txtISBN
             // 
-            txtISBN.BackColor = Color.Beige;
+            txtISBN.BackColor = Color.White;
             txtISBN.Location = new Point(120, 125);
             txtISBN.Name = "txtISBN";
             txtISBN.Size = new Size(168, 23);
@@ -93,7 +93,7 @@
             // 
             // txtCategory
             // 
-            txtCategory.BackColor = Color.Beige;
+            txtCategory.BackColor = Color.White;
             txtCategory.Location = new Point(120, 160);
             txtCategory.Name = "txtCategory";
             txtCategory.Size = new Size(168, 23);
@@ -101,7 +101,7 @@
             // 
             // txtPublisher
             // 
-            txtPublisher.BackColor = Color.Beige;
+            txtPublisher.BackColor = Color.White;
             txtPublisher.Location = new Point(120, 195);
             txtPublisher.Name = "txtPublisher";
             txtPublisher.Size = new Size(168, 23);
@@ -109,7 +109,7 @@
             // 
             // txtYear
             // 
-            txtYear.BackColor = Color.Beige;
+            txtYear.BackColor = Color.White;
             txtYear.Location = new Point(120, 230);
             txtYear.Name = "txtYear";
             txtYear.Size = new Size(168, 23);
@@ -117,7 +117,7 @@
             // 
             // txtCopies
             // 
-            txtCopies.BackColor = Color.Beige;
+            txtCopies.BackColor = Color.White;
             txtCopies.Location = new Point(120, 265);
             txtCopies.Name = "txtCopies";
             txtCopies.Size = new Size(168, 23);
@@ -125,7 +125,7 @@
             // 
             // txtShelfLocation
             // 
-            txtShelfLocation.BackColor = Color.Beige;
+            txtShelfLocation.BackColor = Color.White;
             txtShelfLocation.Location = new Point(120, 300);
             txtShelfLocation.Name = "txtShelfLocation";
             txtShelfLocation.Size = new Size(168, 23);
@@ -238,7 +238,7 @@
             // 
             // EditBookForm
             // 
-            BackColor = Color.PeachPuff;
+            BackColor = Color.FromArgb(33, 150, 243);
             ClientSize = new Size(330, 400);
             Controls.Add(lblBookId);
             Controls.Add(lblTitle);

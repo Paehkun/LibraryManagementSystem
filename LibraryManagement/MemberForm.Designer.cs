@@ -35,7 +35,7 @@
             // 
             // txtName
             // 
-            txtName.BackColor = Color.Beige;
+            txtName.BackColor = Color.White;
             txtName.Location = new Point(100, 20);
             txtName.Name = "txtName";
             txtName.Size = new Size(100, 23);
@@ -43,7 +43,7 @@
             // 
             // txtEmail
             // 
-            txtEmail.BackColor = Color.Beige;
+            txtEmail.BackColor = Color.White;
             txtEmail.Location = new Point(100, 60);
             txtEmail.Name = "txtEmail";
             txtEmail.Size = new Size(100, 23);
@@ -51,7 +51,7 @@
             // 
             // txtPhone
             // 
-            txtPhone.BackColor = Color.Beige;
+            txtPhone.BackColor = Color.White;
             txtPhone.Location = new Point(100, 100);
             txtPhone.Name = "txtPhone";
             txtPhone.Size = new Size(100, 23);
@@ -59,7 +59,7 @@
             // 
             // txtAddress
             // 
-            txtAddress.BackColor = Color.Beige;
+            txtAddress.BackColor = Color.White;
             txtAddress.Location = new Point(100, 140);
             txtAddress.Name = "txtAddress";
             txtAddress.Size = new Size(100, 23);
@@ -143,7 +143,7 @@
             // 
             // MemberForm
             // 
-            BackColor = Color.PeachPuff;
+            BackColor = Color.FromArgb(33, 150, 243);
             ClientSize = new Size(470, 378);
             Controls.Add(lblName);
             Controls.Add(lblEmail);

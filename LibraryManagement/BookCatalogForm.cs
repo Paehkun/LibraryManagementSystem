@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Drawing;
-using System.Net;
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Npgsql;
 
@@ -10,14 +12,22 @@ namespace LibraryManagementSystem
     public partial class BookCatalogForm : Form
     {
         private string username;
+        private static readonly HttpClient httpClient = new HttpClient(); // Reuse for all image requests
+        private readonly string cacheDir = Path.Combine(Application.StartupPath, "image_cache");
+
         public BookCatalogForm(string username)
         {
             InitializeComponent();
             this.username = username;
+
+            if (!Directory.Exists(cacheDir))
+                Directory.CreateDirectory(cacheDir);
         }
 
-        private void BookCatalogForm_Load(object sender, EventArgs e)
+        private async void BookCatalogForm_Load(object sender, EventArgs e)
         {
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+
             // Create Back button
             btnBack = new Button
             {
@@ -30,17 +40,11 @@ namespace LibraryManagementSystem
                 Height = 32
             };
             btnBack.FlatAppearance.BorderSize = 0;
-
-            // Position: left side of the search TextBox
-            // Assuming your txtSearch is near top-right area — we'll align accordingly
             btnBack.Location = new Point(txtSearch.Left - btnBack.Width - 10, txtSearch.Top);
-
-            // Add click event
             btnBack.Click += BtnBack_Click;
-
-            // Add button to the form
             this.Controls.Add(btnBack);
-            LoadBooks();
+
+            await LoadBooks();
         }
 
         private void BtnBack_Click(object sender, EventArgs e)
@@ -50,20 +54,57 @@ namespace LibraryManagementSystem
             home.Show();
         }
 
-
-
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
-            LoadBooks(txtSearch.Text.Trim());
+            await LoadBooks(txtSearch.Text.Trim());
         }
 
-        private void LoadBooks(string search = "")
+        private async Task LoadBooks(string search = "")
         {
             flowPanel.Controls.Clear();
-            DataTable dt = GetBooks(search);
 
+            Label loadingLabel = new Label
+            {
+                Text = "Loading books...",
+                Font = new Font("Segoe UI", 11, FontStyle.Italic),
+                ForeColor = Color.Gray,
+                AutoSize = true,
+                Margin = new Padding(20)
+            };
+            flowPanel.Controls.Add(loadingLabel);
+            flowPanel.Refresh();
+
+            DataTable dt = GetBooks(search);
+            flowPanel.Controls.Clear();
+
+            if (dt.Rows.Count == 0)
+            {
+                flowPanel.Controls.Add(new Label
+                {
+                    Text = "No books found.",
+                    Font = new Font("Segoe UI", 11, FontStyle.Italic),
+                    ForeColor = Color.Gray,
+                    AutoSize = true,
+                    Margin = new Padding(20)
+                });
+                return;
+            }
+
+            // Download or load all images in parallel
+            var imageTasks = new List<Task<Image>>();
             foreach (DataRow row in dt.Rows)
             {
+                string imgUrl = row["image"].ToString();
+                imageTasks.Add(GetCachedImageAsync(imgUrl));
+            }
+
+            var images = await Task.WhenAll(imageTasks);
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                DataRow row = dt.Rows[i];
+                Image img = images[i];
+
                 Panel card = new Panel
                 {
                     Width = 250,
@@ -73,51 +114,19 @@ namespace LibraryManagementSystem
                     BorderStyle = BorderStyle.FixedSingle
                 };
 
-                // Book Cover (image from URL)
                 PictureBox pic = new PictureBox
                 {
                     Width = 220,
                     Height = 180,
                     Location = new Point(15, 10),
                     SizeMode = PictureBoxSizeMode.Zoom,
-                    BorderStyle = BorderStyle.FixedSingle
+                    BorderStyle = BorderStyle.FixedSingle,
+                    Image = img
                 };
-
-                var imgUrl = row["image"].ToString();
-
-                if (!string.IsNullOrEmpty(imgUrl))
-                {
-                    // Load the image asynchronously to avoid freezing the UI
-                    Task.Run(() =>
-                    {
-                        try
-                        {
-                            using (var client = new WebClient())
-                            {
-                                byte[] data = client.DownloadData(imgUrl);
-                                using (var ms = new System.IO.MemoryStream(data))
-                                {
-                                    var img = Image.FromStream(ms);
-                                    pic.Invoke((MethodInvoker)(() => pic.Image = img));
-                                }
-                            }
-                        }
-                        catch
-                        {
-                            pic.Invoke((MethodInvoker)(() => pic.Image = SystemIcons.Warning.ToBitmap()));
-                        }
-                    });
-                }
-                else
-                {
-                    // If no image URL provided
-                    pic.Image = SystemIcons.Warning.ToBitmap();
-                }
-
 
                 Label lblTitle = new Label
                 {
-                    Text = row["name"].ToString(),
+                    Text = row["title"].ToString(),
                     Font = new Font("Segoe UI", 11, FontStyle.Bold),
                     ForeColor = Color.FromArgb(30, 60, 90),
                     AutoSize = false,
@@ -139,7 +148,7 @@ namespace LibraryManagementSystem
 
                 Label lblCategory = new Label
                 {
-                    Text = $"{row["category"]}",
+                    Text = row["category"].ToString(),
                     Font = new Font("Segoe UI", 9, FontStyle.Regular),
                     ForeColor = Color.DimGray,
                     AutoSize = false,
@@ -163,11 +172,10 @@ namespace LibraryManagementSystem
                 btnDetails.Click += (s, e) =>
                 {
                     MessageBox.Show(
-                        $"Title: {row["name"]}\n" +
+                        $"Title: {row["title"]}\n" +
                         $"Author: {row["author"]}\n" +
                         $"ISBN: {row["isbn"]}\n" +
-                        $"Category: {row["category"]}\n" +
-                        $"Image Path: {row["img_paths"]}",
+                        $"Category: {row["category"]}\n",
                         "Book Details",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information
@@ -182,18 +190,36 @@ namespace LibraryManagementSystem
 
                 flowPanel.Controls.Add(card);
             }
+        }
 
-            if (dt.Rows.Count == 0)
+        private async Task<Image> GetCachedImageAsync(string imgUrl)
+        {
+            if (string.IsNullOrEmpty(imgUrl))
+                return SystemIcons.Warning.ToBitmap();
+
+            try
             {
-                Label noData = new Label
+                // Create hashed local filename
+                string hash = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(imgUrl)).Replace("=", "");
+                string filePath = Path.Combine(cacheDir, hash + ".jpg");
+
+                // Return cached file if exists
+                if (File.Exists(filePath))
                 {
-                    Text = "No books found.",
-                    Font = new Font("Segoe UI", 11, FontStyle.Italic),
-                    ForeColor = Color.Gray,
-                    AutoSize = true,
-                    Margin = new Padding(20)
-                };
-                flowPanel.Controls.Add(noData);
+                    using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                        return Image.FromStream(fs);
+                }
+
+                // Otherwise download and cache
+                byte[] data = await httpClient.GetByteArrayAsync(imgUrl);
+                await File.WriteAllBytesAsync(filePath, data);
+
+                using (var ms = new MemoryStream(data))
+                    return Image.FromStream(ms);
+            }
+            catch
+            {
+                return SystemIcons.Warning.ToBitmap();
             }
         }
 
@@ -204,10 +230,10 @@ namespace LibraryManagementSystem
             {
                 conn.Open();
                 string query = @"
-                    SELECT id, image, name, author, isbn, category, img_paths
-                    FROM book_catalog
+                    SELECT id, image, title, author, isbn, category
+                    FROM books
                     WHERE (@search = '' 
-                        OR name ILIKE @pattern 
+                        OR title ILIKE @pattern 
                         OR author ILIKE @pattern 
                         OR isbn ILIKE @pattern 
                         OR category ILIKE @pattern)
@@ -219,9 +245,7 @@ namespace LibraryManagementSystem
                     cmd.Parameters.AddWithValue("@pattern", "%" + search + "%");
 
                     using (var reader = cmd.ExecuteReader())
-                    {
                         dt.Load(reader);
-                    }
                 }
             }
             return dt;
@@ -230,9 +254,8 @@ namespace LibraryManagementSystem
         private void btn_back_Click(object sender, EventArgs e)
         {
             this.Hide();
-            LibrarianHomeForm librarianHome = new LibrarianHomeForm("Librarian");
-            librarianHome.Show();
-
+            LibrarianHomeForm home = new LibrarianHomeForm(username);
+            home.Show();
         }
     }
 }
