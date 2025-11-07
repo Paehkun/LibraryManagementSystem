@@ -33,7 +33,7 @@
             // 
             // topPanel
             // 
-            topPanel.BackColor = Color.White;
+            topPanel.BackColor = Color.FromArgb(33, 150, 243);
             topPanel.Controls.Add(btn_back);
             topPanel.Controls.Add(lblSearch);
             topPanel.Controls.Add(txtSearch);
@@ -97,11 +97,13 @@
             // flowPanel
             // 
             flowPanel.AutoScroll = true;
+            flowPanel.Anchor = AnchorStyles.None;
+            flowPanel.WrapContents = true;
             flowPanel.BackColor = Color.WhiteSmoke;
             flowPanel.Dock = DockStyle.Fill;
             flowPanel.Location = new Point(0, 60);
             flowPanel.Name = "flowPanel";
-            flowPanel.Padding = new Padding(20);
+            flowPanel.Padding = new Padding(150, 0, 0, 20);
             flowPanel.Size = new Size(1164, 636);
             flowPanel.TabIndex = 0;
             // 

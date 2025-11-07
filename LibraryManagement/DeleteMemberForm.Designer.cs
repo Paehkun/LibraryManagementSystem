@@ -27,7 +27,7 @@
             // 
             lblmember.Location = new Point(12, 76);
             lblmember.Name = "lblmember";
-            lblmember.Size = new Size(77, 23);
+            lblmember.Size = new Size(70, 23);
             lblmember.TabIndex = 0;
             lblmember.Text = "Member ID:";
             // 

@@ -105,7 +105,7 @@ namespace LibraryManagementSystem
                     br.borrowid AS ""Borrow ID"",
                     br.memberid AS ""Member ID"",
                     m.name AS ""Member Name"",
-                    br.isbn AS ""Book ISBN"",
+                    
                     b.title AS ""Book Title"",
                     br.borrowdate AS ""Borrow Date"",
                     br.duedate AS ""Due Date""
@@ -163,10 +163,8 @@ namespace LibraryManagementSystem
                 SELECT 
                     borrowid AS ""Borrow ID"",
                     memberid AS ""Member ID"",
-                    name AS ""Member Name"",
-                    isbn AS ""Book ISBN"",
+                    name AS ""Member Name"",                    
                     title AS ""Book Title"",
-                    borrowdate AS ""Borrow Date"",
                     duedate AS ""Due Date""
                 FROM borrowreturn
                 WHERE duedate < CURRENT_DATE AND status = 'Borrowed';

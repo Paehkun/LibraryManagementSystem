@@ -131,7 +131,7 @@ namespace LibraryManagementSystem
                     ForeColor = Color.FromArgb(30, 60, 90),
                     AutoSize = false,
                     Width = 220,
-                    Height = 40,
+                    Height = 30,
                     Location = new Point(15, 200)
                 };
 
