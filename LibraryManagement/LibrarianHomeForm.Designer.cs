@@ -96,7 +96,7 @@
             int spacing = 68;
 
             Button[] buttons = { btnBookManagement, btnMemberRecords, btnBookCatalog, btnReports, btnBorrowReturn, btnLogout };
-            string[] texts = { "📖 Book Management", "👥 Member Management", "📚 Catalog", "📊 Reports", "🔁 Borrow / Return", "🚪 Logout" };
+            string[] texts = { "📖 Book Management", "👥 Member Management", "📚 Catalog", "📊 Reports", "🔁 Borrow And Return", "🚪 Logout" };
 
             for (int i = 0; i < buttons.Length; i++)
             {
