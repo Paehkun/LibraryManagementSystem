@@ -81,10 +81,10 @@ namespace LibraryManagement
             this.panelFilter.Controls.Add(this.lblBookTitle);
             this.panelFilter.Controls.Add(this.lblMember);
             // Filter controls (same as before)
-            this.lblMember.Text = "🧍 Member:";
+            this.lblMember.Text = "Member Name:";
             this.lblMember.Location = new System.Drawing.Point(20, 20);
             this.lblMember.AutoSize = true;
-            this.txtMemberName.Location = new System.Drawing.Point(100, 18);
+            this.txtMemberName.Location = new System.Drawing.Point(120, 18);
             this.txtMemberName.Width = 150;
             this.lblBookTitle.Text = "📚 Book:";
             this.lblBookTitle.Location = new System.Drawing.Point(280, 20);
