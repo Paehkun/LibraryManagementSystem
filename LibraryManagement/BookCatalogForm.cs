@@ -171,16 +171,93 @@ namespace LibraryManagementSystem
 
                 btnDetails.Click += (s, e) =>
                 {
-                    MessageBox.Show(
-                        $"Title: {row["title"]}\n" +
-                        $"Author: {row["author"]}\n" +
-                        $"ISBN: {row["isbn"]}\n" +
-                        $"Category: {row["category"]}\n",
-                        "Book Details",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information
-                    );
+                    // Create a custom Form for the details
+                    Form detailsForm = new Form
+                    {
+                        Text = "📘 Book Details",
+                        Size = new Size(550, 650),
+                        StartPosition = FormStartPosition.CenterParent,
+                        BackColor = Color.White
+                    };
+
+                    PictureBox pic = new PictureBox
+                    {
+                        Image = img,
+                        SizeMode = PictureBoxSizeMode.Zoom,
+                        Width = 300,
+                        Height = 350,
+                        Location = new Point((detailsForm.ClientSize.Width - 300) / 2, 20),
+                        Anchor = AnchorStyles.Top
+                    };
+
+                    Label lblTitle = new Label
+                    {
+                        Text = row["title"].ToString(),
+                        Font = new Font("Segoe UI", 14, FontStyle.Bold),
+                        ForeColor = Color.FromArgb(30, 60, 90),
+                        AutoSize = false,
+                        Width = detailsForm.ClientSize.Width - 40,
+                        Location = new Point(20, 370),
+                        TextAlign = ContentAlignment.MiddleCenter
+                    };
+
+                    Label lblAuthor = new Label
+                    {
+                        Text = $"By: {row["author"]}",
+                        Font = new Font("Segoe UI", 11, FontStyle.Italic),
+                        ForeColor = Color.DimGray,
+                        AutoSize = false,
+                        Width = detailsForm.ClientSize.Width - 40,
+                        Location = new Point(20, 410),
+                        TextAlign = ContentAlignment.MiddleCenter
+                    };
+
+                    Label lblIsbn = new Label
+                    {
+                        Text = $"ISBN: {row["isbn"]}",
+                        Font = new Font("Segoe UI", 11, FontStyle.Regular),
+                        ForeColor = Color.Black,
+                        AutoSize = false,
+                        Width = detailsForm.ClientSize.Width - 40,
+                        Location = new Point(20, 450),
+                        TextAlign = ContentAlignment.MiddleCenter
+                    };
+
+                    Label lblCategory = new Label
+                    {
+                        Text = $"Category: {row["category"]}",
+                        Font = new Font("Segoe UI", 11, FontStyle.Regular),
+                        ForeColor = Color.Black,
+                        AutoSize = false,
+                        Width = detailsForm.ClientSize.Width - 40,
+                        Location = new Point(20, 490),
+                        TextAlign = ContentAlignment.MiddleCenter
+                    };
+
+                    Button btnClose = new Button
+                    {
+                        Text = "Close",
+                        BackColor = Color.SteelBlue,
+                        ForeColor = Color.White,
+                        Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                        FlatStyle = FlatStyle.Flat,
+                        Width = 100,
+                        Height = 35,
+                        Location = new Point((detailsForm.ClientSize.Width - 100) / 2, 520)
+                    };
+                    btnClose.Click += (s2, e2) => detailsForm.Close();
+
+                    detailsForm.Controls.Add(pic);
+                    detailsForm.Controls.Add(lblTitle);
+                    detailsForm.Controls.Add(lblAuthor);
+                    detailsForm.Controls.Add(lblIsbn);
+                    detailsForm.Controls.Add(lblCategory);
+                   // detailsForm.Controls.Add(linkImage);
+                    detailsForm.Controls.Add(btnClose);
+
+                    detailsForm.ShowDialog();
                 };
+
 
                 card.Controls.Add(pic);
                 card.Controls.Add(lblTitle);
