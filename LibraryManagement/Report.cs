@@ -1,12 +1,13 @@
 ﻿using LibraryManagementSystem;
-using Npgsql; // Make sure you added this reference for PostgreSQL
+using Npgsql;
 using System;
 using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace LibraryManagement
 {
@@ -14,6 +15,7 @@ namespace LibraryManagement
     {
         private string username;
         private static string connectionString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db";
+
         public Report(string username)
         {
             InitializeComponent();
@@ -23,6 +25,134 @@ namespace LibraryManagement
         private void Report_Load(object sender, EventArgs e)
         {
             LoadReturnedBooks();
+            StyleDataGridView();
+            ApplyCardStyle();
+
+            foreach (DataGridViewColumn column in dgvReport.Columns)
+            {
+                if (!string.IsNullOrEmpty(column.HeaderText))
+                {
+                    column.HeaderText = char.ToUpper(column.HeaderText[0]) + column.HeaderText.Substring(1);
+                }
+            }
+
+            // Adjust specific column widths
+            //dgvReport.Columns["CopiesAvailable"].Width = 150;  // You can adjust this value
+            //dgvReport.Columns["Id"].Width = 60;
+            //dgvReport.Columns["Title"].Width = 200;
+            //dgvReport.Columns["Author"].Width = 150;
+
+            // Optional: Auto resize to fit content
+            dgvReport.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader;
+            dgvReport.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+
+            // Format column headers
+            dgvReport.Columns["borrowid"].HeaderText = "Borrow ID";
+            dgvReport.Columns["title"].HeaderText = "Title";
+            dgvReport.Columns["isbn"].HeaderText = "ISBN";
+            dgvReport.Columns["memberid"].HeaderText = "Member ID";
+            dgvReport.Columns["name"].HeaderText = "Name";
+            dgvReport.Columns["phone"].HeaderText = "Phone";
+            dgvReport.Columns["borrowdate"].HeaderText = "Borrow Date";
+            dgvReport.Columns["duedate"].HeaderText = "Due Date";
+            dgvReport.Columns["returndate"].HeaderText = "Return Date";
+
+            // Adjust column widths
+            dgvReport.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgvReport.Columns["borrowid"].Width = 120;
+            dgvReport.Columns["title"].Width = 300;
+            dgvReport.Columns["isbn"].Width = 140;
+            dgvReport.Columns["memberid"].Width = 100;
+            dgvReport.Columns["name"].Width = 150;
+            dgvReport.Columns["phone"].Width = 100;
+            dgvReport.Columns["borrowdate"].Width = 130;
+            dgvReport.Columns["duedate"].Width = 130;
+            dgvReport.Columns["returndate"].Width = 130;
+
+            //dgvReport.Columns["borrowid"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            //dgvReport.Columns["year"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+        }
+        private void DgvReport_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                e.Handled = true;
+                e.PaintBackground(e.ClipBounds, true);
+
+                System.Drawing.Rectangle cardRect = e.CellBounds;
+                cardRect.Inflate(-5, -5);
+
+                bool isSelected = (e.State & DataGridViewElementStates.Selected) != 0;
+
+                Color cardColor = isSelected ? Color.FromArgb(230, 240, 255) : e.CellStyle.BackColor;
+                Color borderColor = isSelected ? Color.FromArgb(130, 170, 250) : Color.LightGray;
+
+                using (SolidBrush brush = new SolidBrush(cardColor))
+                using (Pen borderPen = new Pen(borderColor, 1))
+                {
+                    Graphics g = e.Graphics;
+                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                    int radius = 10;
+                    using (System.Drawing.Drawing2D.GraphicsPath path = GetRoundedRectPath(cardRect, radius))
+                    {
+                        g.FillPath(brush, path);
+                        g.DrawPath(borderPen, path);
+                    }
+                }
+
+                TextRenderer.DrawText(
+                    e.Graphics,
+                    e.FormattedValue?.ToString() ?? string.Empty,
+                    e.CellStyle.Font,
+                    cardRect,
+                    e.CellStyle.ForeColor,
+                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter
+                );
+            }
+        }
+
+        private System.Drawing.Drawing2D.GraphicsPath GetRoundedRectPath(System.Drawing.Rectangle rect, int radius)
+        {
+            var path = new System.Drawing.Drawing2D.GraphicsPath();
+            int diameter = radius * 2;
+
+            path.AddArc(rect.X, rect.Y, diameter, diameter, 180, 90);
+            path.AddArc(rect.Right - diameter, rect.Y, diameter, diameter, 270, 90);
+            path.AddArc(rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 0, 90);
+            path.AddArc(rect.X, rect.Bottom - diameter, diameter, diameter, 90, 90);
+            path.CloseFigure();
+
+            return path;
+        }
+
+        private void ApplyCardStyle()
+        {
+            dgvReport.BackgroundColor = Color.White;
+            dgvReport.BorderStyle = BorderStyle.None;
+            dgvReport.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            dgvReport.GridColor = Color.White;
+            dgvReport.RowHeadersVisible = false;
+
+            dgvReport.DefaultCellStyle.BackColor = Color.White;
+            dgvReport.DefaultCellStyle.ForeColor = Color.Black;
+            dgvReport.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10F);
+            dgvReport.DefaultCellStyle.SelectionBackColor = Color.FromArgb(230, 240, 255);
+            dgvReport.DefaultCellStyle.SelectionForeColor = Color.Black;
+            dgvReport.DefaultCellStyle.Padding = new Padding(12, 10, 12, 10);
+
+            dgvReport.RowTemplate.Height = 40;
+            dgvReport.RowTemplate.MinimumHeight = 40;
+            dgvReport.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+            dgvReport.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 248, 250);
+
+            dgvReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvReport.MultiSelect = false;
+            dgvReport.ReadOnly = true;
+
+            dgvReport.CellPainting -= DgvReport_CellPainting; // avoid double subscription
+            dgvReport.CellPainting += DgvReport_CellPainting;
         }
 
         private void LoadReturnedBooks(string titleFilter = "", string memberFilter = "", DateTime? startDate = null, DateTime? endDate = null)
@@ -71,6 +201,23 @@ namespace LibraryManagement
             }
         }
 
+        private void StyleDataGridView()
+        {
+            dgvReport.EnableHeadersVisualStyles = false;
+            dgvReport.ColumnHeadersDefaultCellStyle.BackColor = Color.SteelBlue;
+            dgvReport.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvReport.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, FontStyle.Bold);
+            dgvReport.RowTemplate.Height = 30;
+            dgvReport.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvReport.GridColor = Color.LightGray;
+            dgvReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvReport.MultiSelect = false;
+
+            // Alternate row color
+            dgvReport.RowsDefaultCellStyle.BackColor = Color.White;
+            dgvReport.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+        }
+
         private void btnFilter_Click(object sender, EventArgs e)
         {
             LoadReturnedBooks(
@@ -95,7 +242,6 @@ namespace LibraryManagement
                 {
                     StringBuilder sb = new StringBuilder();
 
-                    // Write header
                     for (int i = 0; i < dgvReport.Columns.Count; i++)
                     {
                         sb.Append(dgvReport.Columns[i].HeaderText);
@@ -103,23 +249,15 @@ namespace LibraryManagement
                     }
                     sb.AppendLine();
 
-                    // Write data
                     foreach (DataGridViewRow row in dgvReport.Rows)
                     {
                         for (int i = 0; i < dgvReport.Columns.Count; i++)
                         {
                             string cellValue = row.Cells[i].Value?.ToString() ?? "";
-
-                            // 🕒 Convert timestamps to only show date
                             if (DateTime.TryParse(cellValue, out DateTime dt))
-                            {
-                                cellValue = dt.ToString("dd/MM/yyyy"); // <-- Only date part
-                            }
-
-                            // Escape commas and quotes properly
+                                cellValue = dt.ToString("dd/MM/yyyy");
                             cellValue = "\"" + cellValue.Replace("\"", "\"\"") + "\"";
                             sb.Append(cellValue);
-
                             if (i < dgvReport.Columns.Count - 1)
                                 sb.Append(",");
                         }
@@ -136,7 +274,7 @@ namespace LibraryManagement
             }
         }
 
-            private void btnExportPdf_Click(object sender, EventArgs e)
+        private void btnExportPdf_Click(object sender, EventArgs e)
         {
             try
             {
@@ -154,47 +292,45 @@ namespace LibraryManagement
 
                 if (saveFile.ShowDialog() == DialogResult.OK)
                 {
-                    // Create PDF
                     using (FileStream stream = new FileStream(saveFile.FileName, FileMode.Create))
                     {
-                        // iTextSharp references
-                        iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(iTextSharp.text.PageSize.A4, 20f, 20f, 20f, 20f);
-                        iTextSharp.text.pdf.PdfWriter.GetInstance(pdfDoc, stream);
+                        Document pdfDoc = new Document(PageSize.A4, 20f, 20f, 20f, 20f);
+                        PdfWriter.GetInstance(pdfDoc, stream);
                         pdfDoc.Open();
 
-                        // Title
-                        var titleFont = iTextSharp.text.FontFactory.GetFont("Arial", 16, iTextSharp.text.Font.BOLD);
-                        var normalFont = iTextSharp.text.FontFactory.GetFont("Arial", 10, iTextSharp.text.Font.NORMAL);
+                        var titleFont = FontFactory.GetFont("Arial", 16, iTextSharp.text.Font.BOLD);
+                        var normalFont = FontFactory.GetFont("Arial", 10, iTextSharp.text.Font.NORMAL);
 
-                        iTextSharp.text.Paragraph title = new iTextSharp.text.Paragraph("📊 Returned Books Report\n\n", titleFont);
-                        title.Alignment = iTextSharp.text.Element.ALIGN_CENTER;
+                        Paragraph title = new Paragraph("📊 Returned Books Report\n\n", titleFont)
+                        {
+                            Alignment = Element.ALIGN_CENTER
+                        };
                         pdfDoc.Add(title);
 
-                        // Create table with same number of columns
-                        iTextSharp.text.pdf.PdfPTable pdfTable = new iTextSharp.text.pdf.PdfPTable(dgvReport.Columns.Count);
-                        pdfTable.WidthPercentage = 100;
+                        PdfPTable pdfTable = new PdfPTable(dgvReport.Columns.Count)
+                        {
+                            WidthPercentage = 100
+                        };
 
-                        // Add header
                         foreach (DataGridViewColumn column in dgvReport.Columns)
                         {
-                            iTextSharp.text.pdf.PdfPCell cell = new iTextSharp.text.pdf.PdfPCell(new iTextSharp.text.Phrase(column.HeaderText, normalFont));
-                            cell.BackgroundColor = new iTextSharp.text.BaseColor(220, 220, 220);
-                            cell.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER;
+                            PdfPCell cell = new PdfPCell(new Phrase(column.HeaderText, normalFont))
+                            {
+                                BackgroundColor = new BaseColor(70, 130, 180), // SteelBlue shade
+                                HorizontalAlignment = Element.ALIGN_CENTER,
+                                Padding = 5
+                            };
                             pdfTable.AddCell(cell);
                         }
 
-                        // Add data
                         foreach (DataGridViewRow row in dgvReport.Rows)
                         {
                             foreach (DataGridViewCell cell in row.Cells)
                             {
                                 string cellValue = cell.Value?.ToString() ?? "";
-                                DateTime dt;
-                                if (DateTime.TryParse(cellValue, out dt))
-                                {
-                                    cellValue = dt.ToString("dd/MM/yyyy"); // Only show date
-                                }
-                                pdfTable.AddCell(new iTextSharp.text.Phrase(cellValue, normalFont));
+                                if (DateTime.TryParse(cellValue, out DateTime dt))
+                                    cellValue = dt.ToString("dd/MM/yyyy");
+                                pdfTable.AddCell(new Phrase(cellValue, normalFont));
                             }
                         }
 
@@ -212,14 +348,11 @@ namespace LibraryManagement
             }
         }
 
-
-
         private void btnBack_Click(object sender, EventArgs e)
         {
             this.Hide();
             LibrarianHomeForm home = new LibrarianHomeForm(username);
             home.Show();
         }
-
     }
 }
