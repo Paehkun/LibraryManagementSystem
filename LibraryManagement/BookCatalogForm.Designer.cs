@@ -8,6 +8,7 @@
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Label lblSearch;
         private System.Windows.Forms.Panel topPanel;
+        private FlowLayoutPanel categoryPanel;
         private Button btnBack;
 
         protected override void Dispose(bool disposing)
@@ -44,6 +45,17 @@
             topPanel.Padding = new Padding(20, 10, 20, 10);
             topPanel.Size = new Size(1164, 60);
             topPanel.TabIndex = 1;
+            // Category panel
+            categoryPanel = new FlowLayoutPanel();
+            categoryPanel.Dock = DockStyle.Top;
+            categoryPanel.Height = 70;
+            categoryPanel.Padding = new Padding(80, 10, 20, 10);
+            categoryPanel.BackColor = Color.LightGray; // or any color you like
+            categoryPanel.AutoScroll = true; // scroll if too many buttons
+            this.Controls.Add(categoryPanel);
+            categoryPanel.BringToFront();
+            //categoryPanel.AutoScroll = true;
+
             // 
             // btn_back
             // 
@@ -77,7 +89,6 @@
             txtSearch.Location = new Point(296, 16);
             txtSearch.Name = "txtSearch";
             txtSearch.Size = new Size(400, 27);
-            txtSearch.TabIndex = 1;
             // 
             // btnSearch
             // 
@@ -103,7 +114,7 @@
             flowPanel.Dock = DockStyle.Fill;
             flowPanel.Location = new Point(0, 60);
             flowPanel.Name = "flowPanel";
-            flowPanel.Padding = new Padding(150, 0, 0, 20);
+            flowPanel.Padding = new Padding(150, 70, 0, 100);
             flowPanel.Size = new Size(1164, 636);
             flowPanel.TabIndex = 0;
             // 
@@ -120,7 +131,7 @@
             btnBack.TabIndex = 2;
             btnBack.Text = "← Back";
             btnBack.UseVisualStyleBackColor = false;
-            btnBack.Click += BtnBack_Click;
+           // btnBack.Click += BtnBack_Click;
             // 
             // BookCatalogForm
             // 

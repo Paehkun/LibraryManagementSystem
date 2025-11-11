@@ -46,80 +46,82 @@ namespace LibraryManagement
             lblPublisher = new Label();
             lblYear = new Label();
             lblShelfLocation = new Label();
+            txtImg = new TextBox();
+            lblimg = new Label();
             SuspendLayout();
             // 
             // txtTitle
             // 
             txtTitle.BackColor = Color.White;
-            txtTitle.Location = new Point(100, 20);
+            txtTitle.Location = new Point(125, 20);
             txtTitle.Name = "txtTitle";
-            txtTitle.Size = new Size(100, 23);
+            txtTitle.Size = new Size(198, 23);
             txtTitle.TabIndex = 4;
             txtTitle.TextChanged += txtTitle_TextChanged;
             // 
             // txtAuthor
             // 
             txtAuthor.BackColor = Color.White;
-            txtAuthor.Location = new Point(100, 60);
+            txtAuthor.Location = new Point(125, 60);
             txtAuthor.Name = "txtAuthor";
-            txtAuthor.Size = new Size(100, 23);
+            txtAuthor.Size = new Size(198, 23);
             txtAuthor.TabIndex = 5;
             // 
             // txtCategory
             // 
             txtCategory.BackColor = Color.White;
-            txtCategory.Location = new Point(100, 100);
+            txtCategory.Location = new Point(125, 100);
             txtCategory.Name = "txtCategory";
-            txtCategory.Size = new Size(100, 23);
+            txtCategory.Size = new Size(198, 23);
             txtCategory.TabIndex = 6;
             // 
             // txtCopies
             // 
             txtCopies.BackColor = Color.White;
-            txtCopies.Location = new Point(100, 140);
+            txtCopies.Location = new Point(125, 140);
             txtCopies.Name = "txtCopies";
-            txtCopies.Size = new Size(100, 23);
+            txtCopies.Size = new Size(198, 23);
             txtCopies.TabIndex = 7;
             // 
             // txtISBN
             // 
             txtISBN.BackColor = Color.White;
-            txtISBN.Location = new Point(223, 20);
+            txtISBN.Location = new Point(125, 179);
             txtISBN.Name = "txtISBN";
-            txtISBN.Size = new Size(100, 23);
+            txtISBN.Size = new Size(198, 23);
             txtISBN.TabIndex = 8;
             // 
             // txtPublisher
             // 
             txtPublisher.BackColor = Color.White;
-            txtPublisher.Location = new Point(223, 60);
+            txtPublisher.Location = new Point(125, 217);
             txtPublisher.Name = "txtPublisher";
-            txtPublisher.Size = new Size(100, 23);
+            txtPublisher.Size = new Size(198, 23);
             txtPublisher.TabIndex = 9;
             // 
             // txtYear
             // 
             txtYear.BackColor = Color.White;
-            txtYear.Location = new Point(223, 100);
+            txtYear.Location = new Point(125, 256);
             txtYear.Name = "txtYear";
-            txtYear.Size = new Size(100, 23);
+            txtYear.Size = new Size(198, 23);
             txtYear.TabIndex = 10;
             // 
             // txtShelfLocation
             // 
             txtShelfLocation.BackColor = Color.White;
-            txtShelfLocation.Location = new Point(223, 143);
+            txtShelfLocation.Location = new Point(125, 296);
             txtShelfLocation.Name = "txtShelfLocation";
-            txtShelfLocation.Size = new Size(100, 23);
+            txtShelfLocation.Size = new Size(198, 23);
             txtShelfLocation.TabIndex = 11;
             // 
             // btnSave
             // 
             btnSave.BackColor = Color.White;
-            btnSave.Location = new Point(109, 200);
+            btnSave.Location = new Point(137, 378);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
-            btnSave.TabIndex = 8;
+            btnSave.TabIndex = 13;
             btnSave.Text = "Save";
             btnSave.UseVisualStyleBackColor = false;
             btnSave.Click += btnSave_Click;
@@ -127,10 +129,10 @@ namespace LibraryManagement
             // btnCancel
             // 
             btnCancel.BackColor = Color.White;
-            btnCancel.Location = new Point(233, 200);
+            btnCancel.Location = new Point(236, 378);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
-            btnCancel.TabIndex = 9;
+            btnCancel.TabIndex = 14;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
@@ -138,7 +140,7 @@ namespace LibraryManagement
             // lblTitle
             // 
             lblTitle.AutoSize = true;
-            lblTitle.Location = new Point(20, 20);
+            lblTitle.Location = new Point(66, 20);
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(32, 15);
             lblTitle.TabIndex = 0;
@@ -147,7 +149,7 @@ namespace LibraryManagement
             // lblAuthor
             // 
             lblAuthor.AutoSize = true;
-            lblAuthor.Location = new Point(20, 60);
+            lblAuthor.Location = new Point(51, 60);
             lblAuthor.Name = "lblAuthor";
             lblAuthor.Size = new Size(47, 15);
             lblAuthor.TabIndex = 1;
@@ -156,7 +158,7 @@ namespace LibraryManagement
             // lblCategory
             // 
             lblCategory.AutoSize = true;
-            lblCategory.Location = new Point(20, 100);
+            lblCategory.Location = new Point(39, 100);
             lblCategory.Name = "lblCategory";
             lblCategory.Size = new Size(58, 15);
             lblCategory.TabIndex = 2;
@@ -165,7 +167,7 @@ namespace LibraryManagement
             // lblCopies
             // 
             lblCopies.AutoSize = true;
-            lblCopies.Location = new Point(20, 143);
+            lblCopies.Location = new Point(51, 143);
             lblCopies.Name = "lblCopies";
             lblCopies.Size = new Size(46, 15);
             lblCopies.TabIndex = 3;
@@ -174,43 +176,62 @@ namespace LibraryManagement
             // lblISBN
             // 
             lblISBN.AutoSize = true;
-            lblISBN.Location = new Point(351, 20);
+            lblISBN.Location = new Point(62, 179);
             lblISBN.Name = "lblISBN";
             lblISBN.Size = new Size(35, 15);
             lblISBN.TabIndex = 4;
-            lblISBN.Text = ":ISBN";
+            lblISBN.Text = "ISBN:";
             // 
             // lblPublisher
             // 
             lblPublisher.AutoSize = true;
-            lblPublisher.Location = new Point(351, 60);
+            lblPublisher.Location = new Point(36, 220);
             lblPublisher.Name = "lblPublisher";
             lblPublisher.Size = new Size(59, 15);
             lblPublisher.TabIndex = 5;
-            lblPublisher.Text = ":Publisher";
+            lblPublisher.Text = "Publisher:";
             // 
             // lblYear
             // 
             lblYear.AutoSize = true;
-            lblYear.Location = new Point(351, 100);
+            lblYear.Location = new Point(62, 259);
             lblYear.Name = "lblYear";
             lblYear.Size = new Size(32, 15);
             lblYear.TabIndex = 6;
-            lblYear.Text = ":Year";
+            lblYear.Text = "Year:";
             // 
             // lblShelfLocation
             // 
             lblShelfLocation.AutoSize = true;
-            lblShelfLocation.Location = new Point(351, 143);
+            lblShelfLocation.Location = new Point(9, 299);
             lblShelfLocation.Name = "lblShelfLocation";
             lblShelfLocation.Size = new Size(85, 15);
             lblShelfLocation.TabIndex = 7;
-            lblShelfLocation.Text = ":Shelf Location";
+            lblShelfLocation.Text = "Shelf Location:";
+            // 
+            // txtImg
+            // 
+            txtImg.BackColor = Color.White;
+            txtImg.Location = new Point(125, 336);
+            txtImg.Name = "txtImg";
+            txtImg.Size = new Size(198, 23);
+            txtImg.TabIndex = 12;
+            // 
+            // lblimg
+            // 
+            lblimg.AutoSize = true;
+            lblimg.Location = new Point(26, 336);
+            lblimg.Name = "lblimg";
+            lblimg.Size = new Size(68, 15);
+            lblimg.TabIndex = 15;
+            lblimg.Text = "Image Link:";
             // 
             // AddBookForm
             // 
             BackColor = Color.FromArgb(33, 150, 243);
-            ClientSize = new Size(470, 291);
+            ClientSize = new Size(433, 496);
+            Controls.Add(lblimg);
+            Controls.Add(txtImg);
             Controls.Add(lblTitle);
             Controls.Add(lblAuthor);
             Controls.Add(lblCategory);
@@ -236,5 +257,7 @@ namespace LibraryManagement
             ResumeLayout(false);
             PerformLayout();
         }
+        private TextBox txtImg;
+        private Label lblimg;
     }
 }

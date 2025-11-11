@@ -20,6 +20,7 @@ namespace LibraryManagement
             string category = txtCategory.Text.Trim();
             string publisher = txtPublisher.Text.Trim();
             string shelflocation = txtShelfLocation.Text.Trim();
+            string image = txtImg.Text.Trim();
 
             int copiesavailable;
             int year;
@@ -27,6 +28,7 @@ namespace LibraryManagement
             if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(author) ||
         string.IsNullOrEmpty(isbn) || string.IsNullOrEmpty(category) ||
         string.IsNullOrEmpty(publisher) || string.IsNullOrEmpty(shelflocation) ||
+        string.IsNullOrEmpty(image) ||
         !int.TryParse(txtYear.Text, out year) ||
         !int.TryParse(txtCopies.Text, out copiesavailable))
             {
@@ -41,7 +43,7 @@ namespace LibraryManagement
                 using (var conn = new NpgsqlConnection(connString))
                 {
                     conn.Open();
-                    string query = "INSERT INTO books (title, author, isbn, category, publisher, year, copiesavailable, shelflocation) VALUES (@title, @author, @isbn, @category, @publisher, @year, @copiesavailable, @shelflocation)";
+                    string query = "INSERT INTO books (title, author, isbn, category, publisher, year, copiesavailable, shelflocation, image) VALUES (@title, @author, @isbn, @category, @publisher, @year, @copiesavailable, @shelflocation, @image)";
                     using (var cmd = new NpgsqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@title", title);
@@ -52,6 +54,7 @@ namespace LibraryManagement
                         cmd.Parameters.AddWithValue("@year", year);
                         cmd.Parameters.AddWithValue("@copiesavailable", copiesavailable);
                         cmd.Parameters.AddWithValue("@shelflocation", shelflocation);
+                        cmd.Parameters.AddWithValue("@image", image);
                         cmd.ExecuteNonQuery();
                     }
                 }
