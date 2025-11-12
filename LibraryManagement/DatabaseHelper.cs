@@ -123,7 +123,7 @@ namespace LibraryManagementSystem
             using (var conn = GetConnection())
             {
                 conn.Open();
-                string query = "SELECT * FROM borrowreturn ORDER BY borrowid ASC";
+                string query = "SELECT * FROM borrowreturn ORDER BY CASE WHEN status = 'Borrowed' THEN 1 ELSE 2 END, borrowdate DESC;";
                 using (var cmd = new NpgsqlCommand(query, conn))
                 using (var reader = cmd.ExecuteReader())
                 {

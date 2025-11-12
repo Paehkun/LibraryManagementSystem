@@ -268,6 +268,7 @@ namespace LibraryManagementSystem
             dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvMembers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMembers.ColumnHeadersVisible = true;
+            dgvMembers.ClearSelection();
         }
 
 

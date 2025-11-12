@@ -145,6 +145,7 @@ namespace LibraryManagementSystem
                 dataGridView1.RowTemplate.Height = 40;
                 dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                 dataGridView1.MultiSelect = false;
+                dataGridView1.ClearSelection();
             }
             catch (Exception ex)
             {
@@ -195,6 +196,7 @@ namespace LibraryManagementSystem
                         dataGridView2.RowTemplate.Height = 40;
                         dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                         dataGridView2.MultiSelect = false;
+                        dataGridView2.ClearSelection();
                     }
                 }
             }

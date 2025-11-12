@@ -228,6 +228,7 @@ namespace LibraryManagementSystem
         private void LoadBooks()
         {
             dgvBooks.DataSource = DatabaseHelper.GetAllBooks();
+            dgvBooks.ClearSelection();
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)

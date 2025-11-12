@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using System.Collections.Generic;
 
 namespace LibraryManagement
 {
@@ -20,10 +21,50 @@ namespace LibraryManagement
         {
             InitializeComponent();
             this.username = username;
-            LoadBorrowRecords();
+
+            // ✅ Apply UI styling first
             StyleDataGridView();
             ApplyCardStyle();
-            // ✅ Adjust specific column widths
+
+            // ✅ Hook Load event instead of calling LoadBorrowRecords() in constructor
+            this.Load += borrowANDreturn_Load;
+        }
+
+        // ✅ This runs when form fully loaded, ensuring DataGridView has columns
+        private void borrowANDreturn_Load(object sender, EventArgs e)
+        {
+            LoadBorrowRecords();
+            SetColumnStyles(); // safe to set column width and headers now
+        }
+
+        private void LoadBorrowRecords()
+        {
+            try
+            {
+                DataTable dt = DatabaseHelper.GetBorrowRecords();
+                dataGridView1.DataSource = dt;
+
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                dataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+                dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                dataGridView1.RowTemplate.Height = 35;
+
+                CheckLateReturns();
+                dataGridView1.ClearSelection();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading records: " + ex.Message);
+            }
+        }
+
+        // ✅ Column widths and header settings (safe after data is loaded)
+        private void SetColumnStyles()
+        {
+            if (dataGridView1.Columns.Count == 0)
+                return;
+
             dataGridView1.Columns["borrowid"].Width = 120;
             dataGridView1.Columns["title"].Width = 230;
             dataGridView1.Columns["isbn"].Width = 140;
@@ -35,10 +76,12 @@ namespace LibraryManagement
             dataGridView1.Columns["status"].Width = 100;
             dataGridView1.Columns["phone"].Width = 120;
 
-            // ✅ Optional: center-align some columns
+            // ✅ Center alignment
             dataGridView1.Columns["borrowid"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView1.Columns["memberid"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView1.Columns["status"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            // ✅ Set readable headers
             dataGridView1.Columns["borrowid"].HeaderText = "Borrow ID";
             dataGridView1.Columns["title"].HeaderText = "Book Title";
             dataGridView1.Columns["isbn"].HeaderText = "ISBN";
@@ -49,23 +92,10 @@ namespace LibraryManagement
             dataGridView1.Columns["duedate"].HeaderText = "Due Date";
             dataGridView1.Columns["returndate"].HeaderText = "Return Date";
             dataGridView1.Columns["status"].HeaderText = "Status";
+
+            // ✅ Center grid on form
             int centerX = (this.ClientSize.Width - dataGridView1.Width) / 2;
-            dataGridView1.Location = new Point(centerX, 200); // 200 = Y position (you can adjust)
-        }
-
-        private void LoadBorrowRecords()
-        {
-            DataTable dt = DatabaseHelper.GetBorrowRecords();
-            dataGridView1.DataSource = dt;
-
-            // Style
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 10);
-            dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            dataGridView1.RowTemplate.Height = 35;
-
-            CheckLateReturns();
+            dataGridView1.Location = new Point(centerX, 200);
         }
 
         private void CheckLateReturns()
@@ -74,13 +104,27 @@ namespace LibraryManagement
 
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
-                if (row.Cells["returndate"].Value != null &&
-                    DateTime.TryParse(row.Cells["returndate"].Value.ToString(), out DateTime returnDate))
+                if (row.Cells["status"].Value == null)
+                    continue;
+
+                string status = row.Cells["status"].Value.ToString();
+
+                if (!status.Equals("Returned", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (returnDate < today)
+                    if (DateTime.TryParse(row.Cells["duedate"].Value?.ToString(), out DateTime dueDate))
                     {
-                        row.DefaultCellStyle.BackColor = Color.LightCoral;
-                        row.DefaultCellStyle.ForeColor = Color.White;
+                        if (dueDate < today)
+                        {
+                            // 🔴 Overdue book
+                            row.DefaultCellStyle.BackColor = Color.LightCoral;
+                            row.DefaultCellStyle.ForeColor = Color.Black;
+                        }
+                        else
+                        {
+                            // 🟠 Within borrow period
+                            row.DefaultCellStyle.BackColor = Color.DarkSeaGreen;
+                            row.DefaultCellStyle.ForeColor = Color.White;
+                        }
                     }
                 }
             }
@@ -92,11 +136,10 @@ namespace LibraryManagement
             {
                 // 🧩 Step 1: Select Member
                 int memberId = -1;
-
                 using (SelectMemberForm memberForm = new SelectMemberForm())
                 {
                     if (memberForm.ShowDialog() != DialogResult.OK)
-                        return; // Cancelled by user
+                        return;
 
                     memberId = int.Parse(memberForm.SelectedMemberId);
                 }
@@ -106,7 +149,7 @@ namespace LibraryManagement
                 using (SelectBooksForm booksForm = new SelectBooksForm())
                 {
                     if (booksForm.ShowDialog() != DialogResult.OK)
-                        return; // Cancelled by user
+                        return;
 
                     foreach (var book in booksForm.SelectedBooks)
                     {
@@ -134,17 +177,14 @@ namespace LibraryManagement
 
                 foreach (var book in selectedBooks)
                 {
-                    // now only send what's needed — the DB helper will fetch phone/name
                     DatabaseHelper.AddBorrowRecord(book.Title, book.ISBN, memberId, borrowDate, dueDate);
 
-                    // Reduce available copies
                     string query = "UPDATE Books SET copiesavailable = copiesavailable - 1 WHERE isbn = @isbn";
                     DatabaseHelper.ExecuteNonQuery(query, new { isbn = book.ISBN });
                 }
 
-                // 🧩 Step 5: Done
                 MessageBox.Show($"{selectedBooks.Count} book(s) borrowed successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadBorrowRecords(); // refresh grid
+                LoadBorrowRecords(); // refresh
             }
             catch (Exception ex)
             {
@@ -152,28 +192,11 @@ namespace LibraryManagement
             }
         }
 
-        //private void BtnSelectMember_Click(object sender, EventArgs e)
-        //{
-        //    using (SelectMemberForm memberForm = new SelectMemberForm())
-        //    {
-        //        if (memberForm.ShowDialog() == DialogResult.OK)
-        //        {
-        //            selectedMemberId = int.Parse(memberForm.SelectedMemberId);
-        //            selectedMemberName = memberForm.SelectedMemberName;
-        //            selectedPhone = memberForm.SelectedMemberPhone;
-
-        //            //MessageBox.Show($"Selected Member: {selectedMemberName} (ID: {selectedMemberId})",
-        //            //    "Member Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //        }
-        //    }
-        //}
-
         private void btnReturnBook_Click(object sender, EventArgs e)
         {
             try
             {
-                string input = Microsoft.VisualBasic.Interaction.InputBox(
-                    "Enter Borrow ID to return:", "Return Book", "");
+                string input = Interaction.InputBox("Enter Borrow ID to return:", "Return Book", "");
 
                 if (string.IsNullOrWhiteSpace(input))
                 {
@@ -181,9 +204,8 @@ namespace LibraryManagement
                     return;
                 }
 
-                string borrowId = input.Trim(); // keep as string since it's VARCHAR(6)
+                string borrowId = input.Trim();
 
-                // 🟡 1. Fetch Borrow Record
                 DataTable dt = DatabaseHelper.ExecuteQuery(
                     "SELECT isbn, returndate, status FROM borrowreturn WHERE borrowid = @borrowid",
                     new { borrowid = borrowId });
@@ -196,7 +218,6 @@ namespace LibraryManagement
 
                 string isbn = dt.Rows[0]["isbn"].ToString();
                 string status = dt.Rows[0]["status"].ToString();
-                object returndateObj = dt.Rows[0]["returndate"];
 
                 if (status == "Returned")
                 {
@@ -204,20 +225,17 @@ namespace LibraryManagement
                     return;
                 }
 
-                // 🟢 2. Update Borrow Record
                 DateTime today = DateTime.Now.Date;
                 string updateQuery = @"UPDATE borrowreturn 
-                               SET returndate = @returndate, status = 'Returned' 
-                               WHERE borrowid = @borrowid";
+                                       SET returndate = @returndate, status = 'Returned' 
+                                       WHERE borrowid = @borrowid";
                 DatabaseHelper.ExecuteNonQuery(updateQuery, new { returndate = today, borrowid = borrowId });
 
-                // 🟢 3. Increment Book Copies
                 string updateCopies = "UPDATE books SET copiesavailable = copiesavailable + 1 WHERE isbn = @isbn";
                 DatabaseHelper.ExecuteNonQuery(updateCopies, new { isbn });
 
-                // 🟢 4. Notify and Refresh
                 MessageBox.Show("Book returned successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadBorrowRecords(); // refresh DataGridView
+                LoadBorrowRecords();
             }
             catch (Exception ex)
             {
@@ -225,36 +243,13 @@ namespace LibraryManagement
             }
         }
 
-
-        //private void BtnSelectBooks_Click(object sender, EventArgs e)
-        //{
-        //    using (SelectBooksForm booksForm = new SelectBooksForm())
-        //    {
-        //        if (booksForm.ShowDialog() == DialogResult.OK)
-        //        {
-        //            selectedBooks.Clear();
-        //            listBoxSelectedBooks.Items.Clear();
-
-        //            foreach (var book in booksForm.SelectedBooks)
-        //            {
-        //                selectedBooks.Add((book.Title, book.ISBN));
-        //                listBoxSelectedBooks.Items.Add($"{book.Title} ({book.ISBN})");
-        //                string query = "UPDATE Books SET copiesavailable = copiesavailable - 1 WHERE isbn = @isbn";
-        //                DatabaseHelper.ExecuteNonQuery(query, new { isbn = book.ISBN });
-        //            }
-
-        //            //MessageBox.Show($"{selectedBooks.Count} book(s) selected.", "Books Selected",
-        //            //    MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //        }
-        //    }
-        //}
-
         private void btnBack_Click(object sender, EventArgs e)
         {
             this.Hide();
             LibrarianHomeForm home = new LibrarianHomeForm(username);
             home.Show();
         }
+
         private void StyleDataGridView()
         {
             dataGridView1.EnableHeadersVisualStyles = false;
@@ -264,7 +259,6 @@ namespace LibraryManagement
             dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView1.ColumnHeadersHeight = 40;
             dataGridView1.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
         }
 
@@ -276,14 +270,12 @@ namespace LibraryManagement
             dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView1.GridColor = Color.White;
             dataGridView1.RowHeadersVisible = false;
-
             dataGridView1.DefaultCellStyle.BackColor = Color.White;
             dataGridView1.DefaultCellStyle.ForeColor = Color.Black;
             dataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 10F);
             dataGridView1.DefaultCellStyle.SelectionBackColor = Color.FromArgb(230, 240, 255);
             dataGridView1.DefaultCellStyle.SelectionForeColor = Color.Black;
             dataGridView1.DefaultCellStyle.Padding = new Padding(12, 10, 12, 10);
-
             dataGridView1.RowTemplate.Height = 40;
             dataGridView1.RowTemplate.MinimumHeight = 40;
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
@@ -348,6 +340,5 @@ namespace LibraryManagement
 
             return path;
         }
-
     }
 }
