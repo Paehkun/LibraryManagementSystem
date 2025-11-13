@@ -51,6 +51,10 @@ namespace LibraryManagementSystem
 
                         this.Hide(); // Hide login form
 
+                        
+
+                        UserSession.Username = username;
+                        UserSession.Role = userRole;
                         Form nextForm;
 
                         if (userRole == "admin")
@@ -66,8 +70,7 @@ namespace LibraryManagementSystem
                             MessageBox.Show("Unknown role: " + userRole);
                             return;
                         }
-
-                        // When the next form closes, close the login form too
+                        this.Hide();
                         nextForm.FormClosed += (s, args) => this.Close();
                         nextForm.Show();
                     }
@@ -86,7 +89,6 @@ namespace LibraryManagementSystem
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-            // Optional: Initialize UI, placeholder text, etc.
         }
 
         private void lblTitle_Click(object sender, EventArgs e)

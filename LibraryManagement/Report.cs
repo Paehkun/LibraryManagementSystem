@@ -19,7 +19,7 @@ namespace LibraryManagement
         public Report(string username)
         {
             InitializeComponent();
-            this.username = username;
+            this.username = UserSession.Username;
         }
 
         private void Report_Load(object sender, EventArgs e)
@@ -350,9 +350,16 @@ namespace LibraryManagement
 
         private void btnBack_Click(object sender, EventArgs e)
         {
+            if (UserSession.Role == "admin")
+            {
+                new AdminHomeForm(UserSession.Username).Show();
+            }
+            else
+            {
+                new LibrarianHomeForm(UserSession.Username).Show();
+            }
+
             this.Hide();
-            LibrarianHomeForm home = new LibrarianHomeForm(username);
-            home.Show();
         }
     }
 }

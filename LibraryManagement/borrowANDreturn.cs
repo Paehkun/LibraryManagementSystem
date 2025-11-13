@@ -20,7 +20,7 @@ namespace LibraryManagement
         public borrowANDreturn(string username)
         {
             InitializeComponent();
-            this.username = username;
+            this.username = UserSession.Username;
 
             // ✅ Apply UI styling first
             StyleDataGridView();
@@ -245,9 +245,16 @@ namespace LibraryManagement
 
         private void btnBack_Click(object sender, EventArgs e)
         {
+            if (UserSession.Role == "admin")
+            {
+                new AdminHomeForm(UserSession.Username).Show();
+            }
+            else
+            {
+                new LibrarianHomeForm(UserSession.Username).Show();
+            }
+
             this.Hide();
-            LibrarianHomeForm home = new LibrarianHomeForm(username);
-            home.Show();
         }
 
         private void StyleDataGridView()

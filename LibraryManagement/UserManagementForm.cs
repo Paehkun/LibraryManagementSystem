@@ -7,22 +7,22 @@ using System.Windows.Forms;
 
 namespace LibraryManagementSystem
 {
-    public partial class MemberManagementForm : Form
+    public partial class UserManagementForm : Form
     {
         private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
         private string username;
-        public MemberManagementForm(string username)
+        public UserManagementForm(string username)
         {
             InitializeComponent();
-            this.username = UserSession.Username;
+            this.username = username;
             dgvMembers.CellClick += dgvMembers_CellClick;
         }
 
-        private void MemberManagementForm_Load(object sender, EventArgs e)
+        private void UserManagementForm_Load(object sender, EventArgs e)
         {
             LoadMembers();
             SetupDataGridView();
-            
+
             foreach (DataGridViewColumn column in dgvMembers.Columns)
             {
                 if (!string.IsNullOrEmpty(column.HeaderText))
@@ -33,37 +33,28 @@ namespace LibraryManagementSystem
             dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             dgvMembers.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
             // Format column headers
-            dgvMembers.Columns["memberid"].HeaderText = "Member ID";
+            dgvMembers.Columns["id"].HeaderText = "ID";
             dgvMembers.Columns["name"].HeaderText = "Name";
-            dgvMembers.Columns["email"].HeaderText = "Email";
-            dgvMembers.Columns["phone"].HeaderText = "Phone";
-            dgvMembers.Columns["address"].HeaderText = "Address";
-            dgvMembers.Columns["membershipdate"].HeaderText = "Member Since";
+            dgvMembers.Columns["username"].HeaderText = "Username";
+            dgvMembers.Columns["password"].HeaderText = "Password";
+            dgvMembers.Columns["role"].HeaderText = "Role";
 
             // Adjust column widths
             dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            dgvMembers.Columns["memberid"].Width = 60;
+            dgvMembers.Columns["id"].Width = 60;
             dgvMembers.Columns["name"].Width = 260;
-            dgvMembers.Columns["email"].Width = 180;
-            dgvMembers.Columns["phone"].Width = 150;
-            dgvMembers.Columns["address"].Width = 120;
-            dgvMembers.Columns["membershipdate"].Width = 180;
+            dgvMembers.Columns["username"].Width = 180;
+            dgvMembers.Columns["password"].Width = 150;
+            dgvMembers.Columns["role"].Width = 120;
             LoadMembers();
             SetupDataGridView();
         }
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            if (UserSession.Role == "admin")
-            {
-                new AdminHomeForm(UserSession.Username).Show();
-            }
-            else
-            {
-                new LibrarianHomeForm(UserSession.Username).Show();
-            }
-
             this.Hide();
+            AdminHomeForm home = new AdminHomeForm(username);
+            home.Show();
         }
 
         private void btnAddMember_Click(object sender, EventArgs e)
@@ -81,10 +72,10 @@ namespace LibraryManagementSystem
         {
             if (dgvMembers.CurrentRow != null)
             {
-                int memberId = Convert.ToInt32(dgvMembers.CurrentRow.Cells["memberid"].Value);
-                using (EditMemberForm editMemberForm = new EditMemberForm(memberId))
+                int Id = Convert.ToInt32(dgvMembers.CurrentRow.Cells["id"].Value);
+                using (EditUserForm editUserForm = new EditUserForm(Id))
                 {
-                    if (editMemberForm.ShowDialog() == DialogResult.OK)
+                    if (editUserForm.ShowDialog() == DialogResult.OK)
                     {
                         LoadMembers();
                     }
@@ -92,7 +83,7 @@ namespace LibraryManagementSystem
             }
             else
             {
-                MessageBox.Show("Please select a member to edit.");
+                MessageBox.Show("Please select a user to edit.");
             }
         }
 
@@ -134,7 +125,7 @@ namespace LibraryManagementSystem
             dgvMembers.CellBorderStyle = DataGridViewCellBorderStyle.None;
             dgvMembers.GridColor = Color.White;
             dgvMembers.RowHeadersVisible = false;
-
+            dgvMembers.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dgvMembers.DefaultCellStyle.BackColor = Color.White;
             dgvMembers.DefaultCellStyle.ForeColor = Color.Black;
             dgvMembers.DefaultCellStyle.Font = new Font("Segoe UI", 10F);
@@ -142,8 +133,8 @@ namespace LibraryManagementSystem
             dgvMembers.DefaultCellStyle.SelectionForeColor = Color.Black;
             dgvMembers.DefaultCellStyle.Padding = new Padding(12, 10, 12, 10);
 
-            dgvMembers.RowTemplate.Height = 90;
-            dgvMembers.RowTemplate.MinimumHeight = 90;
+           // dgvMembers.RowTemplate.Height = 90;
+           // dgvMembers.RowTemplate.MinimumHeight = 90;
             dgvMembers.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
             dgvMembers.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 248, 250);
@@ -211,17 +202,17 @@ namespace LibraryManagementSystem
 
         private void LoadMembers(string search = "")
         {
-            DataTable dt = DatabaseHelper.GetAllMembers(search);
+            DataTable dt = DatabaseHelper.GetAllUsers(search);
 
-            dgvMembers.Columns.Clear(); 
+            dgvMembers.Columns.Clear();
             dgvMembers.AutoGenerateColumns = false;
             dgvMembers.DataSource = dt;
 
             dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
             {
-                DataPropertyName = "memberid",
-                HeaderText = "Member ID",
-                Name = "memberid",
+                DataPropertyName = "id",
+                HeaderText = "ID",
+                Name = "id",
                 Width = 80
             });
 
@@ -235,42 +226,31 @@ namespace LibraryManagementSystem
 
             dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
             {
-                DataPropertyName = "email",
-                HeaderText = "Email",
-                Name = "email",
+                DataPropertyName = "username",
+                HeaderText = "Username",
+                Name = "username",
                 Width = 180
             });
 
             dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
             {
-                DataPropertyName = "phone",
-                HeaderText = "Phone",
-                Name = "phone",
+                DataPropertyName = "password",
+                HeaderText = "Password",
+                Name = "password",
                 Width = 120
             });
 
             dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
             {
-                DataPropertyName = "address",
-                HeaderText = "Address",
-                Name = "address",
+                DataPropertyName = "role",
+                HeaderText = "Role",
+                Name = "role",
                 Width = 200
             });
 
-            dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "membershipdate",
-                HeaderText = "Member Since",
-                Name = "membershipdate",
-                Width = 130,
-                DefaultCellStyle = { Format = "yyyy-MM-dd" }
-            });
-
-            // ✅ Make sure the style is applied (optional)
             ApplyCardStyle();
 
-            // ✅ Adjust columns layout
-            dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            //dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvMembers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMembers.ColumnHeadersVisible = true;
             dgvMembers.ClearSelection();

@@ -1,8 +1,8 @@
 ﻿using LibraryManagement;
 using Npgsql;
 using System;
-using System.Drawing;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace LibraryManagementSystem
 {
@@ -12,19 +12,12 @@ namespace LibraryManagementSystem
         private string username;
         string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
 
-        public AdminHomeForm(string username)
+        public AdminHomeForm(string username = "")
         {
             InitializeComponent();
-            this.username = username;
+            this.username = UserSession.Username;          // ✅ assign the parameter to the field
             FetchFullNameFromDB();
-        }
-
-        private void AdminHomeForm_Load(object sender, EventArgs e)
-        {
             lblWelcome.Text = $"Welcome, {name}";
-            LoadDashboardData();
-            LoadBorrowedBooks();
-            LoadLateReturnedBooks();
         }
 
         private void FetchFullNameFromDB()
@@ -38,7 +31,9 @@ namespace LibraryManagementSystem
                     cmd.Parameters.AddWithValue("@username", username);
                     var result = cmd.ExecuteScalar();
                     if (result != null)
-                        name = result.ToString();
+                    {
+                        name = result.ToString();   // ✅ store full name
+                    }
                 }
             }
         }
@@ -51,7 +46,7 @@ namespace LibraryManagementSystem
                 {
                     conn.Open();
 
-                    // 🟢 Total Books Copies
+                    // 🟢 Total Books (based on total copies available)
                     string totalBooksQuery = "SELECT COALESCE(SUM(copiesavailable), 0) FROM books";
                     using (var cmd = new NpgsqlCommand(totalBooksQuery, conn))
                     {
@@ -59,23 +54,23 @@ namespace LibraryManagementSystem
                         lblTotalBooksValue.Text = totalBooks.ToString();
                     }
 
-                    // 🟢 Total Book Titles
-                    string totalBookTitlesQuery = "SELECT COUNT(*) FROM books";
-                    using (var cmd = new NpgsqlCommand(totalBookTitlesQuery, conn))
+                    // 👥 Total Books Row
+                    string totalBooksRow = "SELECT COUNT(*) FROM books";
+                    using (var cmd = new NpgsqlCommand(totalBooksRow, conn))
                     {
-                        var totalTitles = cmd.ExecuteScalar();
-                        lblBookRow.Text = totalTitles.ToString();
+                        var totalBookRow = cmd.ExecuteScalar();
+                        lblBookRow.Text = totalBookRow.ToString();
                     }
 
-                    // 👥 Total Users (Admin + Librarian + Members)
-                    string totalUsersQuery = "SELECT COUNT(*) FROM users";
-                    using (var cmd = new NpgsqlCommand(totalUsersQuery, conn))
+
+                    // 👥 Total Members
+                    string totalMembersQuery = "SELECT COUNT(*) FROM member";
+                    using (var cmd = new NpgsqlCommand(totalMembersQuery, conn))
                     {
-                        var totalUsers = cmd.ExecuteScalar();
-                        lblTotalMembersValue.Text = totalUsers.ToString();
+                        var totalMembers = cmd.ExecuteScalar();
+                        lblTotalMembersValue.Text = totalMembers.ToString();
                     }
 
-                    // 👥 Total Borrowed Books
                     string totalBorrowQuery = "SELECT COUNT(*) FROM borrowreturn WHERE status = 'Borrowed'";
                     using (var cmd = new NpgsqlCommand(totalBorrowQuery, conn))
                     {
@@ -83,12 +78,12 @@ namespace LibraryManagementSystem
                         lblBorrowedBooksValue.Text = totalBorrow.ToString();
                     }
 
-                    // ⏰ Total Late Return Books
                     string totalLateReturnQuery = "SELECT COUNT(*) FROM borrowreturn WHERE duedate < CURRENT_DATE AND status = 'Borrowed'";
                     using (var cmd = new NpgsqlCommand(totalLateReturnQuery, conn))
                     {
                         var totalLateReturn = cmd.ExecuteScalar();
                         lblLateReturnBooksValue.Text = totalLateReturn.ToString();
+                        lblLateReturnBooksValue.BringToFront();
                     }
                 }
             }
@@ -97,8 +92,6 @@ namespace LibraryManagementSystem
                 MessageBox.Show($"Error loading dashboard data: {ex.Message}");
             }
         }
-
-
         private void LoadBorrowedBooks()
         {
             try
@@ -106,16 +99,18 @@ namespace LibraryManagementSystem
                 using (var conn = new NpgsqlConnection(connString))
                 {
                     conn.Open();
+
                     string query = @"
                 SELECT 
                     br.borrowid AS ""Borrow ID"",
                     br.memberid AS ""Member ID"",
-                    u.name AS ""User Name"",
+                    m.name AS ""Member Name"",
+                    
                     b.title AS ""Book Title"",
                     br.borrowdate AS ""Borrow Date"",
                     br.duedate AS ""Due Date""
                 FROM borrowreturn br
-                JOIN member u ON br.memberid = u.memberid
+                JOIN member m ON br.memberid = m.memberid
                 JOIN books b ON br.isbn = b.isbn
                 WHERE br.status = 'Borrowed'
                 ORDER BY br.borrowdate DESC;
@@ -127,15 +122,36 @@ namespace LibraryManagementSystem
                         var dt = new System.Data.DataTable();
                         dt.Load(reader);
                         dataGridView1.DataSource = dt;
+                        if (dataGridView1.Rows.Count == 1)
+                        {
+                            dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
+                            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+                            dataGridView1.BackgroundColor = Color.LightGray;
+                        }
+                        else
+                        {
+                            dataGridView1.RowsDefaultCellStyle.BackColor = Color.White;
+                            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.WhiteSmoke;
+                            dataGridView1.BackgroundColor = Color.White;
+                        }
+
                     }
                 }
+
+                // Optional: Styling like your other forms
+                dataGridView1.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10);
+                dataGridView1.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                dataGridView1.RowTemplate.Height = 40;
+                dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                dataGridView1.MultiSelect = false;
+                dataGridView1.ClearSelection();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading borrowed books: {ex.Message}");
             }
         }
-
 
         private void LoadLateReturnedBooks()
         {
@@ -146,15 +162,13 @@ namespace LibraryManagementSystem
                     conn.Open();
                     string query = @"
                 SELECT 
-                    br.borrowid AS ""Borrow ID"",
-                    br.memberid AS ""Member ID"",
-                    u.name AS ""User Name"",
-                    b.title AS ""Book Title"",
-                    br.duedate AS ""Due Date""
-                FROM borrowreturn br
-                JOIN member u ON br.memberid = u.memberid
-                JOIN books b ON br.isbn = b.isbn
-                WHERE br.duedate < CURRENT_DATE AND br.status = 'Borrowed';
+                    borrowid AS ""Borrow ID"",
+                    memberid AS ""Member ID"",
+                    name AS ""Member Name"",                    
+                    title AS ""Book Title"",
+                    duedate AS ""Due Date""
+                FROM borrowreturn
+                WHERE duedate < CURRENT_DATE AND status = 'Borrowed';
             ";
 
                     using (var cmd = new NpgsqlCommand(query, conn))
@@ -163,6 +177,26 @@ namespace LibraryManagementSystem
                         var dt = new System.Data.DataTable();
                         dt.Load(reader);
                         dataGridView2.DataSource = dt;
+                        if (dataGridView1.Rows.Count == 1)
+                        {
+                            dataGridView2.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
+                            dataGridView2.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+                            dataGridView2.BackgroundColor = Color.LightGray;
+                        }
+                        else
+                        {
+                            dataGridView2.RowsDefaultCellStyle.BackColor = Color.White;
+                            dataGridView2.AlternatingRowsDefaultCellStyle.BackColor = Color.WhiteSmoke;
+                            dataGridView2.BackgroundColor = Color.White;
+                        }
+
+                        dataGridView2.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10);
+                        dataGridView2.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
+                        dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                        dataGridView2.RowTemplate.Height = 40;
+                        dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                        dataGridView2.MultiSelect = false;
+                        dataGridView2.ClearSelection();
                     }
                 }
             }
@@ -172,22 +206,47 @@ namespace LibraryManagementSystem
             }
         }
 
-
-        private void btnManageBooks_Click(object sender, EventArgs e)
+        private void AdminHomeForm_Load(object sender, EventArgs e)
         {
-            BookManagementForm bookForm = new BookManagementForm(username);
-            bookForm.Show();
+            LoadLateReturnedBooks();
+            LoadBorrowedBooks();
+            LoadDashboardData();
+            LoadBorrowedBooks();
+            LoadLateReturnedBooks();
+        }
+
+        private void btnBookManagement_Click(object sender, EventArgs e)
+        {
+            BookManagementForm bookManagementForm = new BookManagementForm(username);
+            bookManagementForm.Show();
+
             this.Hide();
         }
 
-        private void btnManageUsers_Click(object sender, EventArgs e)
+        private void btnMemberRecords_Click(object sender, EventArgs e)
         {
-            MemberManagementForm userForm = new MemberManagementForm(username);
-            userForm.Show();
+            BookManagementForm bookManagementForm = new BookManagementForm(username);
+            bookManagementForm.Show();
+
             this.Hide();
         }
 
-        private void btnViewReports_Click(object sender, EventArgs e)
+        private void btnUserManagement_Click(object sender, EventArgs e)
+        {
+            UserManagementForm userManagementForm = new UserManagementForm(username);
+            userManagementForm.Show();
+
+            this.Hide();
+        }
+
+        private void btnBookCatalog_Click(object sender, EventArgs e)
+        {
+            BookCatalogForm bookCatalogForm = new BookCatalogForm(username);
+            bookCatalogForm.Show();
+            this.Hide();
+        }
+
+        private void btnReports_Click(object sender, EventArgs e)
         {
             Report reportForm = new Report(username);
             reportForm.Show();
@@ -196,13 +255,21 @@ namespace LibraryManagementSystem
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show("Are you sure you want to logout?", "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show(
+                "Are you sure you want to logout?",
+                "Logout Confirmation",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
             if (result == DialogResult.Yes)
             {
+                UserSession.Username = null;
+                UserSession.Role = null;
+                new LoginForm().Show();
                 this.Hide();
-                LoginForm login = new LoginForm();
-                login.Show();
             }
         }
+
     }
 }

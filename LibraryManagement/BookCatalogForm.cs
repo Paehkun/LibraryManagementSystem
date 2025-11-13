@@ -33,9 +33,16 @@ namespace LibraryManagementSystem
 
         private void btn_back_Click(object sender, EventArgs e)
         {
+            if (UserSession.Role == "admin")
+            {
+                new AdminHomeForm(UserSession.Username).Show();
+            }
+            else
+            {
+                new LibrarianHomeForm(UserSession.Username).Show();
+            }
+
             this.Hide();
-            LibrarianHomeForm home = new LibrarianHomeForm(username);
-            home.Show();
         }
 
         private async void btnSearch_Click(object sender, EventArgs e)

@@ -12,10 +12,10 @@ namespace LibraryManagementSystem
         private string username;
         string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
 
-        public LibrarianHomeForm(string username)
+        public LibrarianHomeForm(string username = "")
         {
             InitializeComponent();
-            this.username = username;          // ✅ assign the parameter to the field
+            this.username = UserSession.Username;          // ✅ assign the parameter to the field
             FetchFullNameFromDB();
             lblWelcome.Text = $"Welcome, {name}";
         }
@@ -264,9 +264,10 @@ namespace LibraryManagementSystem
 
             if (result == DialogResult.Yes)
             {
+                UserSession.Username = null;
+                UserSession.Role = null;
+                new LoginForm().Show();
                 this.Hide();
-                LoginForm login = new LoginForm();
-                login.Show();
             }
         }
 

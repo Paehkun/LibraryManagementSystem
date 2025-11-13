@@ -62,6 +62,39 @@ namespace LibraryManagementSystem
 
             return dt;
         }
+        public static DataTable GetAllUsers(string search = "")
+        {
+            DataTable dt = new DataTable();
+
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+
+                string query = @"
+            SELECT id, name, role, username, password
+            FROM users
+            WHERE (@search = '' 
+                OR CAST(id AS TEXT) ILIKE @pattern
+                OR name ILIKE @pattern 
+                OR username ILIKE @pattern 
+                OR password ILIKE @pattern) 
+            ORDER BY id ASC";
+
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@search", search);
+                    cmd.Parameters.AddWithValue("@pattern", "%" + search + "%");
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        dt.Load(reader);
+                    }
+                }
+            }
+
+            return dt;
+        }
+
 
         public static void DeleteMember(int memberId)
         {
