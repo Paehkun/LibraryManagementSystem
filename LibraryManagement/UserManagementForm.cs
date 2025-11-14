@@ -59,9 +59,9 @@ namespace LibraryManagementSystem
 
         private void btnAddMember_Click(object sender, EventArgs e)
         {
-            using (MemberForm memberForm = new MemberForm())
+            using (AddUserForm addUserForm = new AddUserForm())
             {
-                if (memberForm.ShowDialog() == DialogResult.OK)
+                if (addUserForm.ShowDialog() == DialogResult.OK)
                 {
                     LoadMembers();
                 }
@@ -89,7 +89,7 @@ namespace LibraryManagementSystem
 
         private void btnDeleteMember_Click(object sender, EventArgs e)
         {
-            using (var deleteForm = new DeleteMemberForm())
+            using (var deleteForm = new DeleteUserForm())
             {
                 if (deleteForm.ShowDialog() == DialogResult.OK)
                 {
@@ -181,8 +181,8 @@ namespace LibraryManagementSystem
                     e.FormattedValue?.ToString() ?? string.Empty,
                     e.CellStyle.Font,
                     cardRect,
-                    e.CellStyle.ForeColor,
-                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter
+                    e.CellStyle.ForeColor
+                    //TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter
                 );
             }
         }
@@ -213,7 +213,8 @@ namespace LibraryManagementSystem
                 DataPropertyName = "id",
                 HeaderText = "ID",
                 Name = "id",
-                Width = 80
+                Width = 80,
+                DefaultCellStyle = { Alignment = DataGridViewContentAlignment.MiddleCenter }
             });
 
             dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
@@ -221,7 +222,8 @@ namespace LibraryManagementSystem
                 DataPropertyName = "name",
                 HeaderText = "Name",
                 Name = "name",
-                Width = 180
+                Width = 180,
+                DefaultCellStyle = { Alignment = DataGridViewContentAlignment.MiddleLeft }
             });
 
             dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
@@ -229,7 +231,8 @@ namespace LibraryManagementSystem
                 DataPropertyName = "username",
                 HeaderText = "Username",
                 Name = "username",
-                Width = 180
+                Width = 180,
+                DefaultCellStyle = { Alignment = DataGridViewContentAlignment.MiddleCenter }
             });
 
             dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
@@ -237,7 +240,8 @@ namespace LibraryManagementSystem
                 DataPropertyName = "password",
                 HeaderText = "Password",
                 Name = "password",
-                Width = 120
+                Width = 180,
+                DefaultCellStyle = { Alignment = DataGridViewContentAlignment.MiddleCenter }
             });
 
             dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
@@ -245,7 +249,8 @@ namespace LibraryManagementSystem
                 DataPropertyName = "role",
                 HeaderText = "Role",
                 Name = "role",
-                Width = 200
+                Width = 200,
+                DefaultCellStyle = { Alignment = DataGridViewContentAlignment.MiddleCenter }
             });
 
             ApplyCardStyle();

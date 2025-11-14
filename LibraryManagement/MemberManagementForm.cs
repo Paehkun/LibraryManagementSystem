@@ -142,8 +142,8 @@ namespace LibraryManagementSystem
             dgvMembers.DefaultCellStyle.SelectionForeColor = Color.Black;
             dgvMembers.DefaultCellStyle.Padding = new Padding(12, 10, 12, 10);
 
-            dgvMembers.RowTemplate.Height = 90;
-            dgvMembers.RowTemplate.MinimumHeight = 90;
+            //dgvMembers.RowTemplate.Height = 90;
+            dgvMembers.RowTemplate.MinimumHeight = 60;
             dgvMembers.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
             dgvMembers.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 248, 250);
@@ -222,7 +222,8 @@ namespace LibraryManagementSystem
                 DataPropertyName = "memberid",
                 HeaderText = "Member ID",
                 Name = "memberid",
-                Width = 80
+                Width = 100,
+                DefaultCellStyle = { Alignment = DataGridViewContentAlignment.MiddleCenter }
             });
 
             dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
@@ -230,7 +231,7 @@ namespace LibraryManagementSystem
                 DataPropertyName = "name",
                 HeaderText = "Name",
                 Name = "name",
-                Width = 180
+                Width = 250
             });
 
             dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
@@ -238,7 +239,7 @@ namespace LibraryManagementSystem
                 DataPropertyName = "email",
                 HeaderText = "Email",
                 Name = "email",
-                Width = 180
+                Width = 250
             });
 
             dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
@@ -254,7 +255,7 @@ namespace LibraryManagementSystem
                 DataPropertyName = "address",
                 HeaderText = "Address",
                 Name = "address",
-                Width = 200
+                Width = 300
             });
 
             dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
@@ -263,58 +264,58 @@ namespace LibraryManagementSystem
                 HeaderText = "Member Since",
                 Name = "membershipdate",
                 Width = 130,
-                DefaultCellStyle = { Format = "yyyy-MM-dd" }
+                DefaultCellStyle = { Format = "yyyy-MM-dd", Alignment = DataGridViewContentAlignment.MiddleCenter }
             });
 
             // ✅ Make sure the style is applied (optional)
             ApplyCardStyle();
 
             // ✅ Adjust columns layout
-            dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+           // dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvMembers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMembers.ColumnHeadersVisible = true;
             dgvMembers.ClearSelection();
         }
 
 
-        private void AddActionButtons()
-        {
-            if (dgvMembers.Columns.Contains("Edit")) dgvMembers.Columns.Remove("Edit");
-            if (dgvMembers.Columns.Contains("Delete")) dgvMembers.Columns.Remove("Delete");
+        //private void AddActionButtons()
+        //{
+        ////    if (dgvMembers.Columns.Contains("Edit")) dgvMembers.Columns.Remove("Edit");
+        ////    if (dgvMembers.Columns.Contains("Delete")) dgvMembers.Columns.Remove("Delete");
 
-            DataGridViewButtonColumn editBtn = new DataGridViewButtonColumn
-            {
-                HeaderText = "Edit",
-                Name = "Edit",
-                Text = "Edit",
-                UseColumnTextForButtonValue = true,
-                FlatStyle = FlatStyle.Flat,
-                Width = 70,
-                DefaultCellStyle = {
-            BackColor = Color.LightSkyBlue,
-            ForeColor = Color.White,
-            Alignment = DataGridViewContentAlignment.MiddleCenter
-        }
-            };
+        ////    DataGridViewButtonColumn editBtn = new DataGridViewButtonColumn
+        ////    {
+        ////        HeaderText = "Edit",
+        ////        Name = "Edit",
+        ////        Text = "Edit",
+        ////        UseColumnTextForButtonValue = true,
+        ////        FlatStyle = FlatStyle.Flat,
+        ////        Width = 70,
+        ////        DefaultCellStyle = {
+        ////    BackColor = Color.LightSkyBlue,
+        ////    ForeColor = Color.White,
+        ////    Alignment = DataGridViewContentAlignment.MiddleCenter
+        ////}
+        ////    };
 
-            DataGridViewButtonColumn deleteBtn = new DataGridViewButtonColumn
-            {
-                HeaderText = "Delete",
-                Name = "Delete",
-                Text = "Delete",
-                UseColumnTextForButtonValue = true,
-                FlatStyle = FlatStyle.Flat,
-                Width = 70,
-                DefaultCellStyle = {
-            BackColor = Color.LightCoral,
-            ForeColor = Color.White,
-            Alignment = DataGridViewContentAlignment.MiddleCenter
-        }
-            };
+        ////    DataGridViewButtonColumn deleteBtn = new DataGridViewButtonColumn
+        ////    {
+        ////        HeaderText = "Delete",
+        ////        Name = "Delete",
+        ////        Text = "Delete",
+        ////        UseColumnTextForButtonValue = true,
+        ////        FlatStyle = FlatStyle.Flat,
+        ////        Width = 70,
+        ////        DefaultCellStyle = {
+        ////    BackColor = Color.LightCoral,
+        ////    ForeColor = Color.White,
+        ////    Alignment = DataGridViewContentAlignment.MiddleCenter
+        ////}
+        ////    };
 
-            dgvMembers.Columns.Add(editBtn);
-            dgvMembers.Columns.Add(deleteBtn);
-        }
+        ////    dgvMembers.Columns.Add(editBtn);
+        ////    dgvMembers.Columns.Add(deleteBtn);
+        //}
 
 
         private void dgvMembers_CellClick(object sender, DataGridViewCellEventArgs e)

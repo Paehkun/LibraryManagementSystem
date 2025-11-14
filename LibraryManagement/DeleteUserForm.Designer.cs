@@ -1,6 +1,6 @@
 ﻿namespace LibraryManagement
 {
-    partial class DeleteMemberForm
+    partial class DeleteUserForm
     {
         private System.ComponentModel.IContainer components = null;
         private Label lblmember;
@@ -29,7 +29,7 @@
             lblmember.Name = "lblmember";
             lblmember.Size = new Size(70, 23);
             lblmember.TabIndex = 0;
-            lblmember.Text = "Member ID:";
+            lblmember.Text = "User ID:";
             // 
             // txtmember
             // 
@@ -69,7 +69,7 @@
             label1.Name = "label1";
             label1.Size = new Size(271, 33);
             label1.TabIndex = 4;
-            label1.Text = "Enter the member id that need to be delete";
+            label1.Text = "Enter the user id that need to be delete";
             label1.Click += label1_Click;
             // 
             // DeleteMemberForm
@@ -81,9 +81,9 @@
             Controls.Add(txtmember);
             Controls.Add(btnDelete);
             Controls.Add(btnCancel);
-            Name = "DeleteMemberForm";
+            Name = "DeleteUserForm";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Delete Member";
+            Text = "Delete User";
             ResumeLayout(false);
             PerformLayout();
         }

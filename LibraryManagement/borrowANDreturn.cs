@@ -22,19 +22,16 @@ namespace LibraryManagement
             InitializeComponent();
             this.username = UserSession.Username;
 
-            // ✅ Apply UI styling first
             StyleDataGridView();
             ApplyCardStyle();
 
-            // ✅ Hook Load event instead of calling LoadBorrowRecords() in constructor
             this.Load += borrowANDreturn_Load;
         }
 
-        // ✅ This runs when form fully loaded, ensuring DataGridView has columns
         private void borrowANDreturn_Load(object sender, EventArgs e)
         {
             LoadBorrowRecords();
-            SetColumnStyles(); // safe to set column width and headers now
+            SetColumnStyles();
         }
 
         private void LoadBorrowRecords()
@@ -58,8 +55,6 @@ namespace LibraryManagement
                 MessageBox.Show("Error loading records: " + ex.Message);
             }
         }
-
-        // ✅ Column widths and header settings (safe after data is loaded)
         private void SetColumnStyles()
         {
             if (dataGridView1.Columns.Count == 0)
@@ -134,7 +129,7 @@ namespace LibraryManagement
         {
             try
             {
-                // 🧩 Step 1: Select Member
+                //Select Member
                 int memberId = -1;
                 using (SelectMemberForm memberForm = new SelectMemberForm())
                 {
@@ -144,7 +139,7 @@ namespace LibraryManagement
                     memberId = int.Parse(memberForm.SelectedMemberId);
                 }
 
-                // 🧩 Step 2: Select Books
+                //Select Books
                 List<(string Title, string ISBN)> selectedBooks = new List<(string, string)>();
                 using (SelectBooksForm booksForm = new SelectBooksForm())
                 {
@@ -163,7 +158,7 @@ namespace LibraryManagement
                     return;
                 }
 
-                // 🧩 Step 3: Ask for Borrow Days
+                //Ask for Borrow Days
                 string input = Interaction.InputBox("Enter number of borrow days:", "Borrow Duration", "7");
                 if (!int.TryParse(input, out int borrowDays) || borrowDays <= 0)
                 {
@@ -171,7 +166,7 @@ namespace LibraryManagement
                     return;
                 }
 
-                // 🧩 Step 4: Insert Borrow Records
+                //Insert Borrow Records
                 DateTime borrowDate = DateTime.Now;
                 DateTime dueDate = borrowDate.AddDays(borrowDays);
 

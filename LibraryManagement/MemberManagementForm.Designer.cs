@@ -97,8 +97,8 @@ namespace LibraryManagementSystem
             txtSearch.TextChanged += txtSearch_TextChanged;
 
             // ========== DATAGRIDVIEW ==========
-            dgvMembers.Location = new Point(65, 140);
-            dgvMembers.Size = new Size(1600, 850);
+            dgvMembers.Location = new Point(250, 140);
+            dgvMembers.Size = new Size(1170, 980);
             dgvMembers.ReadOnly = true;
             dgvMembers.AllowUserToAddRows = false;
             dgvMembers.AllowUserToDeleteRows = false;
