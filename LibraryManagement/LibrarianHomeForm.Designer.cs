@@ -68,16 +68,6 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
-            //
-            // btnToggleSidebar
-            // 
-            btnToggleSidebar.Text = "≡";
-            btnToggleSidebar.Font = new Font("Segoe UI", 14, FontStyle.Bold);
-            btnToggleSidebar.Size = new Size(50, 50);
-            btnToggleSidebar.Location = new Point(5, 5);
-            btnToggleSidebar.FlatStyle = FlatStyle.Flat;
-            btnToggleSidebar.FlatAppearance.BorderSize = 0;
-            btnToggleSidebar.Click += BtnToggleSidebar_Click;
             // 
             // lblWelcome
             // 
@@ -129,6 +119,18 @@
             btnBorrowReturn.TabIndex = 5;
             btnBorrowReturn.Click += btnBorrowReturn_Click;
             // 
+            // btnToggleSidebar
+            // 
+            btnToggleSidebar.FlatAppearance.BorderSize = 0;
+            btnToggleSidebar.FlatStyle = FlatStyle.Flat;
+            btnToggleSidebar.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            btnToggleSidebar.Location = new Point(5, 5);
+            btnToggleSidebar.Name = "btnToggleSidebar";
+            btnToggleSidebar.Size = new Size(50, 50);
+            btnToggleSidebar.TabIndex = 7;
+            btnToggleSidebar.Text = "≡";
+            btnToggleSidebar.Click += BtnToggleSidebar_Click;
+            // 
             // btnLogout
             // 
             btnLogout.Location = new Point(0, 0);
@@ -162,7 +164,7 @@
             // 
             lblBorrowedBooks.BackColor = Color.White;
             lblBorrowedBooks.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblBorrowedBooks.Location = new Point(320, 270);
+            lblBorrowedBooks.Location = new Point(320, 279);
             lblBorrowedBooks.Name = "lblBorrowedBooks";
             lblBorrowedBooks.Size = new Size(250, 30);
             lblBorrowedBooks.TabIndex = 6;
@@ -172,7 +174,7 @@
             // 
             lblBorrowedBooksValue.BackColor = Color.White;
             lblBorrowedBooksValue.Font = new Font("Segoe UI", 28F, FontStyle.Bold);
-            lblBorrowedBooksValue.Location = new Point(370, 320);
+            lblBorrowedBooksValue.Location = new Point(379, 320);
             lblBorrowedBooksValue.Name = "lblBorrowedBooksValue";
             lblBorrowedBooksValue.Size = new Size(120, 60);
             lblBorrowedBooksValue.TabIndex = 7;
@@ -183,9 +185,9 @@
             // 
             lblLateReturnBooks.BackColor = Color.White;
             lblLateReturnBooks.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblLateReturnBooks.Location = new Point(1140, 270);
+            lblLateReturnBooks.Location = new Point(1151, 279);
             lblLateReturnBooks.Name = "lblLateReturnBooks";
-            lblLateReturnBooks.Size = new Size(220, 30);
+            lblLateReturnBooks.Size = new Size(195, 30);
             lblLateReturnBooks.TabIndex = 8;
             lblLateReturnBooks.Text = "👥 Total Late Return";
             // 
@@ -220,6 +222,7 @@
             lblTotalMembersValue.TabIndex = 11;
             lblTotalMembersValue.Text = "0";
             lblTotalMembersValue.TextAlign = ContentAlignment.MiddleCenter;
+            lblTotalMembersValue.Click += lblTotalMembersValue_Click;
             // 
             // leftPanel
             // 
@@ -290,7 +293,7 @@
             // 
             lblBookRow.BackColor = Color.White;
             lblBookRow.Font = new Font("Segoe UI", 28F, FontStyle.Bold);
-            lblBookRow.Location = new Point(370, 120);
+            lblBookRow.Location = new Point(379, 120);
             lblBookRow.Name = "lblBookRow";
             lblBookRow.Size = new Size(120, 60);
             lblBookRow.TabIndex = 2;

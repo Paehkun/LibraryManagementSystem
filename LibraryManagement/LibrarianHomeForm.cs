@@ -391,5 +391,9 @@ namespace LibraryManagementSystem
             }
         }
 
+        private void lblTotalMembersValue_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
