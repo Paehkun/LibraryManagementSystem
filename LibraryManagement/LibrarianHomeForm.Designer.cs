@@ -73,9 +73,9 @@
             // 
             lblWelcome.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
             lblWelcome.ForeColor = Color.Black;
-            lblWelcome.Location = new Point(20, 20);
+            lblWelcome.Location = new Point(42, 18);
             lblWelcome.Name = "lblWelcome";
-            lblWelcome.Size = new Size(220, 35);
+            lblWelcome.Size = new Size(202, 35);
             lblWelcome.TabIndex = 0;
             lblWelcome.Text = "Welcome, Librarian";
             // 
@@ -83,6 +83,7 @@
             // 
             btnBookManagement.Location = new Point(0, 0);
             btnBookManagement.Name = "btnBookManagement";
+            btnBookManagement.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnBookManagement.Size = new Size(75, 23);
             btnBookManagement.TabIndex = 1;
             btnBookManagement.Click += btnBookManagement_Click;
@@ -91,6 +92,7 @@
             // 
             btnMemberRecords.Location = new Point(0, 0);
             btnMemberRecords.Name = "btnMemberRecords";
+            btnMemberRecords.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnMemberRecords.Size = new Size(75, 23);
             btnMemberRecords.TabIndex = 2;
             btnMemberRecords.Click += btnMemberRecords_Click;
@@ -99,6 +101,7 @@
             // 
             btnBookCatalog.Location = new Point(0, 0);
             btnBookCatalog.Name = "btnBookCatalog";
+            btnBookCatalog.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnBookCatalog.Size = new Size(75, 23);
             btnBookCatalog.TabIndex = 3;
             btnBookCatalog.Click += btnBookCatalog_Click;
@@ -107,6 +110,7 @@
             // 
             btnReports.Location = new Point(0, 0);
             btnReports.Name = "btnReports";
+            btnReports.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnReports.Size = new Size(75, 23);
             btnReports.TabIndex = 4;
             btnReports.Click += btnReports_Click;
@@ -115,6 +119,7 @@
             // 
             btnBorrowReturn.Location = new Point(0, 0);
             btnBorrowReturn.Name = "btnBorrowReturn";
+            btnBorrowReturn.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnBorrowReturn.Size = new Size(75, 23);
             btnBorrowReturn.TabIndex = 5;
             btnBorrowReturn.Click += btnBorrowReturn_Click;
@@ -135,6 +140,7 @@
             // 
             btnLogout.Location = new Point(0, 0);
             btnLogout.Name = "btnLogout";
+            btnLogout.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnLogout.Size = new Size(75, 23);
             btnLogout.TabIndex = 6;
             btnLogout.Click += btnLogout_Click;

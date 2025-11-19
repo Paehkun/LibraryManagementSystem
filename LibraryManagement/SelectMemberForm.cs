@@ -19,10 +19,11 @@ namespace LibraryManagement
 
         private void LoadMembers()
         {
-            DataTable dt = DatabaseHelper.GetAllMembers(); // You already have this
+            DataTable dt = DatabaseHelper.GetAllMembersAdd();
             dataGridView1.DataSource = dt;
             dataGridView1.ReadOnly = true;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.RowHeadersVisible = false;
         }
 
         private void btnSelect_Click(object sender, EventArgs e)

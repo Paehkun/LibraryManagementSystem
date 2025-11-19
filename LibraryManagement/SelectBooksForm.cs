@@ -19,12 +19,13 @@ namespace LibraryManagement
 
         private void LoadBooks()
         {
-            DataTable dt = DatabaseHelper.GetAllBooks();
+            DataTable dt = DatabaseHelper.GetAllBooksAdd();
             dataGridView1.DataSource = dt;
 
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.MultiSelect = true;
             dataGridView1.ReadOnly = true;
+            dataGridView1.RowHeadersVisible = false;
 
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {

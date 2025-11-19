@@ -6,7 +6,6 @@ namespace LibraryManagementSystem
     partial class BookManagementForm
     {
         private System.ComponentModel.IContainer components = null;
-        private Panel leftPanel;
         private Panel rightPanel;
         private Button btnAddBook;
         private Button btnEditBook;
@@ -28,7 +27,9 @@ namespace LibraryManagementSystem
 
         private void InitializeComponent()
         {
-            leftPanel = new Panel();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             btnBack = new Button();
             btnDeleteBook = new Button();
             btnEditBook = new Button();
@@ -46,173 +47,199 @@ namespace LibraryManagementSystem
             dataGridViewTextBoxColumn7 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn8 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn9 = new DataGridViewTextBoxColumn();
-            leftPanel.SuspendLayout();
             rightPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvBooks).BeginInit();
             SuspendLayout();
             // 
-            // leftPanel
-            // 
-            leftPanel.BackColor = Color.FromArgb(33, 150, 243); // modern blue
-            leftPanel.Controls.Add(btnBack);
-            leftPanel.Controls.Add(btnDeleteBook);
-            leftPanel.Controls.Add(btnEditBook);
-            leftPanel.Controls.Add(btnAddBook);
-            leftPanel.Dock = DockStyle.Left;
-            leftPanel.Location = new Point(0, 0);
-            leftPanel.Name = "leftPanel";
-            leftPanel.Size = new Size(250, 1181);
-            leftPanel.TabIndex = 1;
-            // 
             // btnBack
             // 
-            btnBack.BackColor = Color.White;
-            btnBack.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnBack.FlatStyle = FlatStyle.Flat;
+            btnBack.BackColor = Color.FromArgb(245, 247, 250);
             btnBack.FlatAppearance.BorderSize = 0;
-            btnBack.Location = new Point(25, 280);
+            btnBack.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+            btnBack.FlatStyle = FlatStyle.Flat;
+            btnBack.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnBack.ForeColor = Color.Black;
+            btnBack.Location = new Point(3, 19);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(200, 35);
+            btnBack.Size = new Size(82, 43);
             btnBack.TabIndex = 0;
             btnBack.Text = "⬅️ Back";
             btnBack.UseVisualStyleBackColor = false;
-            // button colors match theme
-            btnBack.ForeColor = Color.Black;
-            btnBack.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
             btnBack.Click += btnBack_Click;
             // 
             // btnDeleteBook
             // 
             btnDeleteBook.BackColor = Color.White;
-            btnDeleteBook.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnDeleteBook.FlatStyle = FlatStyle.Flat;
             btnDeleteBook.FlatAppearance.BorderSize = 0;
-            btnDeleteBook.Location = new Point(25, 200);
+            btnDeleteBook.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+            btnDeleteBook.FlatStyle = FlatStyle.Flat;
+            btnDeleteBook.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnDeleteBook.ForeColor = Color.Black;
+            btnDeleteBook.Location = new Point(714, 20);
             btnDeleteBook.Name = "btnDeleteBook";
-            btnDeleteBook.Size = new Size(200, 40);
+            btnDeleteBook.Size = new Size(143, 40);
             btnDeleteBook.TabIndex = 1;
             btnDeleteBook.Text = "🗑️ Delete Book";
             btnDeleteBook.UseVisualStyleBackColor = false;
-            btnDeleteBook.ForeColor = Color.Black;
-            btnDeleteBook.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
             btnDeleteBook.Click += btnDeleteBook_Click;
             // 
             // btnEditBook
             // 
             btnEditBook.BackColor = Color.White;
-            btnEditBook.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnEditBook.FlatStyle = FlatStyle.Flat;
             btnEditBook.FlatAppearance.BorderSize = 0;
-            btnEditBook.Location = new Point(25, 140);
+            btnEditBook.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+            btnEditBook.FlatStyle = FlatStyle.Flat;
+            btnEditBook.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnEditBook.ForeColor = Color.Black;
+            btnEditBook.Location = new Point(540, 20);
             btnEditBook.Name = "btnEditBook";
-            btnEditBook.Size = new Size(200, 40);
+            btnEditBook.Size = new Size(143, 40);
             btnEditBook.TabIndex = 2;
             btnEditBook.Text = "✏️ Edit Book";
             btnEditBook.UseVisualStyleBackColor = false;
-            btnEditBook.ForeColor = Color.Black;
-            btnEditBook.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
             btnEditBook.Click += btnEditBook_Click;
             // 
             // btnAddBook
             // 
             btnAddBook.BackColor = Color.White;
-            btnAddBook.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnAddBook.FlatStyle = FlatStyle.Flat;
             btnAddBook.FlatAppearance.BorderSize = 0;
-            btnAddBook.Location = new Point(25, 80);
+            btnAddBook.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+            btnAddBook.FlatStyle = FlatStyle.Flat;
+            btnAddBook.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnAddBook.ForeColor = Color.Black;
+            btnAddBook.Location = new Point(365, 20);
             btnAddBook.Name = "btnAddBook";
-            btnAddBook.Size = new Size(200, 40);
+            btnAddBook.Size = new Size(143, 40);
             btnAddBook.TabIndex = 3;
             btnAddBook.Text = "➕ Add Book";
             btnAddBook.UseVisualStyleBackColor = false;
-            btnAddBook.ForeColor = Color.Black;
-            btnAddBook.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
             btnAddBook.Click += btnAddBook_Click;
             // 
             // rightPanel
             // 
-            rightPanel.BackColor = Color.FromArgb(245, 247, 250); // light neutral background
+            rightPanel.BackColor = Color.FromArgb(245, 247, 250);
+            rightPanel.Controls.Add(btnBack);
+            rightPanel.Controls.Add(btnAddBook);
+            rightPanel.Controls.Add(btnDeleteBook);
             rightPanel.Controls.Add(txtSearch);
+            rightPanel.Controls.Add(btnEditBook);
             rightPanel.Controls.Add(dgvBooks);
             rightPanel.Controls.Add(lblTitle);
             rightPanel.Dock = DockStyle.Fill;
-            rightPanel.Location = new Point(250, 0);
+            rightPanel.Location = new Point(0, 0);
             rightPanel.Name = "rightPanel";
-            rightPanel.Size = new Size(1758, 1181);
+            rightPanel.Size = new Size(2008, 1181);
             rightPanel.TabIndex = 0;
             // 
             // txtSearch
             // 
+            txtSearch.BackColor = Color.White;
+            txtSearch.BorderStyle = BorderStyle.FixedSingle;
+            txtSearch.Font = new Font("Segoe UI", 10F);
+            txtSearch.ForeColor = Color.Black;
             txtSearch.Location = new Point(174, 91);
             txtSearch.Name = "txtSearch";
             txtSearch.PlaceholderText = "🔍 Search Book";
-            txtSearch.BorderStyle = BorderStyle.FixedSingle;
-            txtSearch.Font = new Font("Segoe UI", 10F);
             txtSearch.Size = new Size(300, 25);
             txtSearch.TabIndex = 2;
-            // small padding & subtle border color
-            txtSearch.BackColor = Color.White;
-            txtSearch.ForeColor = Color.Black;
             txtSearch.TextChanged += txtSearch_TextChanged;
             // 
             // dgvBooks
             // 
             dgvBooks.AllowUserToAddRows = false;
             dgvBooks.AllowUserToDeleteRows = false;
-            // keep AutoSizeColumnsMode.Fill so layout unchanged
+            dataGridViewCellStyle4.BackColor = Color.FromArgb(250, 250, 251);
+            dgvBooks.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             dgvBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvBooks.BackgroundColor = Color.White;
             dgvBooks.BorderStyle = BorderStyle.None;
+            dgvBooks.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = Color.FromArgb(33, 150, 243);
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle5.ForeColor = Color.White;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+            dgvBooks.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dgvBooks.ColumnHeadersHeight = 42;
+            dgvBooks.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.Window;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle6.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle6.Padding = new Padding(8, 6, 8, 6);
+            dataGridViewCellStyle6.SelectionBackColor = Color.FromArgb(227, 242, 253);
+            dataGridViewCellStyle6.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
+            dgvBooks.DefaultCellStyle = dataGridViewCellStyle6;
+            dgvBooks.EnableHeadersVisualStyles = false;
+            dgvBooks.GridColor = Color.LightGray;
             dgvBooks.Location = new Point(174, 140);
+            dgvBooks.MultiSelect = false;
             dgvBooks.Name = "dgvBooks";
             dgvBooks.ReadOnly = true;
             dgvBooks.RowHeadersVisible = false;
-            dgvBooks.GridColor = Color.LightGray;
-            dgvBooks.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dgvBooks.DefaultCellStyle.Font = new Font("Segoe UI", 10F);
-            dgvBooks.Size = new Size(1356, 950);
-            dgvBooks.TabIndex = 0;
-
-            // header & row appearance (safe to set in Designer)
-            dgvBooks.EnableHeadersVisualStyles = false;
-            dgvBooks.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(33, 150, 243);
-            dgvBooks.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgvBooks.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dgvBooks.ColumnHeadersHeight = 42;
-            dgvBooks.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-
-            dgvBooks.RowTemplate.Height = 56; // taller rows for a card-like feel
-            dgvBooks.DefaultCellStyle.Padding = new Padding(8, 6, 8, 6);
-            dgvBooks.DefaultCellStyle.SelectionBackColor = Color.FromArgb(227, 242, 253);
-            dgvBooks.DefaultCellStyle.SelectionForeColor = Color.Black;
-            dgvBooks.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(250, 250, 251);
-
-            dgvBooks.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            dgvBooks.RowTemplate.Height = 56;
             dgvBooks.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvBooks.MultiSelect = false;
-            dgvBooks.ReadOnly = true;
+            dgvBooks.Size = new Size(1439, 951);
+            dgvBooks.TabIndex = 0;
             // 
             // lblTitle
             // 
             lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
             lblTitle.ForeColor = Color.FromArgb(33, 33, 33);
-            lblTitle.Location = new Point(20, 20);
+            lblTitle.Location = new Point(164, 20);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(400, 40);
+            lblTitle.Size = new Size(183, 40);
             lblTitle.TabIndex = 1;
             lblTitle.Text = "📚 Book List";
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            // 
+            // dataGridViewTextBoxColumn7
+            // 
+            dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+            // 
+            // dataGridViewTextBoxColumn8
+            // 
+            dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
+            // 
+            // dataGridViewTextBoxColumn9
+            // 
+            dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
             // 
             // BookManagementForm
             // 
             ClientSize = new Size(2008, 1181);
             Controls.Add(rightPanel);
-            Controls.Add(leftPanel);
             Name = "BookManagementForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Library Management - Book Management";
             WindowState = FormWindowState.Maximized;
             Load += BookManagementForm_Load;
-            leftPanel.ResumeLayout(false);
             rightPanel.ResumeLayout(false);
             rightPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvBooks).EndInit();

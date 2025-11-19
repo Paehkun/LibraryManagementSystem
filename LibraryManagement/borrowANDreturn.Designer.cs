@@ -18,13 +18,11 @@
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            lblHeader = new Label();
-            panelTop = new Panel();
             btnBack = new Button();
-            btnSelectMember = new Button();
-            btnSelectBooks = new Button();
             btnAdd = new Button();
             btnReturnBook = new Button();
+            btnSelectMember = new Button();
+            btnSelectBooks = new Button();
             lblBorrowDays = new Label();
             txtBorrowDays = new TextBox();
             lblMemberID = new Label();
@@ -33,55 +31,22 @@
             txtISBN = new TextBox();
             dataGridView1 = new DataGridView();
             listBoxSelectedBooks = new ListBox();
-            panelTop.SuspendLayout();
+            lblTitle = new Label();
+            panelFilter = new Panel();
+            panelTop = new Panel();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            panelFilter.SuspendLayout();
+            panelTop.SuspendLayout();
             SuspendLayout();
-            // 
-            // lblHeader
-            // 
-            lblHeader.BackColor = Color.SteelBlue;
-            lblHeader.Dock = DockStyle.Top;
-            lblHeader.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            lblHeader.ForeColor = Color.White;
-            lblHeader.Location = new Point(0, 0);
-            lblHeader.Name = "lblHeader";
-            lblHeader.Size = new Size(2645, 56);
-            lblHeader.TabIndex = 0;
-            lblHeader.Text = "📚 Borrow & Return Management";
-            lblHeader.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // panelTop
-            // 
-            panelTop.BackColor = Color.WhiteSmoke;
-            panelTop.Controls.Add(btnBack);
-            //panelTop.Controls.Add(btnSelectMember);
-            //panelTop.Controls.Add(btnSelectBooks);
-            panelTop.Controls.Add(btnAdd);
-            //panelTop.Controls.Add(lblBorrowDays);
-            //panelTop.Controls.Add(txtBorrowDays);
-            //panelTop.Controls.Add(listBoxSelectedBooks);
-            panelTop.Controls.Add(btnReturnBook);
-            panelTop.Dock = DockStyle.Top;
-            panelTop.Location = new Point(0, 56);
-            panelTop.Name = "panelTop";
-            panelTop.Padding = new Padding(20, 20, 0, 20);
-            panelTop.Size = new Size(2645, 80);
-            panelTop.TabIndex = 1;
-            //
-            //ListBoxSelectedBooks
-            //
-            listBoxSelectedBooks.Location = new Point(900, 5);
-            listBoxSelectedBooks.Size = new Size(400, 80);
-            listBoxSelectedBooks.Font = new Font("Segoe UI", 10);
             // 
             // btnBack
             // 
-            btnBack.BackColor = Color.LightGray;
+            btnBack.BackColor = Color.SteelBlue;
             btnBack.FlatAppearance.BorderSize = 0;
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnBack.ForeColor = Color.Black;
-            btnBack.Location = new Point(20, 20);
+            btnBack.Location = new Point(3, 16);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(100, 38);
             btnBack.TabIndex = 0;
@@ -89,84 +54,91 @@
             btnBack.UseVisualStyleBackColor = false;
             btnBack.Click += btnBack_Click;
             // 
-            // btnSelectMember
-            // 
-            //btnSelectMember.BackColor = Color.SteelBlue;
-            //btnSelectMember.FlatAppearance.BorderSize = 0;
-            //btnSelectMember.FlatStyle = FlatStyle.Flat;
-            //btnSelectMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            //btnSelectMember.ForeColor = Color.White;
-            //btnSelectMember.Location = new Point(140, 20);
-            //btnSelectMember.Name = "btnSelectMember";
-            //btnSelectMember.Size = new Size(150, 38);
-            //btnSelectMember.TabIndex = 1;
-            //btnSelectMember.Text = "Select Member";
-            //btnSelectMember.UseVisualStyleBackColor = false;
-            //btnSelectMember.Click += BtnSelectMember_Click;
-            // 
-            // btnSelectBooks
-            // 
-            //btnSelectBooks.BackColor = Color.SteelBlue;
-            //btnSelectBooks.FlatAppearance.BorderSize = 0;
-            //btnSelectBooks.FlatStyle = FlatStyle.Flat;
-            //btnSelectBooks.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            //btnSelectBooks.ForeColor = Color.White;
-            //btnSelectBooks.Location = new Point(310, 20);
-            //btnSelectBooks.Name = "btnSelectBooks";
-            //btnSelectBooks.Size = new Size(150, 38);
-            //btnSelectBooks.TabIndex = 2;
-            //btnSelectBooks.Text = "Select Books";
-            //btnSelectBooks.UseVisualStyleBackColor = false;
-            //btnSelectBooks.Click += BtnSelectBooks_Click;
-            // 
             // btnAdd
             // 
-            btnAdd.BackColor = Color.SteelBlue;
+            btnAdd.BackColor = Color.White;
             btnAdd.FlatAppearance.BorderSize = 0;
             btnAdd.FlatStyle = FlatStyle.Flat;
             btnAdd.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnAdd.ForeColor = Color.White;
-            btnAdd.Location = new Point(480, 20);
+            btnAdd.ForeColor = Color.Black;
+            btnAdd.Location = new Point(170, 22);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(150, 38);
             btnAdd.TabIndex = 3;
             btnAdd.Text = "➕ Add Record";
             btnAdd.UseVisualStyleBackColor = false;
             btnAdd.Click += btnAdd_Click;
-            //
+            // 
             // btnReturnBook
-            //
-            btnReturnBook.Text = "Return Book";
-            btnReturnBook.BackColor = Color.SteelBlue;
+            // 
+            btnReturnBook.BackColor = Color.White;
             btnReturnBook.FlatAppearance.BorderSize = 0;
             btnReturnBook.FlatStyle = FlatStyle.Flat;
             btnReturnBook.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnReturnBook.ForeColor = Color.White;
+            btnReturnBook.ForeColor = Color.Black;
+            btnReturnBook.Location = new Point(419, 22);
             btnReturnBook.Name = "btnReturnBook";
             btnReturnBook.Size = new Size(150, 38);
             btnReturnBook.TabIndex = 4;
-            btnAdd.UseVisualStyleBackColor = false;
-            btnReturnBook.Location = new Point(310, 20); // adjust position
+            btnReturnBook.Text = "Return Book";
+            btnReturnBook.UseVisualStyleBackColor = false;
             btnReturnBook.Click += btnReturnBook_Click;
+            // 
+            // btnSelectMember
+            // 
+            btnSelectMember.Location = new Point(0, 0);
+            btnSelectMember.Name = "btnSelectMember";
+            btnSelectMember.Size = new Size(75, 23);
+            btnSelectMember.TabIndex = 0;
+            // 
+            // btnSelectBooks
+            // 
+            btnSelectBooks.Location = new Point(0, 0);
+            btnSelectBooks.Name = "btnSelectBooks";
+            btnSelectBooks.Size = new Size(75, 23);
+            btnSelectBooks.TabIndex = 0;
             // 
             // lblBorrowDays
             // 
-            //lblBorrowDays.AutoSize = true;
-            //lblBorrowDays.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            //lblBorrowDays.ForeColor = Color.Black;
-            //lblBorrowDays.Location = new Point(660, 28);
-            //lblBorrowDays.Name = "lblBorrowDays";
-            //lblBorrowDays.Size = new Size(99, 19);
-            //lblBorrowDays.TabIndex = 5;
-            //lblBorrowDays.Text = "Borrow Days:";
+            lblBorrowDays.Location = new Point(0, 0);
+            lblBorrowDays.Name = "lblBorrowDays";
+            lblBorrowDays.Size = new Size(100, 23);
+            lblBorrowDays.TabIndex = 0;
             // 
             // txtBorrowDays
             // 
-            //txtBorrowDays.Font = new Font("Segoe UI", 10F);
-            //txtBorrowDays.Location = new Point(770, 25);
-            //txtBorrowDays.Name = "txtBorrowDays";
-            //txtBorrowDays.Size = new Size(80, 25);
-            //txtBorrowDays.TabIndex = 6;
+            txtBorrowDays.Location = new Point(0, 0);
+            txtBorrowDays.Name = "txtBorrowDays";
+            txtBorrowDays.Size = new Size(100, 23);
+            txtBorrowDays.TabIndex = 0;
+            // 
+            // lblMemberID
+            // 
+            lblMemberID.Location = new Point(0, 0);
+            lblMemberID.Name = "lblMemberID";
+            lblMemberID.Size = new Size(100, 23);
+            lblMemberID.TabIndex = 0;
+            // 
+            // txtMemberID
+            // 
+            txtMemberID.Location = new Point(0, 0);
+            txtMemberID.Name = "txtMemberID";
+            txtMemberID.Size = new Size(100, 23);
+            txtMemberID.TabIndex = 0;
+            // 
+            // lblISBN
+            // 
+            lblISBN.Location = new Point(0, 0);
+            lblISBN.Name = "lblISBN";
+            lblISBN.Size = new Size(100, 23);
+            lblISBN.TabIndex = 0;
+            // 
+            // txtISBN
+            // 
+            txtISBN.Location = new Point(0, 0);
+            txtISBN.Name = "txtISBN";
+            txtISBN.Size = new Size(100, 23);
+            txtISBN.TabIndex = 0;
             // 
             // dataGridView1
             // 
@@ -174,7 +146,7 @@
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridViewCellStyle1.BackColor = Color.FromArgb(250, 250, 251);
             dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            dataGridView1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.BackgroundColor = Color.White;
             dataGridView1.BorderStyle = BorderStyle.None;
             dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None;
@@ -199,37 +171,76 @@
             dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
             dataGridView1.EnableHeadersVisualStyles = false;
             dataGridView1.GridColor = Color.LightGray;
-            dataGridView1.Location = new Point(269, 500);
+            dataGridView1.Location = new Point(242, 207);
             dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowTemplate.Height = 56;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(2200, 938);
+            dataGridView1.Size = new Size(2200, 909);
             dataGridView1.TabIndex = 0;
+            // 
+            // listBoxSelectedBooks
+            // 
+            listBoxSelectedBooks.Font = new Font("Segoe UI", 10F);
+            listBoxSelectedBooks.Location = new Point(900, 5);
+            listBoxSelectedBooks.Name = "listBoxSelectedBooks";
+            listBoxSelectedBooks.Size = new Size(400, 80);
+            listBoxSelectedBooks.TabIndex = 0;
+            // 
+            // lblTitle
+            // 
+            lblTitle.AutoSize = true;
+            lblTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblTitle.ForeColor = Color.White;
+            lblTitle.Location = new Point(140, 15);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(274, 25);
+            lblTitle.TabIndex = 1;
+            lblTitle.Text = "📊 Borrow And Return Books";
+            // 
+            // panelFilter
+            // 
+            panelFilter.BackColor = Color.AliceBlue;
+            panelFilter.Controls.Add(btnAdd);
+            panelFilter.Controls.Add(btnReturnBook);
+            panelFilter.Dock = DockStyle.Top;
+            panelFilter.Location = new Point(0, 60);
+            panelFilter.Name = "panelFilter";
+            panelFilter.Size = new Size(2645, 120);
+            panelFilter.TabIndex = 5;
+            // 
+            // panelTop
+            // 
+            panelTop.BackColor = Color.SteelBlue;
+            panelTop.Controls.Add(lblTitle);
+            panelTop.Controls.Add(btnBack);
+            panelTop.Dock = DockStyle.Top;
+            panelTop.Location = new Point(0, 0);
+            panelTop.Name = "panelTop";
+            panelTop.Size = new Size(2645, 60);
+            panelTop.TabIndex = 6;
             // 
             // borrowANDreturn
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(2645, 1181);
-            Controls.Add(dataGridView1);
+            Controls.Add(panelFilter);
             Controls.Add(panelTop);
-            Controls.Add(lblHeader);
+            Controls.Add(dataGridView1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "borrowANDreturn";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Borrow & Return";
             WindowState = FormWindowState.Maximized;
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            panelFilter.ResumeLayout(false);
             panelTop.ResumeLayout(false);
             panelTop.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
         }
-
-        private System.Windows.Forms.Label lblHeader;
-        private System.Windows.Forms.Panel panelTop;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label lblISBN;
         private System.Windows.Forms.Label lblMemberID;
@@ -245,6 +256,8 @@
         private System.Windows.Forms.ListBox listBoxSelectedBooks;
         private System.Windows.Forms.DataGridView dataGridMembers;
         private System.Windows.Forms.DataGridView dataGridBooks;
-
+        private Label lblTitle;
+        private Panel panelFilter;
+        private Panel panelTop;
     }
 }

@@ -33,7 +33,7 @@ namespace LibraryManagementSystem
             // Adjust specific column widths
             dgvBooks.Columns["CopiesAvailable"].Width = 150;  // You can adjust this value
             dgvBooks.Columns["Id"].Width = 60;
-            dgvBooks.Columns["Title"].Width = 200;
+            //dgvBooks.Columns["Title"].Width = 200;
             dgvBooks.Columns["Author"].Width = 150;
 
             // Optional: Auto resize to fit content
@@ -54,9 +54,9 @@ namespace LibraryManagementSystem
             // Adjust column widths
             dgvBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             dgvBooks.Columns["id"].Width = 60;
-            dgvBooks.Columns["title"].Width = 260;
-            dgvBooks.Columns["author"].Width = 180;
-            dgvBooks.Columns["isbn"].Width = 150;
+            dgvBooks.Columns["title"].Width = 290;
+            dgvBooks.Columns["author"].Width = 220;
+            dgvBooks.Columns["isbn"].Width = 160;
             dgvBooks.Columns["category"].Width = 120;
             dgvBooks.Columns["publisher"].Width = 180;
             dgvBooks.Columns["year"].Width = 80;
