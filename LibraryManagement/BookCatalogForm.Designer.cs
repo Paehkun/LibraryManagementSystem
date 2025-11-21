@@ -29,12 +29,13 @@
             btnSearch = new Button();
             flowPanel = new FlowLayoutPanel();
             btnBack = new Button();
+            categoryPanel = new FlowLayoutPanel();
             topPanel.SuspendLayout();
             SuspendLayout();
             // 
             // topPanel
             // 
-            topPanel.BackColor = Color.FromArgb(33, 150, 243);
+            topPanel.BackColor = Color.RoyalBlue;
             topPanel.Controls.Add(btn_back);
             topPanel.Controls.Add(lblSearch);
             topPanel.Controls.Add(txtSearch);
@@ -43,23 +44,12 @@
             topPanel.Location = new Point(0, 0);
             topPanel.Name = "topPanel";
             topPanel.Padding = new Padding(20, 10, 20, 10);
-            topPanel.Size = new Size(1164, 60);
+            topPanel.Size = new Size(1564, 60);
             topPanel.TabIndex = 1;
-            // Category panel
-            categoryPanel = new FlowLayoutPanel();
-            categoryPanel.Dock = DockStyle.Top;
-            categoryPanel.Height = 70;
-            categoryPanel.Padding = new Padding(80, 10, 20, 10);
-            categoryPanel.BackColor = Color.LightGray; // or any color you like
-            categoryPanel.AutoScroll = true; // scroll if too many buttons
-            this.Controls.Add(categoryPanel);
-            categoryPanel.BringToFront();
-            //categoryPanel.AutoScroll = true;
-
             // 
             // btn_back
             // 
-            btn_back.BackColor = Color.SteelBlue;
+            btn_back.BackColor = Color.RoyalBlue;
             btn_back.FlatAppearance.BorderSize = 0;
             btn_back.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
             btn_back.FlatStyle = FlatStyle.Flat;
@@ -77,6 +67,7 @@
             // 
             lblSearch.AutoSize = true;
             lblSearch.Font = new Font("Segoe UI", 11F);
+            lblSearch.ForeColor = Color.White;
             lblSearch.Location = new Point(234, 20);
             lblSearch.Name = "lblSearch";
             lblSearch.Size = new Size(56, 20);
@@ -89,15 +80,16 @@
             txtSearch.Location = new Point(296, 16);
             txtSearch.Name = "txtSearch";
             txtSearch.Size = new Size(400, 27);
+            txtSearch.TabIndex = 4;
             // 
             // btnSearch
             // 
-            btnSearch.BackColor = Color.SteelBlue;
+            btnSearch.BackColor = Color.RoyalBlue;
             btnSearch.FlatAppearance.BorderSize = 0;
-            btnSearch.FlatStyle = FlatStyle.Flat;
+            btnSearch.FlatStyle = FlatStyle.System;
             btnSearch.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnSearch.ForeColor = Color.White;
-            btnSearch.Location = new Point(721, 13);
+            btnSearch.Location = new Point(713, 14);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(100, 30);
             btnSearch.TabIndex = 2;
@@ -108,14 +100,12 @@
             // flowPanel
             // 
             flowPanel.AutoScroll = true;
-            flowPanel.Anchor = AnchorStyles.None;
-            flowPanel.WrapContents = true;
             flowPanel.BackColor = Color.WhiteSmoke;
             flowPanel.Dock = DockStyle.Fill;
             flowPanel.Location = new Point(0, 60);
             flowPanel.Name = "flowPanel";
             flowPanel.Padding = new Padding(150, 70, 0, 100);
-            flowPanel.Size = new Size(1164, 636);
+            flowPanel.Size = new Size(1564, 1121);
             flowPanel.TabIndex = 0;
             // 
             // btnBack
@@ -131,14 +121,25 @@
             btnBack.TabIndex = 2;
             btnBack.Text = "← Back";
             btnBack.UseVisualStyleBackColor = false;
-           // btnBack.Click += BtnBack_Click;
+            // 
+            // categoryPanel
+            // 
+            categoryPanel.AutoScroll = true;
+            categoryPanel.BackColor = Color.LightGray;
+            categoryPanel.Dock = DockStyle.Top;
+            categoryPanel.Location = new Point(0, 60);
+            categoryPanel.Name = "categoryPanel";
+            categoryPanel.Padding = new Padding(80, 10, 20, 10);
+            categoryPanel.Size = new Size(1564, 70);
+            categoryPanel.TabIndex = 0;
             // 
             // BookCatalogForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.WhiteSmoke;
-            ClientSize = new Size(1164, 696);
+            ClientSize = new Size(1564, 1181);
+            Controls.Add(categoryPanel);
             Controls.Add(flowPanel);
             Controls.Add(topPanel);
             Controls.Add(btnBack);

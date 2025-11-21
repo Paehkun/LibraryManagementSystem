@@ -26,6 +26,11 @@ namespace LibraryManagement
             dataGridView1.RowHeadersVisible = false;
         }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
+        }
         private void btnSelect_Click(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count > 0)

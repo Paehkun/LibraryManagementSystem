@@ -82,6 +82,12 @@ namespace LibraryManagement
             }
         }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
+        }
+
         private void btnSelect_Click(object sender, EventArgs e)
         {
             SelectedBooks.Clear();

@@ -11,6 +11,8 @@ namespace LibraryManagementSystem
     {
         private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
         private string username;
+        private Font buttonFont = new Font("Segoe UI", 10, FontStyle.Bold);
+        private Color textColor = Color.Black;
         public MemberManagementForm(string username)
         {
             InitializeComponent();

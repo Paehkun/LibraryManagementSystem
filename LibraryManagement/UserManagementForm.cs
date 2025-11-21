@@ -16,6 +16,7 @@ namespace LibraryManagementSystem
             InitializeComponent();
             this.username = username;
             dgvMembers.CellClick += dgvMembers_CellClick;
+            dgvMembers.CellFormatting += dgvMembers_CellFormatting;
         }
 
         private void UserManagementForm_Load(object sender, EventArgs e)
@@ -38,6 +39,8 @@ namespace LibraryManagementSystem
             dgvMembers.Columns["username"].HeaderText = "Username";
             dgvMembers.Columns["password"].HeaderText = "Password";
             dgvMembers.Columns["role"].HeaderText = "Role";
+            dgvMembers.Columns["email"].HeaderText = "Email";
+            dgvMembers.Columns["phone"].HeaderText = "Phone";
 
             // Adjust column widths
             dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
@@ -46,18 +49,27 @@ namespace LibraryManagementSystem
             dgvMembers.Columns["username"].Width = 180;
             dgvMembers.Columns["password"].Width = 150;
             dgvMembers.Columns["role"].Width = 120;
+            dgvMembers.Columns["email"].Width = 120;
+            dgvMembers.Columns["phone"].Width = 120;
             LoadMembers();
             SetupDataGridView();
         }
+        private void dgvMembers_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvMembers.Columns[e.ColumnIndex].Name == "password")
+            {
+                e.Value = new string('*', 10);
+            }
+        }
 
-        private void btnBack_Click(object sender, EventArgs e)
+        private void btnBack_Click_1(object sender, EventArgs e)
         {
             this.Hide();
             AdminHomeForm home = new AdminHomeForm(username);
             home.Show();
         }
 
-        private void btnAddMember_Click(object sender, EventArgs e)
+        private void btnAddMember_Click_1(object sender, EventArgs e)
         {
             using (AddUserForm addUserForm = new AddUserForm())
             {
@@ -68,7 +80,7 @@ namespace LibraryManagementSystem
             }
         }
 
-        private void btnEditMember_Click(object sender, EventArgs e)
+        private void btnEditMember_Click_1(object sender, EventArgs e)
         {
             if (dgvMembers.CurrentRow != null)
             {
@@ -87,7 +99,7 @@ namespace LibraryManagementSystem
             }
         }
 
-        private void btnDeleteMember_Click(object sender, EventArgs e)
+        private void btnDeleteMember_Click_1(object sender, EventArgs e)
         {
             using (var deleteForm = new DeleteUserForm())
             {
@@ -103,8 +115,6 @@ namespace LibraryManagementSystem
         {
             LoadMembers(txtSearch.Text.Trim());
         }
-
-        // ✅ Style and base setup for DataGridView
         private void SetupDataGridView()
         {
             dgvMembers.EnableHeadersVisualStyles = false;
@@ -133,8 +143,8 @@ namespace LibraryManagementSystem
             dgvMembers.DefaultCellStyle.SelectionForeColor = Color.Black;
             dgvMembers.DefaultCellStyle.Padding = new Padding(12, 10, 12, 10);
 
-           // dgvMembers.RowTemplate.Height = 90;
-           // dgvMembers.RowTemplate.MinimumHeight = 90;
+            // dgvMembers.RowTemplate.Height = 90;
+            // dgvMembers.RowTemplate.MinimumHeight = 90;
             dgvMembers.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
             dgvMembers.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 248, 250);
@@ -182,7 +192,7 @@ namespace LibraryManagementSystem
                     e.CellStyle.Font,
                     cardRect,
                     e.CellStyle.ForeColor
-                    //TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter
+                //TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter
                 );
             }
         }
@@ -253,6 +263,25 @@ namespace LibraryManagementSystem
                 DefaultCellStyle = { Alignment = DataGridViewContentAlignment.MiddleCenter }
             });
 
+            dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "email",
+                HeaderText = "Email",
+                Name = "email",
+                Width = 200,
+                DefaultCellStyle = { Alignment = DataGridViewContentAlignment.MiddleCenter }
+            });
+
+            dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "phone",
+                HeaderText = "Phone",
+                Name = "phone",
+                Width = 200,
+                DefaultCellStyle = { Alignment = DataGridViewContentAlignment.MiddleCenter }
+            });
+
+
             ApplyCardStyle();
 
             //dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -307,8 +336,8 @@ namespace LibraryManagementSystem
             if (e.RowIndex >= 0)
             {
                 string col = dgvMembers.Columns[e.ColumnIndex].Name;
-                if (col == "Edit") btnEditMember_Click(sender, e);
-                else if (col == "Delete") btnDeleteMember_Click(sender, e);
+                if (col == "Edit") btnEditMember_Click_1(sender, e);
+                else if (col == "Delete") btnDeleteMember_Click_1(sender, e);
             }
         }
     }

@@ -71,8 +71,7 @@
             this.btnCancel.FlatAppearance.BorderSize = 0;
             this.btnCancel.Size = new System.Drawing.Size(100, 35);
             this.btnCancel.Location = new System.Drawing.Point(565, 370);
-            this.btnCancel.Click += (s, e) => this.Close();
-
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // SelectBooksForm
             // 

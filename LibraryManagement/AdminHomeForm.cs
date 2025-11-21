@@ -10,6 +10,8 @@ namespace LibraryManagementSystem
     {
         private string name;
         private string username;
+        private bool sidebarExpanded = true;
+        private System.Windows.Forms.Timer sidebarTimer;
         string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
 
         public AdminHomeForm(string username = "")
@@ -18,6 +20,125 @@ namespace LibraryManagementSystem
             this.username = UserSession.Username;          // ✅ assign the parameter to the field
             FetchFullNameFromDB();
             lblWelcome.Text = $"Welcome, {name}";
+            SetupSidebarAnimation();
+            SetupSidebarButtons();
+        }
+
+        private void BtnToggleSidebar_Click(object sender, EventArgs e)
+        {
+            sidebarExpanded = !sidebarExpanded;
+            sidebarTimer.Start();
+        }
+        private void SidebarTimer_Tick(object sender, EventArgs e)
+        {
+            if (sidebarExpanded)
+            {
+                // Expand
+                if (leftPanel.Width < 250)
+                {
+                    leftPanel.Width += 10;
+
+                    if (leftPanel.Width > 150)
+                        lblWelcome.Visible = true;
+                }
+                else
+                {
+                    sidebarTimer.Stop();
+                }
+            }
+            else
+            {
+                // Collapse
+                if (leftPanel.Width > 70)
+                {
+                    leftPanel.Width -= 10;
+                    lblWelcome.Visible = false;
+                }
+                else
+                {
+                    sidebarTimer.Stop();
+                }
+            }
+
+            UpdateSidebarButtonText(); // icon-only or full text
+        }
+
+        private void UpdateSidebarButtonText()
+        {
+            if (leftPanel.Width < 100)
+            {
+                btnBookManagement.Text = "📖";
+                btnMemberRecords.Text = "👥";
+                btnUserManagement.Text = "👥";
+                btnBookCatalog.Text = "📚";
+                btnReports.Text = "📊";
+                //btnBorrowReturn.Text = "🔁";
+                btnLogout.Text = "🚪";
+            }
+            else
+            {
+                btnBookManagement.Text = "📖 Book Management";
+                btnMemberRecords.Text = "👥 Member Management";
+                btnUserManagement.Text = "👥 User Management";
+                btnBookCatalog.Text = "📚 Catalog";
+                btnReports.Text = "📊 Reports";
+                //btnBorrowReturn.Text = "🔁 Borrow And Return";
+                btnLogout.Text = "🚪 Logout";
+            }
+        }
+
+
+
+        private void SetupSidebarAnimation()
+        {
+            sidebarTimer = new System.Windows.Forms.Timer();
+            sidebarTimer.Interval = 10;
+            sidebarTimer.Tick += SidebarTimer_Tick;
+        }
+
+        private void SetupSidebarButtons()
+        {
+            int btnWidth = 200;
+            int btnHeight = 45;
+            int startY = 80;
+            int spacing = 55;
+
+            Button[] buttons =
+            {
+        btnBookManagement,
+        btnMemberRecords,
+        btnUserManagement,
+        btnBookCatalog,
+        btnReports,
+        //btnBorrowReturn,
+        btnLogout
+    };
+
+            string[] texts =
+            {
+        "📖 Book Management",
+        "👥 Member Management",
+        "👥 User Management",
+        "📚 Catalog",
+        "📊 Reports",
+        "🚪 Logout"
+    };
+
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                var b = buttons[i];
+
+                b.Text = texts[i];
+                b.Size = new Size(btnWidth, btnHeight);
+                b.Location = new Point(20, startY + (i * spacing));
+                b.TextAlign = ContentAlignment.MiddleLeft;
+
+                b.FlatStyle = FlatStyle.Flat;
+                b.FlatAppearance.BorderSize = 0;
+                b.BackColor = Color.White;
+                b.ForeColor = Color.Black;
+                b.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+            }
         }
 
         private void FetchFullNameFromDB()
@@ -225,8 +346,8 @@ namespace LibraryManagementSystem
 
         private void btnMemberRecords_Click(object sender, EventArgs e)
         {
-            BookManagementForm bookManagementForm = new BookManagementForm(username);
-            bookManagementForm.Show();
+            MemberManagementForm memberManagementForm = new MemberManagementForm(username);
+            memberManagementForm.Show();
 
             this.Hide();
         }

@@ -8,7 +8,6 @@ namespace LibraryManagementSystem
     partial class MemberManagementForm
     {
         private System.ComponentModel.IContainer components = null;
-        private Panel leftPanel;
         private Panel rightPanel;
         private Button btnAddMember;
         private Button btnEditMember;
@@ -30,107 +29,187 @@ namespace LibraryManagementSystem
 
         private void InitializeComponent()
         {
-            components = new Container();
-            leftPanel = new Panel();
-            btnBack = new Button();
-            btnDeleteMember = new Button();
-            btnEditMember = new Button();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             btnAddMember = new Button();
+            btnEditMember = new Button();
+            btnDeleteMember = new Button();
+            btnBack = new Button();
             rightPanel = new Panel();
-            txtSearch = new TextBox();
-            dgvMembers = new DataGridView();
+            topPanel = new Panel();
             lblTitle = new Label();
-
-            // 🎨 Theme Colors
-            Color leftPanelColor = Color.FromArgb(33, 150, 243); // Blue left panel
-            Color mainBg = Color.FromArgb(245, 247, 250);        // Light gray/white background
-            Color textColor = Color.Black;
-            Font buttonFont = new Font("Segoe UI", 10F, FontStyle.Bold);
-
-            // ========== LEFT PANEL ==========
-            leftPanel.BackColor = leftPanelColor;
-            leftPanel.Dock = DockStyle.Left;
-            leftPanel.Size = new Size(250, 1181);
-            leftPanel.Controls.AddRange(new Control[] { btnAddMember, btnEditMember, btnDeleteMember, btnBack });
-
-            void StyleButton(Button btn, string text, int top)
-            {
-                btn.Text = text;
-                btn.Font = buttonFont;
-                btn.BackColor = Color.White;
-                btn.ForeColor = textColor;
-                btn.FlatStyle = FlatStyle.Flat;
-                btn.FlatAppearance.BorderSize = 0;
-                btn.Location = new Point(25, top);
-                btn.Size = new Size(200, 50);
-            }
-
-            StyleButton(btnAddMember, "➕ Add Member", 80);
+            dgvMembers = new DataGridView();
+            txtSearch = new TextBox();
+            rightPanel.SuspendLayout();
+            topPanel.SuspendLayout();
+            ((ISupportInitialize)dgvMembers).BeginInit();
+            SuspendLayout();
+            // 
+            // btnAddMember
+            // 
+            btnAddMember.BackColor = Color.RoyalBlue;
+            btnAddMember.FlatAppearance.BorderSize = 0;
+            btnAddMember.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+            btnAddMember.FlatStyle = FlatStyle.System;
+            btnAddMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnAddMember.ForeColor = Color.White;
+            btnAddMember.Location = new Point(365, 10);
+            btnAddMember.Name = "btnAddMember";
+            btnAddMember.Size = new Size(143, 42);
+            btnAddMember.TabIndex = 0;
+            btnAddMember.Text = "➕ Add Member";
+            btnAddMember.UseVisualStyleBackColor = false;
             btnAddMember.Click += btnAddMember_Click;
-
-            StyleButton(btnEditMember, "✏️ Edit Member", 150);
+            // 
+            // btnEditMember
+            // 
+            btnEditMember.BackColor = Color.RoyalBlue;
+            btnEditMember.FlatAppearance.BorderSize = 0;
+            btnEditMember.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+            btnEditMember.FlatStyle = FlatStyle.System;
+            btnEditMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnEditMember.ForeColor = Color.White;
+            btnEditMember.Location = new Point(537, 10);
+            btnEditMember.Name = "btnEditMember";
+            btnEditMember.Size = new Size(143, 41);
+            btnEditMember.TabIndex = 0;
+            btnEditMember.Text = "✏️ Edit Member";
+            btnEditMember.UseVisualStyleBackColor = false;
             btnEditMember.Click += btnEditMember_Click;
-
-            StyleButton(btnDeleteMember, "🗑️ Delete Member", 220);
+            // 
+            // btnDeleteMember
+            // 
+            btnDeleteMember.BackColor = Color.RoyalBlue;
+            btnDeleteMember.FlatAppearance.BorderSize = 0;
+            btnDeleteMember.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+            btnDeleteMember.FlatStyle = FlatStyle.System;
+            btnDeleteMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnDeleteMember.ForeColor = Color.White;
+            btnDeleteMember.Location = new Point(712, 9);
+            btnDeleteMember.Name = "btnDeleteMember";
+            btnDeleteMember.Size = new Size(143, 43);
+            btnDeleteMember.TabIndex = 0;
+            btnDeleteMember.Text = "🗑️ Delete Member";
+            btnDeleteMember.UseVisualStyleBackColor = false;
             btnDeleteMember.Click += btnDeleteMember_Click;
-
-            StyleButton(btnBack, "⬅️ Back", 290);
+            // 
+            // btnBack
+            // 
+            btnBack.BackColor = Color.RoyalBlue;
+            btnBack.FlatAppearance.BorderSize = 0;
+            btnBack.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+            btnBack.FlatStyle = FlatStyle.Flat;
+            btnBack.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnBack.ForeColor = Color.White;
+            btnBack.Location = new Point(0, 9);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(82, 43);
+            btnBack.TabIndex = 0;
+            btnBack.Text = "⬅️ Back";
+            btnBack.UseVisualStyleBackColor = false;
             btnBack.Click += btnBack_Click;
-
-            // ========== RIGHT PANEL ==========
+            // 
+            // rightPanel
+            // 
+            rightPanel.BackColor = Color.FromArgb(245, 247, 250);
+            rightPanel.Controls.Add(topPanel);
+            rightPanel.Controls.Add(dgvMembers);
+            rightPanel.Controls.Add(txtSearch);
             rightPanel.Dock = DockStyle.Fill;
-            rightPanel.BackColor = mainBg;
-            rightPanel.Controls.AddRange(new Control[] { dgvMembers, txtSearch, lblTitle });
-
-            // ========== TITLE ==========
-            lblTitle.Text = "👤 Member List";
-            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            lblTitle.ForeColor = textColor;
-            lblTitle.Location = new Point(60, 30);
+            rightPanel.Location = new Point(0, 0);
+            rightPanel.Name = "rightPanel";
+            rightPanel.Size = new Size(1900, 1100);
+            rightPanel.TabIndex = 0;
+            // 
+            // topPanel
+            // 
+            topPanel.BackColor = Color.RoyalBlue;
+            topPanel.Controls.Add(lblTitle);
+            topPanel.Controls.Add(btnBack);
+            topPanel.Controls.Add(btnEditMember);
+            topPanel.Controls.Add(btnAddMember);
+            topPanel.Controls.Add(btnDeleteMember);
+            topPanel.Dock = DockStyle.Top;
+            topPanel.Location = new Point(0, 0);
+            topPanel.Name = "topPanel";
+            topPanel.Padding = new Padding(20, 10, 20, 10);
+            topPanel.Size = new Size(1900, 60);
+            topPanel.TabIndex = 5;
+            // 
+            // lblTitle
+            // 
             lblTitle.AutoSize = true;
-
-            // ========== SEARCH BOX ==========
-            txtSearch.Location = new Point(65, 90);
-            txtSearch.PlaceholderText = "Search Member 🔍";
-            txtSearch.Size = new Size(300, 30);
-            txtSearch.Font = new Font("Segoe UI", 10F);
-            txtSearch.TextChanged += txtSearch_TextChanged;
-
-            // ========== DATAGRIDVIEW ==========
-            dgvMembers.Location = new Point(250, 140);
-            dgvMembers.Size = new Size(1170, 980);
-            dgvMembers.ReadOnly = true;
+            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            lblTitle.ForeColor = Color.White;
+            lblTitle.Location = new Point(135, 10);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(197, 32);
+            lblTitle.TabIndex = 2;
+            lblTitle.Text = "👤 Member List";
+            // 
+            // dgvMembers
+            // 
             dgvMembers.AllowUserToAddRows = false;
             dgvMembers.AllowUserToDeleteRows = false;
-            dgvMembers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvMembers.RowTemplate.Height = 45; // ✅ Taller row height
-            dgvMembers.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dgvMembers.BackgroundColor = Color.White;
-            dgvMembers.GridColor = Color.FromArgb(240, 240, 240);
             dgvMembers.BorderStyle = BorderStyle.None;
-            dgvMembers.DefaultCellStyle.Padding = new Padding(10, 8, 10, 8);
-            dgvMembers.DefaultCellStyle.BackColor = Color.White;
-            dgvMembers.DefaultCellStyle.SelectionBackColor = Color.FromArgb(225, 235, 255);
-            dgvMembers.DefaultCellStyle.SelectionForeColor = Color.Black;
+            dgvMembers.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.WhiteSmoke;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = Color.Black;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvMembers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.White;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.Padding = new Padding(10, 8, 10, 8);
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(225, 235, 255);
+            dataGridViewCellStyle2.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgvMembers.DefaultCellStyle = dataGridViewCellStyle2;
             dgvMembers.EnableHeadersVisualStyles = false;
-            dgvMembers.ColumnHeadersDefaultCellStyle.BackColor = Color.WhiteSmoke;
-            dgvMembers.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
-            dgvMembers.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dgvMembers.DefaultCellStyle.Font = new Font("Segoe UI", 10F);
+            dgvMembers.GridColor = Color.FromArgb(240, 240, 240);
+            dgvMembers.Location = new Point(338, 136);
+            dgvMembers.Name = "dgvMembers";
+            dgvMembers.ReadOnly = true;
+            dgvMembers.RowTemplate.Height = 45;
+            dgvMembers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvMembers.Size = new Size(1170, 980);
+            dgvMembers.TabIndex = 0;
             dgvMembers.CellClick += dgvMembers_CellClick;
-
-
-            // ========== FORM ==========
+            // 
+            // txtSearch
+            // 
+            txtSearch.Font = new Font("Segoe UI", 10F);
+            txtSearch.Location = new Point(338, 94);
+            txtSearch.Name = "txtSearch";
+            txtSearch.PlaceholderText = "Search Member 🔍";
+            txtSearch.Size = new Size(300, 25);
+            txtSearch.TabIndex = 1;
+            txtSearch.TextChanged += txtSearch_TextChanged;
+            // 
+            // MemberManagementForm
+            // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1900, 1100);
             Controls.Add(rightPanel);
-            Controls.Add(leftPanel);
+            Name = "MemberManagementForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Library Management - Member Management";
             WindowState = FormWindowState.Maximized;
             Load += MemberManagementForm_Load;
+            rightPanel.ResumeLayout(false);
+            rightPanel.PerformLayout();
+            topPanel.ResumeLayout(false);
+            topPanel.PerformLayout();
+            ((ISupportInitialize)dgvMembers).EndInit();
+            ResumeLayout(false);
         }
 
 
@@ -143,7 +222,6 @@ namespace LibraryManagementSystem
             card.BackColor = Color.White;
             card.BorderStyle = BorderStyle.FixedSingle;
 
-            // Add soft shadow (fake by panel border)
             card.Padding = new Padding(10);
 
             // Top accent line
@@ -184,5 +262,6 @@ namespace LibraryManagementSystem
 
             return card;
         }
+        private Panel topPanel;
     }
 }

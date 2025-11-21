@@ -49,7 +49,7 @@ namespace LibraryManagement
                 using (var conn = new NpgsqlConnection(connString))
                 {
                     conn.Open();
-                    string query = @"SELECT id, name, username, password, role FROM users 
+                    string query = @"SELECT id, name, username, password, role, email, phone FROM users 
                                      WHERE id = @id";
                     using (var cmd = new NpgsqlCommand(query, conn))
                     {
@@ -62,7 +62,9 @@ namespace LibraryManagement
                                 txtName.Text = reader["name"].ToString();
                                 txtUsername.Text = reader["username"].ToString();
                                 txtPassword.Text = reader["password"].ToString();
-                                txtRole.Text = reader["role"].ToString();
+                                CMRole.Text = reader["role"].ToString();
+                                txtEmail.Text = reader["email"].ToString();
+                                txtPhone.Text = reader["phone"].ToString();
                             }
                             else
                             {
@@ -84,7 +86,9 @@ namespace LibraryManagement
                 string.IsNullOrWhiteSpace(txtName.Text) ||
                 string.IsNullOrWhiteSpace(txtUsername.Text) ||
                 string.IsNullOrWhiteSpace(txtPassword.Text) ||
-                string.IsNullOrWhiteSpace(txtRole.Text))
+                string.IsNullOrWhiteSpace(CMRole.Text) ||
+                string.IsNullOrWhiteSpace(txtEmail.Text) ||
+                string.IsNullOrWhiteSpace(txtPhone.Text))
             {
                 MessageBox.Show("Please fill in all fields correctly.");
                 return;
@@ -99,15 +103,19 @@ namespace LibraryManagement
                                            SET name = @name, 
                                                username = @username, 
                                                password = @password, 
-                                               role = @role 
+                                               role = @role,
+                                               email = @email,
+                                               phone = @phone
                                            WHERE id = @id";
                     using (var cmd = new NpgsqlCommand(updateQuery, conn))
                     {
                         cmd.Parameters.AddWithValue("@name", txtName.Text.Trim());
                         cmd.Parameters.AddWithValue("@username", txtUsername.Text.Trim());
                         cmd.Parameters.AddWithValue("@password", txtPassword.Text.Trim());
-                        cmd.Parameters.AddWithValue("@role", txtRole.Text.Trim());
+                        cmd.Parameters.AddWithValue("@role", CMRole.Text.Trim());
                         cmd.Parameters.AddWithValue("@id", id);
+                        cmd.Parameters.AddWithValue("@email", txtEmail.Text.Trim());
+                        cmd.Parameters.AddWithValue("@phone", txtPhone.Text.Trim());
 
                         int rows = cmd.ExecuteNonQuery();
                         if (rows > 0)
@@ -140,7 +148,7 @@ namespace LibraryManagement
                 using (var conn = new NpgsqlConnection(connString))
                 {
                     conn.Open();
-                    string query = @"SELECT id, name, username, password, role
+                    string query = @"SELECT id, name, username, password, role, email, phone
                                  FROM users 
                                  WHERE id = @id";
 
@@ -155,7 +163,9 @@ namespace LibraryManagement
                                 txtName.Text = reader["name"].ToString();
                                 txtUsername.Text = reader["username"].ToString();
                                 txtPassword.Text = reader["password"].ToString();
-                                txtRole.Text = reader["role"].ToString();
+                                CMRole.Text = reader["role"].ToString();
+                                txtEmail.Text = reader["email"].ToString();
+                                txtPhone.Text = reader["phone"].ToString();
                             }
                             else
                             {

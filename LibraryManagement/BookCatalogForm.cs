@@ -50,7 +50,6 @@ namespace LibraryManagementSystem
             await LoadBooks(txtSearch.Text.Trim());
         }
 
-        // Load dynamic category buttons
         private async Task LoadCategoryButtons()
         {
             await Task.Run(() =>
@@ -180,7 +179,6 @@ namespace LibraryManagementSystem
             await PopulateBookCards(dt);
         }
 
-        // Generate book cards
         private async Task PopulateBookCards(DataTable dt)
         {
             var imageTasks = new List<Task<Image>>();
@@ -212,7 +210,7 @@ namespace LibraryManagementSystem
                     Height = 180,
                     Location = new Point(15, 10),
                     SizeMode = PictureBoxSizeMode.Zoom,
-                    BorderStyle = BorderStyle.FixedSingle,
+                    BorderStyle = BorderStyle.None,
                     Image = img
                 };
 

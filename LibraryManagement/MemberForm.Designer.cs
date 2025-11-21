@@ -38,7 +38,8 @@
             txtName.BackColor = Color.White;
             txtName.Location = new Point(100, 20);
             txtName.Name = "txtName";
-            txtName.Size = new Size(100, 23);
+            txtName.PlaceholderText = "Name";
+            txtName.Size = new Size(190, 23);
             txtName.TabIndex = 4;
             // 
             // txtEmail
@@ -46,7 +47,8 @@
             txtEmail.BackColor = Color.White;
             txtEmail.Location = new Point(100, 60);
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(100, 23);
+            txtEmail.PlaceholderText = "Email";
+            txtEmail.Size = new Size(190, 23);
             txtEmail.TabIndex = 5;
             // 
             // txtPhone
@@ -54,7 +56,8 @@
             txtPhone.BackColor = Color.White;
             txtPhone.Location = new Point(100, 100);
             txtPhone.Name = "txtPhone";
-            txtPhone.Size = new Size(100, 23);
+            txtPhone.PlaceholderText = "Phone";
+            txtPhone.Size = new Size(190, 23);
             txtPhone.TabIndex = 6;
             // 
             // txtAddress
@@ -62,7 +65,8 @@
             txtAddress.BackColor = Color.White;
             txtAddress.Location = new Point(100, 140);
             txtAddress.Name = "txtAddress";
-            txtAddress.Size = new Size(100, 23);
+            txtAddress.PlaceholderText = "Address";
+            txtAddress.Size = new Size(190, 23);
             txtAddress.TabIndex = 7;
             // 
             // dtpMembershipDate
@@ -76,7 +80,7 @@
             // btnSave
             // 
             btnSave.BackColor = Color.White;
-            btnSave.Location = new Point(100, 283);
+            btnSave.Location = new Point(100, 259);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 8;
@@ -87,7 +91,7 @@
             // btnCancel
             // 
             btnCancel.BackColor = Color.White;
-            btnCancel.Location = new Point(223, 283);
+            btnCancel.Location = new Point(215, 259);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 9;
@@ -120,7 +124,7 @@
             lblPhone.Name = "lblPhone";
             lblPhone.Size = new Size(44, 15);
             lblPhone.TabIndex = 1;
-            lblPhone.Text = "phone:";
+            lblPhone.Text = "Phone:";
             // 
             // lblAddress
             // 
@@ -143,8 +147,8 @@
             // 
             // MemberForm
             // 
-            BackColor = Color.FromArgb(33, 150, 243);
-            ClientSize = new Size(470, 378);
+            BackColor = Color.WhiteSmoke;
+            ClientSize = new Size(391, 378);
             Controls.Add(lblName);
             Controls.Add(lblEmail);
             Controls.Add(lblPhone);
@@ -160,6 +164,7 @@
             Name = "MemberForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Add New Member";
+            Load += MemberForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }

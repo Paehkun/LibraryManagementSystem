@@ -64,6 +64,7 @@
             txtBookId.BackColor = Color.White;
             txtBookId.Location = new Point(120, 17);
             txtBookId.Name = "txtBookId";
+            txtBookId.PlaceholderText = "Book ID";
             txtBookId.Size = new Size(70, 23);
             txtBookId.TabIndex = 0;
             // 
@@ -72,6 +73,7 @@
             txtTitle.BackColor = Color.White;
             txtTitle.Location = new Point(120, 55);
             txtTitle.Name = "txtTitle";
+            txtTitle.PlaceholderText = "Book Title";
             txtTitle.Size = new Size(168, 23);
             txtTitle.TabIndex = 1;
             // 
@@ -80,6 +82,7 @@
             txtAuthor.BackColor = Color.White;
             txtAuthor.Location = new Point(120, 90);
             txtAuthor.Name = "txtAuthor";
+            txtAuthor.PlaceholderText = "Author";
             txtAuthor.Size = new Size(168, 23);
             txtAuthor.TabIndex = 2;
             // 
@@ -88,6 +91,7 @@
             txtISBN.BackColor = Color.White;
             txtISBN.Location = new Point(120, 125);
             txtISBN.Name = "txtISBN";
+            txtISBN.PlaceholderText = "ISBN Number";
             txtISBN.Size = new Size(168, 23);
             txtISBN.TabIndex = 3;
             // 
@@ -96,6 +100,7 @@
             txtCategory.BackColor = Color.White;
             txtCategory.Location = new Point(120, 160);
             txtCategory.Name = "txtCategory";
+            txtCategory.PlaceholderText = "Category";
             txtCategory.Size = new Size(168, 23);
             txtCategory.TabIndex = 4;
             // 
@@ -104,6 +109,7 @@
             txtPublisher.BackColor = Color.White;
             txtPublisher.Location = new Point(120, 195);
             txtPublisher.Name = "txtPublisher";
+            txtPublisher.PlaceholderText = "Publisher";
             txtPublisher.Size = new Size(168, 23);
             txtPublisher.TabIndex = 5;
             // 
@@ -112,6 +118,7 @@
             txtYear.BackColor = Color.White;
             txtYear.Location = new Point(120, 230);
             txtYear.Name = "txtYear";
+            txtYear.PlaceholderText = "Year";
             txtYear.Size = new Size(168, 23);
             txtYear.TabIndex = 6;
             // 
@@ -120,6 +127,7 @@
             txtCopies.BackColor = Color.White;
             txtCopies.Location = new Point(120, 265);
             txtCopies.Name = "txtCopies";
+            txtCopies.PlaceholderText = "Copies";
             txtCopies.Size = new Size(168, 23);
             txtCopies.TabIndex = 7;
             // 
@@ -128,6 +136,7 @@
             txtShelfLocation.BackColor = Color.White;
             txtShelfLocation.Location = new Point(120, 300);
             txtShelfLocation.Name = "txtShelfLocation";
+            txtShelfLocation.PlaceholderText = "Shelf Location";
             txtShelfLocation.Size = new Size(168, 23);
             txtShelfLocation.TabIndex = 8;
             // 
@@ -205,7 +214,7 @@
             // 
             // btnLoad
             // 
-            btnLoad.BackColor = Color.White;
+            btnLoad.BackColor = Color.Gainsboro;
             btnLoad.Location = new Point(210, 17);
             btnLoad.Name = "btnLoad";
             btnLoad.Size = new Size(75, 23);
@@ -216,7 +225,7 @@
             // 
             // btnSave
             // 
-            btnSave.BackColor = Color.White;
+            btnSave.BackColor = Color.Gainsboro;
             btnSave.Location = new Point(60, 350);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 25);
@@ -227,7 +236,7 @@
             // 
             // btnCancel
             // 
-            btnCancel.BackColor = Color.White;
+            btnCancel.BackColor = Color.Gainsboro;
             btnCancel.Location = new Point(170, 350);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 25);
@@ -238,7 +247,7 @@
             // 
             // EditBookForm
             // 
-            BackColor = Color.FromArgb(33, 150, 243);
+            BackColor = Color.WhiteSmoke;
             ClientSize = new Size(330, 400);
             Controls.Add(lblBookId);
             Controls.Add(lblTitle);

@@ -55,6 +55,7 @@ namespace LibraryManagement
             txtTitle.BackColor = Color.White;
             txtTitle.Location = new Point(125, 20);
             txtTitle.Name = "txtTitle";
+            txtTitle.PlaceholderText = "Book Title";
             txtTitle.Size = new Size(198, 23);
             txtTitle.TabIndex = 4;
             txtTitle.TextChanged += txtTitle_TextChanged;
@@ -64,6 +65,7 @@ namespace LibraryManagement
             txtAuthor.BackColor = Color.White;
             txtAuthor.Location = new Point(125, 60);
             txtAuthor.Name = "txtAuthor";
+            txtAuthor.PlaceholderText = "Author";
             txtAuthor.Size = new Size(198, 23);
             txtAuthor.TabIndex = 5;
             // 
@@ -72,6 +74,7 @@ namespace LibraryManagement
             txtCategory.BackColor = Color.White;
             txtCategory.Location = new Point(125, 100);
             txtCategory.Name = "txtCategory";
+            txtCategory.PlaceholderText = "Category";
             txtCategory.Size = new Size(198, 23);
             txtCategory.TabIndex = 6;
             // 
@@ -80,6 +83,7 @@ namespace LibraryManagement
             txtCopies.BackColor = Color.White;
             txtCopies.Location = new Point(125, 140);
             txtCopies.Name = "txtCopies";
+            txtCopies.PlaceholderText = "Copies";
             txtCopies.Size = new Size(198, 23);
             txtCopies.TabIndex = 7;
             // 
@@ -88,6 +92,7 @@ namespace LibraryManagement
             txtISBN.BackColor = Color.White;
             txtISBN.Location = new Point(125, 179);
             txtISBN.Name = "txtISBN";
+            txtISBN.PlaceholderText = "ISBN Number";
             txtISBN.Size = new Size(198, 23);
             txtISBN.TabIndex = 8;
             // 
@@ -96,6 +101,7 @@ namespace LibraryManagement
             txtPublisher.BackColor = Color.White;
             txtPublisher.Location = new Point(125, 217);
             txtPublisher.Name = "txtPublisher";
+            txtPublisher.PlaceholderText = "Publisher";
             txtPublisher.Size = new Size(198, 23);
             txtPublisher.TabIndex = 9;
             // 
@@ -104,6 +110,7 @@ namespace LibraryManagement
             txtYear.BackColor = Color.White;
             txtYear.Location = new Point(125, 256);
             txtYear.Name = "txtYear";
+            txtYear.PlaceholderText = "Year";
             txtYear.Size = new Size(198, 23);
             txtYear.TabIndex = 10;
             // 
@@ -112,13 +119,14 @@ namespace LibraryManagement
             txtShelfLocation.BackColor = Color.White;
             txtShelfLocation.Location = new Point(125, 296);
             txtShelfLocation.Name = "txtShelfLocation";
+            txtShelfLocation.PlaceholderText = "Shelf Location";
             txtShelfLocation.Size = new Size(198, 23);
             txtShelfLocation.TabIndex = 11;
             // 
             // btnSave
             // 
-            btnSave.BackColor = Color.White;
-            btnSave.Location = new Point(137, 378);
+            btnSave.BackColor = Color.Gainsboro;
+            btnSave.Location = new Point(137, 397);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 13;
@@ -128,8 +136,8 @@ namespace LibraryManagement
             // 
             // btnCancel
             // 
-            btnCancel.BackColor = Color.White;
-            btnCancel.Location = new Point(236, 378);
+            btnCancel.BackColor = Color.Gainsboro;
+            btnCancel.Location = new Point(236, 397);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 14;
@@ -140,7 +148,7 @@ namespace LibraryManagement
             // lblTitle
             // 
             lblTitle.AutoSize = true;
-            lblTitle.Location = new Point(66, 20);
+            lblTitle.Location = new Point(66, 23);
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(32, 15);
             lblTitle.TabIndex = 0;
@@ -214,6 +222,7 @@ namespace LibraryManagement
             txtImg.BackColor = Color.White;
             txtImg.Location = new Point(125, 336);
             txtImg.Name = "txtImg";
+            txtImg.PlaceholderText = "Image URL";
             txtImg.Size = new Size(198, 23);
             txtImg.TabIndex = 12;
             // 
@@ -228,7 +237,7 @@ namespace LibraryManagement
             // 
             // AddBookForm
             // 
-            BackColor = Color.FromArgb(33, 150, 243);
+            BackColor = Color.WhiteSmoke;
             ClientSize = new Size(433, 496);
             Controls.Add(lblimg);
             Controls.Add(txtImg);

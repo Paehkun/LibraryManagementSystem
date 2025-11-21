@@ -120,13 +120,15 @@ namespace LibraryManagementSystem
                 conn.Open();
 
                 string query = @"
-            SELECT id, name, role, username, password
+            SELECT id, name, role, username, password, email, phone
             FROM users
             WHERE (@search = '' 
                 OR CAST(id AS TEXT) ILIKE @pattern
                 OR name ILIKE @pattern 
                 OR username ILIKE @pattern 
-                OR password ILIKE @pattern) 
+                OR password ILIKE @pattern
+                OR email ILIKE @pattern
+                OR CAST(phone AS TEXT) ILIKE @pattern) 
             ORDER BY id ASC";
 
                 using (var cmd = new NpgsqlCommand(query, conn))

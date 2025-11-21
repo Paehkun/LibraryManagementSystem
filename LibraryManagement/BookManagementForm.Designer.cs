@@ -47,19 +47,21 @@ namespace LibraryManagementSystem
             dataGridViewTextBoxColumn7 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn8 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn9 = new DataGridViewTextBoxColumn();
+            topPanel = new Panel();
             rightPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvBooks).BeginInit();
+            topPanel.SuspendLayout();
             SuspendLayout();
             // 
             // btnBack
             // 
-            btnBack.BackColor = Color.FromArgb(245, 247, 250);
+            btnBack.BackColor = Color.RoyalBlue;
             btnBack.FlatAppearance.BorderSize = 0;
             btnBack.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnBack.ForeColor = Color.Black;
-            btnBack.Location = new Point(3, 19);
+            btnBack.ForeColor = Color.White;
+            btnBack.Location = new Point(3, 4);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(82, 43);
             btnBack.TabIndex = 0;
@@ -69,13 +71,13 @@ namespace LibraryManagementSystem
             // 
             // btnDeleteBook
             // 
-            btnDeleteBook.BackColor = Color.White;
+            btnDeleteBook.BackColor = Color.RoyalBlue;
             btnDeleteBook.FlatAppearance.BorderSize = 0;
             btnDeleteBook.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
-            btnDeleteBook.FlatStyle = FlatStyle.Flat;
+            btnDeleteBook.FlatStyle = FlatStyle.System;
             btnDeleteBook.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnDeleteBook.ForeColor = Color.Black;
-            btnDeleteBook.Location = new Point(714, 20);
+            btnDeleteBook.ForeColor = Color.White;
+            btnDeleteBook.Location = new Point(713, 10);
             btnDeleteBook.Name = "btnDeleteBook";
             btnDeleteBook.Size = new Size(143, 40);
             btnDeleteBook.TabIndex = 1;
@@ -85,13 +87,13 @@ namespace LibraryManagementSystem
             // 
             // btnEditBook
             // 
-            btnEditBook.BackColor = Color.White;
+            btnEditBook.BackColor = Color.RoyalBlue;
             btnEditBook.FlatAppearance.BorderSize = 0;
             btnEditBook.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
-            btnEditBook.FlatStyle = FlatStyle.Flat;
+            btnEditBook.FlatStyle = FlatStyle.System;
             btnEditBook.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnEditBook.ForeColor = Color.Black;
-            btnEditBook.Location = new Point(540, 20);
+            btnEditBook.ForeColor = Color.White;
+            btnEditBook.Location = new Point(537, 10);
             btnEditBook.Name = "btnEditBook";
             btnEditBook.Size = new Size(143, 40);
             btnEditBook.TabIndex = 2;
@@ -101,13 +103,12 @@ namespace LibraryManagementSystem
             // 
             // btnAddBook
             // 
-            btnAddBook.BackColor = Color.White;
-            btnAddBook.FlatAppearance.BorderSize = 0;
+            btnAddBook.BackColor = Color.RoyalBlue;
             btnAddBook.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
-            btnAddBook.FlatStyle = FlatStyle.Flat;
+            btnAddBook.FlatStyle = FlatStyle.System;
             btnAddBook.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnAddBook.ForeColor = Color.Black;
-            btnAddBook.Location = new Point(365, 20);
+            btnAddBook.ForeColor = Color.RoyalBlue;
+            btnAddBook.Location = new Point(353, 10);
             btnAddBook.Name = "btnAddBook";
             btnAddBook.Size = new Size(143, 40);
             btnAddBook.TabIndex = 3;
@@ -118,13 +119,9 @@ namespace LibraryManagementSystem
             // rightPanel
             // 
             rightPanel.BackColor = Color.FromArgb(245, 247, 250);
-            rightPanel.Controls.Add(btnBack);
-            rightPanel.Controls.Add(btnAddBook);
-            rightPanel.Controls.Add(btnDeleteBook);
+            rightPanel.Controls.Add(topPanel);
             rightPanel.Controls.Add(txtSearch);
-            rightPanel.Controls.Add(btnEditBook);
             rightPanel.Controls.Add(dgvBooks);
-            rightPanel.Controls.Add(lblTitle);
             rightPanel.Dock = DockStyle.Fill;
             rightPanel.Location = new Point(0, 0);
             rightPanel.Name = "rightPanel";
@@ -188,8 +185,8 @@ namespace LibraryManagementSystem
             // lblTitle
             // 
             lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            lblTitle.ForeColor = Color.FromArgb(33, 33, 33);
-            lblTitle.Location = new Point(164, 20);
+            lblTitle.ForeColor = Color.White;
+            lblTitle.Location = new Point(150, 10);
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(183, 40);
             lblTitle.TabIndex = 1;
@@ -231,6 +228,21 @@ namespace LibraryManagementSystem
             // 
             dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
             // 
+            // topPanel
+            // 
+            topPanel.BackColor = Color.RoyalBlue;
+            topPanel.Controls.Add(btnBack);
+            topPanel.Controls.Add(btnDeleteBook);
+            topPanel.Controls.Add(btnAddBook);
+            topPanel.Controls.Add(lblTitle);
+            topPanel.Controls.Add(btnEditBook);
+            topPanel.Dock = DockStyle.Top;
+            topPanel.Location = new Point(0, 0);
+            topPanel.Name = "topPanel";
+            topPanel.Padding = new Padding(20, 10, 20, 10);
+            topPanel.Size = new Size(2008, 60);
+            topPanel.TabIndex = 4;
+            // 
             // BookManagementForm
             // 
             ClientSize = new Size(2008, 1181);
@@ -243,6 +255,7 @@ namespace LibraryManagementSystem
             rightPanel.ResumeLayout(false);
             rightPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvBooks).EndInit();
+            topPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -256,5 +269,6 @@ namespace LibraryManagementSystem
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
         private Button button1;
+        private Panel topPanel;
     }
 }

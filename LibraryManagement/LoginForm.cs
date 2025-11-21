@@ -51,7 +51,7 @@ namespace LibraryManagementSystem
 
                         this.Hide(); // Hide login form
 
-                        
+
 
                         UserSession.Username = username;
                         UserSession.Role = userRole;
@@ -89,16 +89,6 @@ namespace LibraryManagementSystem
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-        }
-
-        private void lblTitle_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblUser_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

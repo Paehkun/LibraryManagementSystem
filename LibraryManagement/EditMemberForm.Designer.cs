@@ -51,6 +51,7 @@
             txtMemberID.BackColor = Color.White;
             txtMemberID.Location = new Point(142, 30);
             txtMemberID.Name = "txtMemberID";
+            txtMemberID.PlaceholderText = "Member ID";
             txtMemberID.Size = new Size(70, 23);
             txtMemberID.TabIndex = 0;
             // 
@@ -59,6 +60,7 @@
             txtName.BackColor = Color.White;
             txtName.Location = new Point(142, 68);
             txtName.Name = "txtName";
+            txtName.PlaceholderText = "Name";
             txtName.Size = new Size(168, 23);
             txtName.TabIndex = 1;
             // 
@@ -67,6 +69,7 @@
             txtEmail.BackColor = Color.White;
             txtEmail.Location = new Point(142, 103);
             txtEmail.Name = "txtEmail";
+            txtEmail.PlaceholderText = "Email";
             txtEmail.Size = new Size(168, 23);
             txtEmail.TabIndex = 2;
             // 
@@ -75,6 +78,7 @@
             txtPhone.BackColor = Color.White;
             txtPhone.Location = new Point(142, 138);
             txtPhone.Name = "txtPhone";
+            txtPhone.PlaceholderText = "Phone";
             txtPhone.Size = new Size(168, 23);
             txtPhone.TabIndex = 3;
             // 
@@ -83,6 +87,7 @@
             txtAddress.BackColor = Color.White;
             txtAddress.Location = new Point(142, 173);
             txtAddress.Name = "txtAddress";
+            txtAddress.PlaceholderText = "Address";
             txtAddress.Size = new Size(168, 23);
             txtAddress.TabIndex = 4;
             // 
@@ -138,7 +143,7 @@
             // 
             // btnLoad
             // 
-            btnLoad.BackColor = Color.White;
+            btnLoad.BackColor = Color.Gainsboro;
             btnLoad.Location = new Point(232, 30);
             btnLoad.Name = "btnLoad";
             btnLoad.Size = new Size(75, 23);
@@ -149,7 +154,7 @@
             // 
             // btnSave
             // 
-            btnSave.BackColor = Color.White;
+            btnSave.BackColor = Color.Gainsboro;
             btnSave.Location = new Point(82, 317);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 25);
@@ -160,7 +165,7 @@
             // 
             // btnCancel
             // 
-            btnCancel.BackColor = Color.White;
+            btnCancel.BackColor = Color.Gainsboro;
             btnCancel.Location = new Point(192, 317);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 25);
@@ -179,7 +184,7 @@
             // 
             // EditMemberForm
             // 
-            BackColor = Color.FromArgb(33, 150, 243);
+            BackColor = Color.WhiteSmoke;
             ClientSize = new Size(356, 434);
             Controls.Add(lblMemberID);
             Controls.Add(lblName);

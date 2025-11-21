@@ -19,53 +19,59 @@
             btnLogin = new Button();
             btnExit = new Button();
             lblPass = new Label();
+            roundedLabel1 = new RoundedLabel();
+            label1 = new Label();
             SuspendLayout();
             // 
             // lblTitle
             // 
             lblTitle.AutoSize = true;
+            lblTitle.BackColor = Color.White;
             lblTitle.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            lblTitle.Location = new Point(12, 29);
+            lblTitle.Location = new Point(853, 350);
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(311, 30);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Library Management System";
-            lblTitle.Click += lblTitle_Click;
             // 
             // lblUser
             // 
             lblUser.AutoSize = true;
-            lblUser.Location = new Point(9, 132);
+            lblUser.BackColor = Color.White;
+            lblUser.Location = new Point(908, 488);
             lblUser.Name = "lblUser";
-            lblUser.Size = new Size(63, 15);
+            lblUser.Size = new Size(60, 15);
             lblUser.TabIndex = 1;
-            lblUser.Text = "Username:";
+            lblUser.Text = "Username";
             // 
             // txtUsername
             // 
-            txtUsername.BackColor = Color.Beige;
-            txtUsername.Location = new Point(78, 132);
+            txtUsername.BackColor = Color.White;
+            txtUsername.Location = new Point(908, 506);
             txtUsername.Name = "txtUsername";
-            txtUsername.PlaceholderText = "username";
+            txtUsername.PlaceholderText = "Enter your username";
             txtUsername.Size = new Size(180, 23);
             txtUsername.TabIndex = 3;
             // 
             // txtPassword
             // 
-            txtPassword.BackColor = Color.Beige;
-            txtPassword.Location = new Point(78, 175);
+            txtPassword.BackColor = Color.White;
+            txtPassword.Location = new Point(908, 589);
             txtPassword.Name = "txtPassword";
             txtPassword.PasswordChar = '*';
-            txtPassword.PlaceholderText = "password";
+            txtPassword.PlaceholderText = "Enter your password";
             txtPassword.Size = new Size(180, 23);
             txtPassword.TabIndex = 4;
             // 
             // btnLogin
             // 
-            btnLogin.BackColor = Color.White;
-            btnLogin.Location = new Point(65, 256);
+            btnLogin.BackColor = Color.RoyalBlue;
+            btnLogin.FlatAppearance.BorderSize = 0;
+            btnLogin.FlatStyle = FlatStyle.Flat;
+            btnLogin.ForeColor = Color.White;
+            btnLogin.Location = new Point(886, 650);
             btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(81, 39);
+            btnLogin.Size = new Size(227, 28);
             btnLogin.TabIndex = 5;
             btnLogin.Text = "Login";
             btnLogin.UseVisualStyleBackColor = false;
@@ -73,10 +79,12 @@
             // 
             // btnExit
             // 
-            btnExit.BackColor = Color.White;
-            btnExit.Location = new Point(165, 256);
+            btnExit.BackColor = Color.RoyalBlue;
+            btnExit.FlatStyle = FlatStyle.Flat;
+            btnExit.ForeColor = Color.White;
+            btnExit.Location = new Point(961, 698);
             btnExit.Name = "btnExit";
-            btnExit.Size = new Size(81, 39);
+            btnExit.Size = new Size(81, 28);
             btnExit.TabIndex = 6;
             btnExit.Text = "Exit";
             btnExit.UseVisualStyleBackColor = false;
@@ -85,16 +93,41 @@
             // lblPass
             // 
             lblPass.AutoSize = true;
-            lblPass.Location = new Point(9, 178);
+            lblPass.BackColor = Color.White;
+            lblPass.Location = new Point(908, 571);
             lblPass.Name = "lblPass";
-            lblPass.Size = new Size(60, 15);
+            lblPass.Size = new Size(57, 15);
             lblPass.TabIndex = 2;
-            lblPass.Text = "Password:";
+            lblPass.Text = "Password";
+            // 
+            // roundedLabel1
+            // 
+            roundedLabel1.BackColor = Color.White;
+            roundedLabel1.BorderColor = Color.White;
+            roundedLabel1.BorderRadius = 30;
+            roundedLabel1.BorderSize = 0;
+            roundedLabel1.ForeColor = Color.Black;
+            roundedLabel1.Location = new Point(826, 331);
+            roundedLabel1.Name = "roundedLabel1";
+            roundedLabel1.Size = new Size(355, 416);
+            roundedLabel1.TabIndex = 13;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.BackColor = Color.White;
+            label1.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+            label1.Location = new Point(955, 418);
+            label1.Name = "label1";
+            label1.Size = new Size(65, 25);
+            label1.TabIndex = 14;
+            label1.Text = "Log In";
             // 
             // LoginForm
             // 
-            BackColor = Color.SteelBlue;
-            ClientSize = new Size(342, 411);
+            BackColor = Color.Beige;
+            ClientSize = new Size(1430, 787);
+            Controls.Add(label1);
             Controls.Add(lblTitle);
             Controls.Add(lblUser);
             Controls.Add(lblPass);
@@ -102,13 +135,17 @@
             Controls.Add(txtPassword);
             Controls.Add(btnLogin);
             Controls.Add(btnExit);
+            Controls.Add(roundedLabel1);
             Name = "LoginForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Login";
+            WindowState = FormWindowState.Maximized;
             Load += LoginForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }
         private Label lblPass;
+        private RoundedLabel roundedLabel1;
+        private Label label1;
     }
 }

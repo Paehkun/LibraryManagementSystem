@@ -15,9 +15,9 @@
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle17 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle18 = new DataGridViewCellStyle();
             btnBack = new Button();
             btnAdd = new Button();
             btnReturnBook = new Button();
@@ -32,21 +32,19 @@
             dataGridView1 = new DataGridView();
             listBoxSelectedBooks = new ListBox();
             lblTitle = new Label();
-            panelFilter = new Panel();
-            panelTop = new Panel();
+            topPanel = new Panel();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            panelFilter.SuspendLayout();
-            panelTop.SuspendLayout();
+            topPanel.SuspendLayout();
             SuspendLayout();
             // 
             // btnBack
             // 
-            btnBack.BackColor = Color.SteelBlue;
+            btnBack.BackColor = Color.RoyalBlue;
             btnBack.FlatAppearance.BorderSize = 0;
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnBack.ForeColor = Color.Black;
-            btnBack.Location = new Point(3, 16);
+            btnBack.ForeColor = Color.White;
+            btnBack.Location = new Point(12, 9);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(100, 38);
             btnBack.TabIndex = 0;
@@ -58,10 +56,10 @@
             // 
             btnAdd.BackColor = Color.White;
             btnAdd.FlatAppearance.BorderSize = 0;
-            btnAdd.FlatStyle = FlatStyle.Flat;
+            btnAdd.FlatStyle = FlatStyle.System;
             btnAdd.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnAdd.ForeColor = Color.Black;
-            btnAdd.Location = new Point(170, 22);
+            btnAdd.Location = new Point(509, 9);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(150, 38);
             btnAdd.TabIndex = 3;
@@ -73,10 +71,10 @@
             // 
             btnReturnBook.BackColor = Color.White;
             btnReturnBook.FlatAppearance.BorderSize = 0;
-            btnReturnBook.FlatStyle = FlatStyle.Flat;
+            btnReturnBook.FlatStyle = FlatStyle.System;
             btnReturnBook.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnReturnBook.ForeColor = Color.Black;
-            btnReturnBook.Location = new Point(419, 22);
+            btnReturnBook.Location = new Point(726, 12);
             btnReturnBook.Name = "btnReturnBook";
             btnReturnBook.Size = new Size(150, 38);
             btnReturnBook.TabIndex = 4;
@@ -144,31 +142,31 @@
             // 
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(250, 250, 251);
-            dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle16.BackColor = Color.FromArgb(250, 250, 251);
+            dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle16;
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.BackgroundColor = Color.White;
             dataGridView1.BorderStyle = BorderStyle.None;
             dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(33, 150, 243);
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle17.BackColor = Color.FromArgb(33, 150, 243);
+            dataGridViewCellStyle17.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle17.ForeColor = Color.White;
+            dataGridViewCellStyle17.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle17.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle17.WrapMode = DataGridViewTriState.True;
+            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
             dataGridView1.ColumnHeadersHeight = 42;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 10F);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.Padding = new Padding(8, 6, 8, 6);
-            dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(227, 242, 253);
-            dataGridViewCellStyle3.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle18.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle18.BackColor = SystemColors.Window;
+            dataGridViewCellStyle18.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle18.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle18.Padding = new Padding(8, 6, 8, 6);
+            dataGridViewCellStyle18.SelectionBackColor = Color.FromArgb(227, 242, 253);
+            dataGridViewCellStyle18.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle18.WrapMode = DataGridViewTriState.False;
+            dataGridView1.DefaultCellStyle = dataGridViewCellStyle18;
             dataGridView1.EnableHeadersVisualStyles = false;
             dataGridView1.GridColor = Color.LightGray;
             dataGridView1.Location = new Point(242, 207);
@@ -192,43 +190,34 @@
             // lblTitle
             // 
             lblTitle.AutoSize = true;
-            lblTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
             lblTitle.ForeColor = Color.White;
-            lblTitle.Location = new Point(140, 15);
+            lblTitle.Location = new Point(171, 8);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(274, 25);
+            lblTitle.Size = new Size(277, 32);
             lblTitle.TabIndex = 1;
-            lblTitle.Text = "📊 Borrow And Return Books";
+            lblTitle.Text = "📊 Borrow And Return";
             // 
-            // panelFilter
+            // topPanel
             // 
-            panelFilter.BackColor = Color.AliceBlue;
-            panelFilter.Controls.Add(btnAdd);
-            panelFilter.Controls.Add(btnReturnBook);
-            panelFilter.Dock = DockStyle.Top;
-            panelFilter.Location = new Point(0, 60);
-            panelFilter.Name = "panelFilter";
-            panelFilter.Size = new Size(2645, 120);
-            panelFilter.TabIndex = 5;
-            // 
-            // panelTop
-            // 
-            panelTop.BackColor = Color.SteelBlue;
-            panelTop.Controls.Add(lblTitle);
-            panelTop.Controls.Add(btnBack);
-            panelTop.Dock = DockStyle.Top;
-            panelTop.Location = new Point(0, 0);
-            panelTop.Name = "panelTop";
-            panelTop.Size = new Size(2645, 60);
-            panelTop.TabIndex = 6;
+            topPanel.BackColor = Color.RoyalBlue;
+            topPanel.Controls.Add(btnBack);
+            topPanel.Controls.Add(btnReturnBook);
+            topPanel.Controls.Add(lblTitle);
+            topPanel.Controls.Add(btnAdd);
+            topPanel.Dock = DockStyle.Top;
+            topPanel.Location = new Point(0, 0);
+            topPanel.Name = "topPanel";
+            topPanel.Padding = new Padding(20, 10, 20, 10);
+            topPanel.Size = new Size(2645, 60);
+            topPanel.TabIndex = 5;
             // 
             // borrowANDreturn
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(2645, 1181);
-            Controls.Add(panelFilter);
-            Controls.Add(panelTop);
+            Controls.Add(topPanel);
             Controls.Add(dataGridView1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "borrowANDreturn";
@@ -236,9 +225,8 @@
             Text = "Borrow & Return";
             WindowState = FormWindowState.Maximized;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            panelFilter.ResumeLayout(false);
-            panelTop.ResumeLayout(false);
-            panelTop.PerformLayout();
+            topPanel.ResumeLayout(false);
+            topPanel.PerformLayout();
             ResumeLayout(false);
         }
         private System.Windows.Forms.DataGridView dataGridView1;
@@ -257,7 +245,6 @@
         private System.Windows.Forms.DataGridView dataGridMembers;
         private System.Windows.Forms.DataGridView dataGridBooks;
         private Label lblTitle;
-        private Panel panelFilter;
-        private Panel panelTop;
+        private Panel topPanel;
     }
 }
