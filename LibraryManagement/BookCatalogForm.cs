@@ -79,13 +79,13 @@ namespace LibraryManagementSystem
                     Button btnAll = new Button
                     {
                         Text = "View All",
-                        Width = 150,
+                        Width = 110,
                         Height = 40,
-                        Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                        Font = new Font("Segoe UI", 9, FontStyle.Regular),
                         BackColor = Color.SteelBlue,
                         ForeColor = Color.White,
                         FlatStyle = FlatStyle.Flat,
-                        Margin = new Padding(5)
+                        Margin = new Padding(3)
                     };
                     btnAll.Click += async (s, e) => await LoadBooks();
                     categoryPanel.Controls.Add(btnAll);
@@ -96,13 +96,13 @@ namespace LibraryManagementSystem
                         Button btn = new Button
                         {
                             Text = cat,
-                            Width = 150,
+                            Width = 110,
                             Height = 40,
-                            Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                            Font = new Font("Segoe UI", 9, FontStyle.Regular),
                             BackColor = Color.CadetBlue,
                             ForeColor = Color.White,
                             FlatStyle = FlatStyle.Flat,
-                            Margin = new Padding(5)
+                            Margin = new Padding(3)
                         };
                         btn.Click += async (s, e) => await LoadBooksByCategory(cat);
                         categoryPanel.Controls.Add(btn);
@@ -403,7 +403,7 @@ namespace LibraryManagementSystem
                         OR isbn ILIKE @pattern 
                         OR category ILIKE @pattern)
                         AND (@category = 'All' OR category = @category)
-                    ORDER BY id ASC";
+                    ORDER BY author ASC";
 
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
