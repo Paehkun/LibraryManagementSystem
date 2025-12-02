@@ -10,7 +10,7 @@ namespace LibraryManagementSystem.Domain.Entities
             Borrowed = 0,
             Returned = 1
         }
-//table ubah jadi id
+        public string BorrowId { get; set; }
         public string Title { get; set; }           
         public string ISBN { get; set; }            
         public int MemberId { get; set; }           

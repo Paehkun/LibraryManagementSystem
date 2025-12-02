@@ -1,4 +1,5 @@
 ﻿using LibraryManagement;
+using LibraryManagementSystem.Domain.Repository;
 using Npgsql;
 using System;
 using System.Windows.Forms;
@@ -12,11 +13,15 @@ namespace LibraryManagementSystem
         private string username;
         private bool sidebarExpanded = true;
         private System.Windows.Forms.Timer sidebarTimer;
-        string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
+        private BookRepository _bookRepo;
+        private UserRepository _userRepo;
 
         public LibrarianHomeForm(string username = "")
         {
             InitializeComponent();
+            DBConnection db = new DBConnection();
+            _bookRepo = new BookRepository(db);
+            _userRepo = new UserRepository(db);
 
             this.username = UserSession.Username;
 
@@ -88,8 +93,6 @@ namespace LibraryManagementSystem
             }
         }
 
-
-
         private void SetupSidebarAnimation()
         {
             sidebarTimer = new System.Windows.Forms.Timer();
@@ -142,188 +145,42 @@ namespace LibraryManagementSystem
         }
         private void FetchFullNameFromDB()
         {
-            using (var conn = new NpgsqlConnection(connString))
+            var user = _userRepo.GetUserByUsername(username);
+            if (user != null)
             {
-                conn.Open();
-                string query = "SELECT name FROM users WHERE username = @username";
-                using (var cmd = new NpgsqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@username", username);
-                    var result = cmd.ExecuteScalar();
-                    if (result != null)
-                    {
-                        name = result.ToString();   // ✅ store full name
-                    }
-                }
+                name = user.Name;
+                lblWelcome.Text = $"Welcome, {name}";
+            }
+            else
+            {
+                lblWelcome.Text = "Welcome, User";
             }
         }
 
         private void LoadDashboardData()
         {
-            try
-            {
-                using (var conn = new NpgsqlConnection(connString))
-                {
-                    conn.Open();
+                var stats = _bookRepo.GetDashboardStats();
 
-                    // 🟢 Total Books (based on total copies available)
-                    string totalBooksQuery = "SELECT COALESCE(SUM(copiesavailable), 0) FROM books";
-                    using (var cmd = new NpgsqlCommand(totalBooksQuery, conn))
-                    {
-                        var totalBooks = cmd.ExecuteScalar();
-                        lblTotalBooksValue.Text = totalBooks.ToString();
-                    }
-
-                    // 👥 Total Books Row
-                    string totalBooksRow = "SELECT COUNT(*) FROM books";
-                    using (var cmd = new NpgsqlCommand(totalBooksRow, conn))
-                    {
-                        var totalBookRow = cmd.ExecuteScalar();
-                        lblBookRow.Text = totalBookRow.ToString();
-                    }
-
-
-                    // 👥 Total Members
-                    string totalMembersQuery = "SELECT COUNT(*) FROM member";
-                    using (var cmd = new NpgsqlCommand(totalMembersQuery, conn))
-                    {
-                        var totalMembers = cmd.ExecuteScalar();
-                        lblTotalMembersValue.Text = totalMembers.ToString();
-                    }
-
-                    string totalBorrowQuery = "SELECT COUNT(*) FROM borrowreturn WHERE status = 'Borrowed'";
-                    using (var cmd = new NpgsqlCommand(totalBorrowQuery, conn))
-                    {
-                        var totalBorrow = cmd.ExecuteScalar();
-                        lblBorrowedBooksValue.Text = totalBorrow.ToString();
-                    }
-
-                    string totalLateReturnQuery = "SELECT COUNT(*) FROM borrowreturn WHERE duedate < CURRENT_DATE AND status = 'Borrowed'";
-                    using (var cmd = new NpgsqlCommand(totalLateReturnQuery, conn))
-                    {
-                        var totalLateReturn = cmd.ExecuteScalar();
-                        lblLateReturnBooksValue.Text = totalLateReturn.ToString();
-                        lblLateReturnBooksValue.BringToFront();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading dashboard data: {ex.Message}");
-            }
+                lblTotalBooksValue.Text = stats.TotalBooks.ToString();
+                lblBookRow.Text = stats.TotalBookRows.ToString();
+                lblTotalMembersValue.Text = stats.TotalMembers.ToString();
+                lblBorrowedBooksValue.Text = stats.TotalBorrowedBooks.ToString();
+                lblLateReturnBooksValue.Text = stats.TotalLateReturnedBooks.ToString();
+                lblLateReturnBooksValue.BringToFront();
         }
+
         private void LoadBorrowedBooks()
         {
-            try
-            {
-                using (var conn = new NpgsqlConnection(connString))
-                {
-                    conn.Open();
+            var loadborrowedbooks = _bookRepo.LoadBorrowedBooks();
 
-                    string query = @"
-                SELECT 
-                    br.borrowid AS ""Borrow ID"",
-                    br.memberid AS ""Member ID"",
-                    m.name AS ""Member Name"",
-                    
-                    b.title AS ""Book Title"",
-                    br.borrowdate AS ""Borrow Date"",
-                    br.duedate AS ""Due Date""
-                FROM borrowreturn br
-                JOIN member m ON br.memberid = m.memberid
-                JOIN books b ON br.isbn = b.isbn
-                WHERE br.status = 'Borrowed'
-                ORDER BY br.borrowdate DESC;
-            ";
-
-                    using (var cmd = new NpgsqlCommand(query, conn))
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        var dt = new System.Data.DataTable();
-                        dt.Load(reader);
-                        dataGridView1.DataSource = dt;
-                        if (dataGridView1.Rows.Count == 1)
-                        {
-                            dataGridView1.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
-                            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
-                            dataGridView1.BackgroundColor = Color.LightGray;
-                        }
-                        else
-                        {
-                            dataGridView1.RowsDefaultCellStyle.BackColor = Color.White;
-                            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.WhiteSmoke;
-                            dataGridView1.BackgroundColor = Color.White;
-                        }
-
-                    }
-                }
-
-                // Optional: Styling like your other forms
-                dataGridView1.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10);
-                dataGridView1.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                dataGridView1.RowTemplate.Height = 40;
-                dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                dataGridView1.MultiSelect = false;
-                dataGridView1.ClearSelection();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading borrowed books: {ex.Message}");
-            }
+            dataGridView1.DataSource = loadborrowedbooks;
         }
 
         private void LoadLateReturnedBooks()
         {
-            try
-            {
-                using (var conn = new NpgsqlConnection(connString))
-                {
-                    conn.Open();
-                    string query = @"
-                SELECT 
-                    borrowid AS ""Borrow ID"",
-                    memberid AS ""Member ID"",
-                    name AS ""Member Name"",                    
-                    title AS ""Book Title"",
-                    duedate AS ""Due Date""
-                FROM borrowreturn
-                WHERE duedate < CURRENT_DATE AND status = 'Borrowed';
-            ";
+            var lateBooks = _bookRepo.LoadLateReturnedBooks();
 
-                    using (var cmd = new NpgsqlCommand(query, conn))
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        var dt = new System.Data.DataTable();
-                        dt.Load(reader);
-                        dataGridView2.DataSource = dt;
-                        if (dataGridView1.Rows.Count == 1)
-                        {
-                            dataGridView2.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
-                            dataGridView2.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
-                            dataGridView2.BackgroundColor = Color.LightGray;
-                        }
-                        else
-                        {
-                            dataGridView2.RowsDefaultCellStyle.BackColor = Color.White;
-                            dataGridView2.AlternatingRowsDefaultCellStyle.BackColor = Color.WhiteSmoke;
-                            dataGridView2.BackgroundColor = Color.White;
-                        }
-
-                        dataGridView2.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10);
-                        dataGridView2.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
-                        dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                        dataGridView2.RowTemplate.Height = 40;
-                        dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                        dataGridView2.MultiSelect = false;
-                        dataGridView2.ClearSelection();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading late returned books: {ex.Message}");
-            }
+            dataGridView2.DataSource = lateBooks;
         }
 
         private void LibrarianHomeForm_Load(object sender, EventArgs e)

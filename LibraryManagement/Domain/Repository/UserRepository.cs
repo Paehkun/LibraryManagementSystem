@@ -1,5 +1,8 @@
-﻿using System.Data;
+﻿using Microsoft.VisualBasic.ApplicationServices;
 using Npgsql;
+using System.Data;
+using LibraryManagement.Domain.Model;
+using LibraryManagementSystem.Domain.Entities;
 
 namespace LibraryManagementSystem.Domain.Repository
 {
@@ -43,6 +46,41 @@ namespace LibraryManagementSystem.Domain.Repository
             }
 
             return dt;
+        }
+        public Users? GetUserByUsername(string username)
+        {
+            try
+            {
+                using (var conn = _db.GetConnection())
+                {
+                    conn.Open();
+                    string query = "SELECT username, name, role FROM users WHERE username = @username";
+
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@username", username);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return new Users
+                                {
+                                    Username = reader.GetString(reader.GetOrdinal("username")),
+                                    Name = reader.GetString(reader.GetOrdinal("name")),
+                                    Role = reader.GetString(reader.GetOrdinal("role"))
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle error
+                throw new Exception("Error fetching user: " + ex.Message);
+            }
+
+            return null;
         }
     }
 }

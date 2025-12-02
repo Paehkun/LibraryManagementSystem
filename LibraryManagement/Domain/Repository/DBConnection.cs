@@ -6,9 +6,9 @@ namespace LibraryManagementSystem.Domain.Repository
     {
         private readonly string _connectionString;
 
-        public DBConnection(string connectionString)
+        public DBConnection()
         {
-            _connectionString = connectionString;
+            _connectionString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
         }
 
         public NpgsqlConnection GetConnection()

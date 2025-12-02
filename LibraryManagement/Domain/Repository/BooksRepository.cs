@@ -3,6 +3,8 @@ using LibraryManagementSystem.Domain.Entities;
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Windows.Forms;
 
 namespace LibraryManagementSystem.Domain.Repository
 {
@@ -176,5 +178,180 @@ namespace LibraryManagementSystem.Domain.Repository
                 }
             }
         }
+
+        public List<BorrowReturn> LoadBorrowedBooks()
+        {
+            List<BorrowReturn> list = new List<BorrowReturn>();
+
+            try
+            {
+                using (var conn = _db.GetConnection())
+                {
+                    conn.Open();
+
+                    string query = @"
+                SELECT 
+                    borrowid,
+                    memberid,
+                    name,
+                    title,
+                    isbn,
+                    phone,
+                    borrowdate,
+                    duedate,
+                    returndate,
+                    status
+                FROM borrowreturn
+                WHERE status = 1
+                ORDER BY borrowdate DESC;
+            ";
+
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(new BorrowReturn
+                            {
+                                BorrowId = reader.GetString(reader.GetOrdinal("borrowid")),
+                                MemberId = reader.GetInt32(reader.GetOrdinal("memberid")),
+                                Name = reader.GetString(reader.GetOrdinal("name")),
+                                Title = reader.GetString(reader.GetOrdinal("title")),
+                                ISBN = reader.GetString(reader.GetOrdinal("isbn")),
+                                Phone = reader.GetString(reader.GetOrdinal("phone")),
+                                BorrowDate = reader.GetDateTime(reader.GetOrdinal("borrowdate")),
+                                DueDate = reader.GetDateTime(reader.GetOrdinal("duedate")),
+                                ReturnDate = reader.IsDBNull(reader.GetOrdinal("returndate"))
+                                             ? null
+                                             : reader.GetDateTime(reader.GetOrdinal("returndate")),
+                                Status = (BorrowReturn.BorrowStatus)reader.GetInt32(reader.GetOrdinal("status"))
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading borrowed books: {ex.Message}");
+            }
+
+            return list;
+        }
+
+
+        public List<BorrowReturn> LoadLateReturnedBooks()
+        {
+            List<BorrowReturn> list = new List<BorrowReturn>();
+
+            try
+            {
+                using (var conn = _db.GetConnection())
+                {
+                    conn.Open();
+
+                    string query = @"
+                SELECT 
+                    borrowid,
+                    memberid,
+                    name,
+                    title,
+                    duedate,
+                    isbn,
+                    phone,
+                    borrowdate,
+                    returndate,
+                    status
+                FROM borrowreturn
+                WHERE duedate < CURRENT_DATE AND status = 1;
+            ";
+
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(new BorrowReturn
+                            {
+                               // Id = reader.GetInt32(reader.GetOrdinal("id")),
+                                BorrowId = reader.GetString(reader.GetOrdinal("borrowid")),
+                                MemberId = reader.GetInt32(reader.GetOrdinal("memberid")),
+                                Name = reader.GetString(reader.GetOrdinal("name")),
+                                Title = reader.GetString(reader.GetOrdinal("title")),
+                                ISBN = reader.GetString(reader.GetOrdinal("isbn")),
+                                Phone = reader.GetString(reader.GetOrdinal("phone")),
+                                BorrowDate = reader.GetDateTime(reader.GetOrdinal("borrowdate")),
+                                DueDate = reader.GetDateTime(reader.GetOrdinal("duedate")),
+                                ReturnDate = reader.IsDBNull(reader.GetOrdinal("returndate"))
+                                             ? null
+                                             : reader.GetDateTime(reader.GetOrdinal("returndate")),
+                                Status = (BorrowReturn.BorrowStatus)reader.GetInt32(reader.GetOrdinal("status"))
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading: {ex.Message}");
+            }
+
+            return list;
+        }
+
+        public DashboardStats GetDashboardStats()
+        {
+            var stats = new DashboardStats();
+
+            try
+            {
+                using (var conn = _db.GetConnection())
+                {
+                    conn.Open();
+
+                    // Total books (sum of copies available)
+                    string totalBooksQuery = "SELECT COALESCE(SUM(copiesavailable), 0) FROM books";
+                    using (var cmd = new NpgsqlCommand(totalBooksQuery, conn))
+                    {
+                        stats.TotalBooks = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+
+                    // Total book rows
+                    string totalBooksRowQuery = "SELECT COUNT(*) FROM books";
+                    using (var cmd = new NpgsqlCommand(totalBooksRowQuery, conn))
+                    {
+                        stats.TotalBookRows = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+
+                    // Total members
+                    string totalMembersQuery = "SELECT COUNT(*) FROM member";
+                    using (var cmd = new NpgsqlCommand(totalMembersQuery, conn))
+                    {
+                        stats.TotalMembers = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+
+                    // Total borrowed books
+                    string totalBorrowQuery = "SELECT COUNT(*) FROM borrowreturn WHERE status = 1";
+                    using (var cmd = new NpgsqlCommand(totalBorrowQuery, conn))
+                    {
+                        stats.TotalBorrowedBooks = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+
+                    // Total late returned books
+                    string totalLateReturnQuery = "SELECT COUNT(*) FROM borrowreturn WHERE duedate < CURRENT_DATE AND status = 1";
+                    using (var cmd = new NpgsqlCommand(totalLateReturnQuery, conn))
+                    {
+                        stats.TotalLateReturnedBooks = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Optionally log the error
+                throw new Exception("Error fetching dashboard stats: " + ex.Message);
+            }
+
+            return stats;
+        }
+
     }
 }

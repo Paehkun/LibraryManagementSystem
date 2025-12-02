@@ -11,8 +11,8 @@ namespace LibraryManagement.Domain.Shared
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime LastModified { get; set; } = DateTime.Now;
-        public Boolean IsDeleted { get; set; }    
-        public DateTime CreateBy { get; set; } = DateTime.Now;
-        public DateTime LastModifiedBy { get; set; } = DateTime.Now;
+        public bool IsDeleted { get; set; }    
+        public int CreateBy { get; set; }
+        public int LastModifiedBy { get; set; }
     }
 }
