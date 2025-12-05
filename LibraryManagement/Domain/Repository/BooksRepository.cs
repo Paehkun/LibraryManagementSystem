@@ -24,7 +24,7 @@ namespace LibraryManagementSystem.Domain.Repository
             using (var conn = _db.GetConnection())
             {
                 conn.Open();
-                string query = "SELECT id, title, author, isbn, category, publisher, year, copiesavailable, shelflocation FROM books ORDER BY id ASC";
+                string query = "SELECT id, title, author, isbn, category, publisher, year, copiesavailable, shelflocation FROM books WHERE is_deleted = false ORDER BY id ASC";
 
                 using (var cmd = new NpgsqlCommand(query, conn))
                 using (var reader = cmd.ExecuteReader())
@@ -57,7 +57,7 @@ namespace LibraryManagementSystem.Domain.Repository
             using (var conn = _db.GetConnection())
             {
                 conn.Open();
-                string query = "SELECT id, title, isbn, category, copiesavailable FROM books ORDER BY id ASC";
+                string query = "SELECT id, title, isbn, category, copiesavailable FROM books WHERE is_deleted = false ORDER BY id ASC";
 
                 using (var cmd = new NpgsqlCommand(query, conn))
                 using (var reader = cmd.ExecuteReader())
@@ -119,8 +119,8 @@ namespace LibraryManagementSystem.Domain.Repository
             {
                 conn.Open();
                 string query = @"INSERT INTO books 
-                    (title, author, isbn, category, publisher, year, copiesavailable, shelflocation)
-                    VALUES (@title, @author, @isbn, @category, @publisher, @year, @copies, @shelf)";
+                    (title, author, isbn, category, publisher, year, copiesavailable, shelflocation, image)
+                    VALUES (@title, @author, @isbn, @category, @publisher, @year, @copies, @shelf, @image)";
 
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
@@ -132,6 +132,7 @@ namespace LibraryManagementSystem.Domain.Repository
                     cmd.Parameters.AddWithValue("@year", book.Year);
                     cmd.Parameters.AddWithValue("@copies", book.CopiesAvailable);
                     cmd.Parameters.AddWithValue("@shelf", book.ShelfLocation);
+                    cmd.Parameters.AddWithValue("@image", book.Image);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -143,41 +144,86 @@ namespace LibraryManagementSystem.Domain.Repository
             using (var conn = _db.GetConnection())
             {
                 conn.Open();
-                string query = @"UPDATE books 
-                                 SET title=@title, author=@author, category=@category, publisher=@publisher, 
-                                     year=@year, copiesavailable=@copies, shelflocation=@shelf
-                                 WHERE isbn=@isbn";
+                string query = @"UPDATE books
+                         SET title = @title,
+                             author = @author,
+                             isbn = @isbn,
+                             category = @category,
+                             publisher = @publisher,
+                             year = @year,
+                             copiesavailable = @copies,
+                             shelflocation = @shelf,
+                             image = @image
+                         WHERE id = @id";
 
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@title", book.Title);
                     cmd.Parameters.AddWithValue("@author", book.Author);
+                    cmd.Parameters.AddWithValue("@isbn", book.ISBN);
                     cmd.Parameters.AddWithValue("@category", book.Category);
                     cmd.Parameters.AddWithValue("@publisher", book.Publisher);
                     cmd.Parameters.AddWithValue("@year", book.Year);
                     cmd.Parameters.AddWithValue("@copies", book.CopiesAvailable);
                     cmd.Parameters.AddWithValue("@shelf", book.ShelfLocation);
-                    cmd.Parameters.AddWithValue("@isbn", book.ISBN);
+                    cmd.Parameters.AddWithValue("@image", book.Image ?? "");
+                    cmd.Parameters.AddWithValue("@id", book.Id);
 
                     cmd.ExecuteNonQuery();
                 }
             }
         }
 
-        public void DeleteBook(string isbn)
+
+        public bool DeleteBook(string isbn)
         {
             using (var conn = _db.GetConnection())
             {
                 conn.Open();
-                string query = "DELETE FROM books WHERE isbn=@isbn";
+
+                string checkQuery = "SELECT COUNT(*) FROM books WHERE isbn = @isbn AND is_deleted = false";
+                using (var checkCmd = new NpgsqlCommand(checkQuery, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@isbn", isbn);
+                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                    if (count == 0)
+                    {
+                        return false;
+                    }
+                }
+                string deleteQuery = @"UPDATE books 
+                               SET is_deleted = true, last_modified = NOW()
+                               WHERE isbn = @isbn";
+
+                using (var deleteCmd = new NpgsqlCommand(deleteQuery, conn))
+                {
+                    deleteCmd.Parameters.AddWithValue("@isbn", isbn);
+                    deleteCmd.ExecuteNonQuery();
+                }
+
+                return true;
+            }
+        }
+
+        public bool BookExists(string isbn)
+        {
+            using (var conn = _db.GetConnection())
+            {
+                conn.Open();
+
+                string query = "SELECT COUNT(*) FROM books WHERE isbn = @isbn AND is_deleted = false";
 
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@isbn", isbn);
-                    cmd.ExecuteNonQuery();
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
+                    return count > 0;
                 }
             }
         }
+
+
 
         public List<BorrowReturn> LoadBorrowedBooks()
         {
@@ -352,6 +398,58 @@ namespace LibraryManagementSystem.Domain.Repository
 
             return stats;
         }
+
+        public List<Book> BookSearch(string searchText)
+        {
+            var books = new List<Book>();
+
+            using (var conn = _db.GetConnection())
+            {
+                conn.Open();
+
+                string query = @"
+            SELECT id, title, author, isbn, category, publisher, year, copiesavailable, shelflocation
+            FROM books
+            WHERE is_deleted = false
+              AND (
+                    CAST(id AS TEXT) ILIKE @search
+                    OR title ILIKE @search
+                    OR author ILIKE @search
+                    OR isbn ILIKE @search
+                    OR category ILIKE @search
+                    OR publisher ILIKE @search
+                  )
+            ORDER BY id";
+
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@search", "%" + searchText + "%");
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            books.Add(new Book
+                            {
+                                Id = reader.GetInt32(0),
+                                Title = reader.GetString(1),
+                                Author = reader.GetString(2),
+                                ISBN = reader.GetString(3),
+                                Category = reader.GetString(4),
+                                Publisher = reader.GetString(5),
+                                Year = reader.GetInt32(6),
+                                CopiesAvailable = reader.GetInt32(7),
+                                ShelfLocation = reader.GetString(8)
+                            });
+                        }
+                    }
+                }
+            }
+
+            return books;
+        }
+
+
 
     }
 }

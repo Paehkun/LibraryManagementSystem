@@ -1,4 +1,6 @@
-﻿using Npgsql;
+﻿using LibraryManagement.Domain.Model;
+using LibraryManagementSystem.Domain.Repository;
+using Npgsql;
 using System;
 using System.Security.Policy;
 using System.Windows.Forms;
@@ -7,58 +9,38 @@ namespace LibraryManagement
 {
     public partial class AddBookForm : Form
     {
+        private BookRepository _bookRepo;
         public AddBookForm()
         {
             InitializeComponent();
+            DBConnection db = new DBConnection();
+            _bookRepo = new BookRepository(db);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string title = txtTitle.Text.Trim();
-            string author = txtAuthor.Text.Trim();
-            string isbn = txtISBN.Text.Trim();
-            string category = txtCategory.Text.Trim();
-            string publisher = txtPublisher.Text.Trim();
-            string shelflocation = txtShelfLocation.Text.Trim();
-            string image = txtImg.Text.Trim();
-
-            int copiesavailable;
-            int year;
-
-            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(author) ||
-        string.IsNullOrEmpty(isbn) || string.IsNullOrEmpty(category) ||
-        string.IsNullOrEmpty(publisher) || string.IsNullOrEmpty(shelflocation) ||
-        string.IsNullOrEmpty(image) ||
-        !int.TryParse(txtYear.Text, out year) ||
-        !int.TryParse(txtCopies.Text, out copiesavailable))
+            if (!ValidateInputs())
             {
                 MessageBox.Show("Please fill in all fields correctly.");
                 return;
             }
 
-            string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
+            var book = new Book
+            {
+                Title = txtTitle.Text.Trim(),
+                Author = txtAuthor.Text.Trim(),
+                ISBN = txtISBN.Text.Trim(),
+                Category = txtCategory.Text.Trim(),
+                Publisher = txtPublisher.Text.Trim(),
+                Year = int.Parse(txtYear.Text),
+                CopiesAvailable = int.Parse(txtCopies.Text),
+                ShelfLocation = txtShelfLocation.Text.Trim(),
+                Image = txtImg.Text.Trim()
+            };
 
             try
             {
-                using (var conn = new NpgsqlConnection(connString))
-                {
-                    conn.Open();
-                    string query = "INSERT INTO books (title, author, isbn, category, publisher, year, copiesavailable, shelflocation, image) VALUES (@title, @author, @isbn, @category, @publisher, @year, @copiesavailable, @shelflocation, @image)";
-                    using (var cmd = new NpgsqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@title", title);
-                        cmd.Parameters.AddWithValue("@author", author);
-                        cmd.Parameters.AddWithValue("@isbn", isbn);
-                        cmd.Parameters.AddWithValue("@category", category);
-                        cmd.Parameters.AddWithValue("@publisher", publisher);
-                        cmd.Parameters.AddWithValue("@year", year);
-                        cmd.Parameters.AddWithValue("@copiesavailable", copiesavailable);
-                        cmd.Parameters.AddWithValue("@shelflocation", shelflocation);
-                        cmd.Parameters.AddWithValue("@image", image);
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
+                _bookRepo.AddBook(book);
                 MessageBox.Show("Book added successfully!");
                 this.DialogResult = DialogResult.OK;
                 this.Close();
@@ -68,6 +50,22 @@ namespace LibraryManagement
                 MessageBox.Show($"Error: {ex.Message}");
             }
         }
+        private bool ValidateInputs()
+        {
+            int year, copies;
+
+            return
+                !string.IsNullOrWhiteSpace(txtTitle.Text) &&
+                !string.IsNullOrWhiteSpace(txtAuthor.Text) &&
+                !string.IsNullOrWhiteSpace(txtISBN.Text) &&
+                !string.IsNullOrWhiteSpace(txtCategory.Text) &&
+                !string.IsNullOrWhiteSpace(txtPublisher.Text) &&
+                !string.IsNullOrWhiteSpace(txtShelfLocation.Text) &&
+                !string.IsNullOrWhiteSpace(txtImg.Text) &&
+                int.TryParse(txtYear.Text, out year) &&
+                int.TryParse(txtCopies.Text, out copies);
+        }
+
 
         private void btnCancel_Click(object sender, EventArgs e)
         {

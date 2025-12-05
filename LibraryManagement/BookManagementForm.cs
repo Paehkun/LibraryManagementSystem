@@ -1,4 +1,5 @@
 ﻿using LibraryManagement;
+using LibraryManagementSystem.Domain.Repository;
 using Npgsql;
 using System;
 using System.Data;
@@ -10,10 +11,12 @@ namespace LibraryManagementSystem
     public partial class BookManagementForm : Form
     {
         private string username;
-        private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
+        private BookRepository _bookRepo;
         public BookManagementForm(string username)
         {
             InitializeComponent();
+            DBConnection db = new DBConnection();
+            _bookRepo = new BookRepository(db);
             this.username = UserSession.Username;
         }
 
@@ -208,7 +211,7 @@ namespace LibraryManagementSystem
 
         private void btnDeleteBook_Click(object sender, EventArgs e)
         {
-            using (var deleteForm = new DeleteBookForm())
+            using (var deleteForm = new DeleteBookForm(_bookRepo))
             {
                 if (deleteForm.ShowDialog() == DialogResult.OK)
                 {
@@ -234,8 +237,22 @@ namespace LibraryManagementSystem
 
         private void LoadBooks()
         {
-            dgvBooks.DataSource = DatabaseHelper.GetAllBooks();
+            dgvBooks.DataSource = _bookRepo.GetAllBooks();
             dgvBooks.ClearSelection();
+
+            // Hide BaseClass 
+            string[] baseFields = { "CreatedAt", "LastModified", "IsDeleted", "CreateBy", "LastModifiedBy", "Image" };
+            foreach (var field in baseFields)
+            {
+                if (dgvBooks.Columns[field] != null)
+                    dgvBooks.Columns[field].Visible = false;
+            }
+
+            // Move ID to left
+            if (dgvBooks.Columns["Id"] != null)
+            {
+                dgvBooks.Columns["Id"].DisplayIndex = 0; // 0 = first column
+            }
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
@@ -244,38 +261,16 @@ namespace LibraryManagementSystem
 
             try
             {
-                using (var conn = new NpgsqlConnection(connString))
-                {
-                    conn.Open();
-
-                    string query = @"SELECT id, title, author, isbn, category, publisher, year, copiesavailable, shelflocation 
-                             FROM books
-                             WHERE CAST(id AS TEXT) ILIKE @search
-                                OR title ILIKE @search
-                                OR author ILIKE @search
-                                OR isbn ILIKE @search
-                                OR category ILIKE @search
-                                OR publisher ILIKE @search
-                             ORDER BY id";
-
-                    using (var cmd = new NpgsqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@search", "%" + searchText + "%");
-
-                        using (var adapter = new NpgsqlDataAdapter(cmd))
-                        {
-                            var dt = new DataTable();
-                            adapter.Fill(dt);
-                            dgvBooks.DataSource = dt;
-                            ApplyCardStyle();  // 🪄 make sure search also keeps the card look
-                        }
-                    }
-                }
+                var searchResults = _bookRepo.BookSearch(searchText);
+                dgvBooks.DataSource = searchResults;
+                dgvBooks.ClearSelection();
+                ApplyCardStyle(); 
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error searching: {ex.Message}");
             }
         }
+
     }
 }

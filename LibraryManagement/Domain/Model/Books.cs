@@ -13,6 +13,7 @@ namespace LibraryManagement.Domain.Model
         public int Year { get; set; }
         public int CopiesAvailable { get; set; }
         public string ShelfLocation { get; set; }
+        public string Image { get; set; }
     }
 
 }

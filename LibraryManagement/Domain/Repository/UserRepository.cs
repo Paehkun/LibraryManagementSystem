@@ -15,23 +15,25 @@ namespace LibraryManagementSystem.Domain.Repository
             _db = db;
         }
 
-        public DataTable GetAllUsers(string search = "")
+        public List<Users> GetAllUsers(string search)
         {
-            DataTable dt = new DataTable();
+            List<Users> users = new List<Users>();
+
             using (var conn = _db.GetConnection())
             {
                 conn.Open();
+
                 string query = @"
-            SELECT id, name, role, username, password, email, phone
-            FROM users
-            WHERE (@search = '' 
-                OR CAST(id AS TEXT) ILIKE @pattern
-                OR name ILIKE @pattern 
-                OR username ILIKE @pattern 
-                OR password ILIKE @pattern
-                OR email ILIKE @pattern
-                OR CAST(phone AS TEXT) ILIKE @pattern) 
-            ORDER BY id ASC";
+                SELECT id, name, role, username, password, email, phone
+                FROM users
+                WHERE (@search = '' 
+                    OR CAST(id AS TEXT) ILIKE @pattern
+                    OR name ILIKE @pattern 
+                    OR username ILIKE @pattern 
+                    OR password ILIKE @pattern
+                    OR email ILIKE @pattern
+                    OR CAST(phone AS TEXT) ILIKE @pattern)
+                ORDER BY id ASC";
 
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
@@ -40,12 +42,24 @@ namespace LibraryManagementSystem.Domain.Repository
 
                     using (var reader = cmd.ExecuteReader())
                     {
-                        dt.Load(reader);
+                        while (reader.Read())
+                        {
+                            users.Add(new Users
+                            {
+                                Id = reader.GetInt32(0),
+                                Name = reader.GetString(1),
+                                Role = reader.GetString(2),
+                                Username = reader.GetString(3),
+                                Password = reader.GetString(4),
+                                Email = reader.GetString(5),
+                                Phone = reader.GetString(6)
+                            });
+                        }
                     }
                 }
             }
 
-            return dt;
+            return users;
         }
         public Users? GetUserByUsername(string username)
         {

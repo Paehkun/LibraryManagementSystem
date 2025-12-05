@@ -174,6 +174,13 @@ namespace LibraryManagementSystem
             var loadborrowedbooks = _bookRepo.LoadBorrowedBooks();
 
             dataGridView1.DataSource = loadborrowedbooks;
+            // Hide BaseClass 
+            string[] baseFields = { "CreatedAt", "LastModified", "IsDeleted", "CreateBy", "LastModifiedBy", "Image" , "Id"};
+            foreach (var field in baseFields)
+            {
+                if (dataGridView1.Columns[field] != null)
+                    dataGridView1.Columns[field].Visible = false;
+            }
         }
 
         private void LoadLateReturnedBooks()
