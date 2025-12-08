@@ -1,5 +1,6 @@
-﻿using System.Data;
+﻿using LibraryManagement.Domain.Model;
 using Npgsql;
+using System.Data;
 
 namespace LibraryManagementSystem.Domain.Repository
 {
@@ -30,6 +31,32 @@ namespace LibraryManagementSystem.Domain.Repository
                 }
             }
         }
+
+        public void AddMember(Member member)
+        {
+            using (var conn = _db.GetConnection())
+            {
+                conn.Open();
+
+                string query = @"
+            INSERT INTO member 
+            (name, email, phone, address, membershipdate)
+            VALUES 
+            (@name, @email, @phone, @address, @membershipDate)";
+
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@name", member.Name);
+                    cmd.Parameters.AddWithValue("@email", member.Email);
+                    cmd.Parameters.AddWithValue("@phone", member.Phone);
+                    cmd.Parameters.AddWithValue("@address", member.Address);
+                    cmd.Parameters.AddWithValue("@membershipDate", member.MembershipDate);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
 
         public DataTable GetAllMembers(string search = "")
         {

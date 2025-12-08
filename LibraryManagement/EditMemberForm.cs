@@ -38,7 +38,6 @@ namespace LibraryManagement
         {
 
         }
-        //private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
         private void btnLoad_Click(object sender, EventArgs e)
         {
             if (!int.TryParse(txtMemberID.Text.Trim(), out int memberid))

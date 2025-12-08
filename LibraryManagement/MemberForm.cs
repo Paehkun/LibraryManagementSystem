@@ -1,4 +1,6 @@
-﻿using Npgsql;
+﻿using LibraryManagement.Domain.Model;
+using LibraryManagementSystem.Domain.Repository;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,9 +15,12 @@ namespace LibraryManagement
 {
     public partial class MemberForm : Form
     {
+        private MemberRepository _memberRepo;
         public MemberForm()
         {
             InitializeComponent();
+            DBConnection db = new DBConnection();
+            _memberRepo = new MemberRepository(db);
         }
 
         private void lblMembershipDate_Click(object sender, EventArgs e)
@@ -25,39 +30,27 @@ namespace LibraryManagement
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string name = txtName.Text.Trim();
-            string email = txtEmail.Text.Trim();
-            string phone = txtPhone.Text.Trim();
-            string address = txtAddress.Text.Trim();
-            DateTime membershipDate = dtpMembershipDate.Value;
-
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) ||
-        string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(address))
+            if (string.IsNullOrWhiteSpace(txtName.Text) ||
+                string.IsNullOrWhiteSpace(txtEmail.Text) ||
+                string.IsNullOrWhiteSpace(txtPhone.Text) ||
+                string.IsNullOrWhiteSpace(txtAddress.Text))
             {
                 MessageBox.Show("Please fill in all fields correctly.");
                 return;
             }
 
-            string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
+            var member = new Member
+            {
+                Name = txtName.Text.Trim(),
+                Email = txtEmail.Text.Trim(),
+                Phone = txtPhone.Text.Trim(),
+                Address = txtAddress.Text.Trim(),
+                MembershipDate = dtpMembershipDate.Value
+            };
 
             try
             {
-                using (var conn = new NpgsqlConnection(connString))
-                {
-                    conn.Open();
-                    string query = @"INSERT INTO member (name, email, phone, address, membershipdate)
-                                     VALUES (@n, @e, @p, @a, @d)";
-                    using (var cmd = new NpgsqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@n", name);
-                        cmd.Parameters.AddWithValue("@e", email);
-                        cmd.Parameters.AddWithValue("@p", phone);
-                        cmd.Parameters.AddWithValue("@a", address);
-                        cmd.Parameters.AddWithValue("@d", membershipDate);
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
+                _memberRepo.AddMember(member); // using repository
                 MessageBox.Show("Member added successfully!");
                 this.DialogResult = DialogResult.OK;
                 this.Close();
@@ -67,6 +60,7 @@ namespace LibraryManagement
                 MessageBox.Show($"Error: {ex.Message}");
             }
         }
+
 
         private void btnCancel_Click(object sender, EventArgs e)
         {

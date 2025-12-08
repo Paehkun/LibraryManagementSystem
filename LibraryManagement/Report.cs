@@ -8,17 +8,21 @@ using System.Text;
 using System.Windows.Forms;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using LibraryManagementSystem.Domain.Repository;
 
 namespace LibraryManagement
 {
     public partial class Report : Form
     {
+        private BorrowRepository _borrowRepo;
         private string username;
         private static string connectionString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db";
 
         public Report(string username)
         {
             InitializeComponent();
+            DBConnection db = new DBConnection();
+            _borrowRepo = new BorrowRepository(db);
             this.username = UserSession.Username;
         }
 
@@ -155,51 +159,26 @@ namespace LibraryManagement
             dgvReport.CellPainting += DgvReport_CellPainting;
         }
 
-        private void LoadReturnedBooks(string titleFilter = "", string memberFilter = "", DateTime? startDate = null, DateTime? endDate = null)
+        private void LoadReturnedBooks(
+    string titleFilter = "",
+    string memberFilter = "",
+    DateTime? startDate = null,
+    DateTime? endDate = null)
         {
             try
             {
-                using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
-                {
-                    conn.Open();
-
-                    string query = "SELECT borrowid, title, isbn, memberid, name, phone, borrowdate, duedate, returndate FROM borrowreturn WHERE status = 'Returned'";
-
-                    if (!string.IsNullOrEmpty(titleFilter))
-                        query += " AND LOWER(title) LIKE LOWER(@title)";
-                    if (!string.IsNullOrEmpty(memberFilter))
-                        query += " AND LOWER(name) LIKE LOWER(@name)";
-                    if (startDate.HasValue && endDate.HasValue)
-                        query += " AND returndate BETWEEN @startDate AND @endDate";
-
-                    query += " ORDER BY returndate DESC";
-
-                    using (var cmd = new NpgsqlCommand(query, conn))
-                    {
-                        if (!string.IsNullOrEmpty(titleFilter))
-                            cmd.Parameters.AddWithValue("@title", "%" + titleFilter + "%");
-                        if (!string.IsNullOrEmpty(memberFilter))
-                            cmd.Parameters.AddWithValue("@name", "%" + memberFilter + "%");
-                        if (startDate.HasValue && endDate.HasValue)
-                        {
-                            cmd.Parameters.AddWithValue("@startDate", startDate.Value);
-                            cmd.Parameters.AddWithValue("@endDate", endDate.Value);
-                        }
-
-                        using (var adapter = new NpgsqlDataAdapter(cmd))
-                        {
-                            DataTable dt = new DataTable();
-                            adapter.Fill(dt);
-                            dgvReport.DataSource = dt;
-                        }
-                    }
-                }
+                dgvReport.DataSource = _borrowRepo.GetReturnedBooks(
+                    titleFilter,
+                    memberFilter,
+                    startDate,
+                    endDate);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error loading data: " + ex.Message);
             }
         }
+
 
         private void StyleDataGridView()
         {

@@ -1,16 +1,19 @@
-﻿using LibraryManagementSystem;
+﻿using LibraryManagement.Domain.Model;
+using LibraryManagementSystem;
+using LibraryManagementSystem.Domain.Repository;
 using Microsoft.VisualBasic;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using System.Collections.Generic;
 
 namespace LibraryManagement
 {
     public partial class borrowANDreturn : Form
     {
+        private BorrowRepository _borrowRepo;
         private int selectedMemberId = -1;
         private string selectedMemberName = "";
         private string selectedPhone = "";
@@ -20,6 +23,8 @@ namespace LibraryManagement
         public borrowANDreturn(string username)
         {
             InitializeComponent();
+            DBConnection db = new DBConnection();
+            _borrowRepo = new BorrowRepository(db);
             this.username = UserSession.Username;
 
             StyleDataGridView();
@@ -38,7 +43,7 @@ namespace LibraryManagement
         {
             try
             {
-                DataTable dt = DatabaseHelper.GetBorrowRecords();
+                DataTable dt = _borrowRepo.GetBorrowRecords();
                 dataGridView1.DataSource = dt;
 
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -129,8 +134,8 @@ namespace LibraryManagement
         {
             try
             {
-                //Select Member
-                int memberId = -1;
+                // ✅ Select Member
+                int memberId;
                 using (SelectMemberForm memberForm = new SelectMemberForm())
                 {
                     if (memberForm.ShowDialog() != DialogResult.OK)
@@ -139,8 +144,8 @@ namespace LibraryManagement
                     memberId = int.Parse(memberForm.SelectedMemberId);
                 }
 
-                //Select Books
-                List<(string Title, string ISBN)> selectedBooks = new List<(string, string)>();
+                // ✅ Select Books
+                List<(string Title, string ISBN)> selectedBooks = new();
                 using (SelectBooksForm booksForm = new SelectBooksForm())
                 {
                     if (booksForm.ShowDialog() != DialogResult.OK)
@@ -154,38 +159,50 @@ namespace LibraryManagement
 
                 if (selectedBooks.Count == 0)
                 {
-                    MessageBox.Show("No books selected!", "Missing Books", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("No books selected!", "Warning",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                //Ask for Borrow Days
-                string input = Interaction.InputBox("Enter number of borrow days:", "Borrow Duration", "7");
+                // ✅ Borrow days
+                string input = Interaction.InputBox(
+                    "Enter number of borrow days:", "Borrow Duration", "7");
+
                 if (!int.TryParse(input, out int borrowDays) || borrowDays <= 0)
                 {
-                    MessageBox.Show("Please enter a valid number of days.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Invalid borrow days.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                //Insert Borrow Records
+                // ✅ Dates
                 DateTime borrowDate = DateTime.Now;
                 DateTime dueDate = borrowDate.AddDays(borrowDays);
 
+                // ✅ Call repository (NO SQL here)
                 foreach (var book in selectedBooks)
                 {
-                    DatabaseHelper.AddBorrowRecord(book.Title, book.ISBN, memberId, borrowDate, dueDate);
-
-                    string query = "UPDATE Books SET copiesavailable = copiesavailable - 1 WHERE isbn = @isbn";
-                    DatabaseHelper.ExecuteNonQuery(query, new { isbn = book.ISBN });
+                    _borrowRepo.AddBorrowRecord(
+                        book.Title,
+                        book.ISBN,
+                        memberId,
+                        borrowDate,
+                        dueDate
+                    );
                 }
 
-                MessageBox.Show($"{selectedBooks.Count} book(s) borrowed successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadBorrowRecords(); // refresh
+                MessageBox.Show("Books borrowed successfully!",
+                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                LoadBorrowRecords();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error while adding record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void btnReturnBook_Click(object sender, EventArgs e)
         {

@@ -1,4 +1,5 @@
 ﻿using LibraryManagement;
+using LibraryManagementSystem.Domain.Repository;
 using Npgsql;
 using System;
 using System.Data;
@@ -9,6 +10,7 @@ namespace LibraryManagementSystem
 {
     public partial class MemberManagementForm : Form
     {
+        private MemberRepository _memberRepo;
         private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
         private string username;
         private Font buttonFont = new Font("Segoe UI", 10, FontStyle.Bold);
@@ -16,6 +18,8 @@ namespace LibraryManagementSystem
         public MemberManagementForm(string username)
         {
             InitializeComponent();
+            DBConnection db = new DBConnection();
+            _memberRepo = new MemberRepository(db);
             this.username = UserSession.Username;
             dgvMembers.CellClick += dgvMembers_CellClick;
         }
@@ -105,7 +109,7 @@ namespace LibraryManagementSystem
                 if (deleteForm.ShowDialog() == DialogResult.OK)
                 {
                     LoadMembers();
-                    ApplyCardStyle(); // 🔄
+                    ApplyCardStyle(); //
                 }
             }
         }
@@ -115,7 +119,7 @@ namespace LibraryManagementSystem
             LoadMembers(txtSearch.Text.Trim());
         }
 
-        // ✅ Style and base setup for DataGridView
+        //Style and base setup for DataGridView
         private void SetupDataGridView()
         {
             dgvMembers.EnableHeadersVisualStyles = false;
@@ -213,7 +217,7 @@ namespace LibraryManagementSystem
 
         private void LoadMembers(string search = "")
         {
-            DataTable dt = DatabaseHelper.GetAllMembers(search);
+            DataTable dt = _memberRepo.GetAllMembers(search);
 
             dgvMembers.Columns.Clear(); 
             dgvMembers.AutoGenerateColumns = false;
@@ -269,56 +273,11 @@ namespace LibraryManagementSystem
                 DefaultCellStyle = { Format = "yyyy-MM-dd", Alignment = DataGridViewContentAlignment.MiddleCenter }
             });
 
-            // ✅ Make sure the style is applied (optional)
             ApplyCardStyle();
-
-            // ✅ Adjust columns layout
-           // dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvMembers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMembers.ColumnHeadersVisible = true;
             dgvMembers.ClearSelection();
         }
-
-
-        //private void AddActionButtons()
-        //{
-        ////    if (dgvMembers.Columns.Contains("Edit")) dgvMembers.Columns.Remove("Edit");
-        ////    if (dgvMembers.Columns.Contains("Delete")) dgvMembers.Columns.Remove("Delete");
-
-        ////    DataGridViewButtonColumn editBtn = new DataGridViewButtonColumn
-        ////    {
-        ////        HeaderText = "Edit",
-        ////        Name = "Edit",
-        ////        Text = "Edit",
-        ////        UseColumnTextForButtonValue = true,
-        ////        FlatStyle = FlatStyle.Flat,
-        ////        Width = 70,
-        ////        DefaultCellStyle = {
-        ////    BackColor = Color.LightSkyBlue,
-        ////    ForeColor = Color.White,
-        ////    Alignment = DataGridViewContentAlignment.MiddleCenter
-        ////}
-        ////    };
-
-        ////    DataGridViewButtonColumn deleteBtn = new DataGridViewButtonColumn
-        ////    {
-        ////        HeaderText = "Delete",
-        ////        Name = "Delete",
-        ////        Text = "Delete",
-        ////        UseColumnTextForButtonValue = true,
-        ////        FlatStyle = FlatStyle.Flat,
-        ////        Width = 70,
-        ////        DefaultCellStyle = {
-        ////    BackColor = Color.LightCoral,
-        ////    ForeColor = Color.White,
-        ////    Alignment = DataGridViewContentAlignment.MiddleCenter
-        ////}
-        ////    };
-
-        ////    dgvMembers.Columns.Add(editBtn);
-        ////    dgvMembers.Columns.Add(deleteBtn);
-        //}
-
 
         private void dgvMembers_CellClick(object sender, DataGridViewCellEventArgs e)
         {
