@@ -31,7 +31,7 @@ namespace LibraryManagement
             if (_memberId > 0)
             {
                 LoadMemberData(_memberId);
-                txtMemberID.ReadOnly = false; // prevent editing ID
+                txtMemberID.ReadOnly = false; 
             }
         }
         private void lblMembershipDate_Click(object sender, EventArgs e)

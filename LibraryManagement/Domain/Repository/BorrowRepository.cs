@@ -29,7 +29,7 @@ namespace LibraryManagementSystem.Domain.Repository
                     SELECT * 
                     FROM borrowreturn
                     ORDER BY 
-                        CASE WHEN status = 'Borrowed' THEN 1 ELSE 2 END,
+                        CASE WHEN status = '0' THEN 1 ELSE 2 END,
                         borrowdate DESC";
 
                 using (var cmd = new NpgsqlCommand(query, conn))
@@ -124,7 +124,7 @@ namespace LibraryManagementSystem.Domain.Repository
                 string updateBorrow = @"
                     UPDATE borrowreturn
                     SET returndate = @returndate,
-                        status = 'Returned'
+                        status = '1'
                     WHERE borrowid = @borrowid";
 
                 using (var cmd = new NpgsqlCommand(updateBorrow, conn))

@@ -46,10 +46,29 @@ namespace LibraryManagement
                 DataTable dt = _borrowRepo.GetBorrowRecords();
                 dataGridView1.DataSource = dt;
 
+                // ✅ Hide actual DB columns (NOT BaseClass)
+                string[] hideColumns =
+{
+    "created_at",
+    "last_modified",
+    "is_deleted",
+    "create_by",
+    "last_modified_by",
+    "image",
+    "id"
+};
+                foreach (var col in hideColumns)
+                {
+                    if (dataGridView1.Columns.Contains(col))
+                        dataGridView1.Columns[col].Visible = false;
+                }
+
+                // ✅ UI Styling
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 dataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 10);
                 dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                dataGridView1.ColumnHeadersDefaultCellStyle.Font =
+                    new Font("Segoe UI", 10, FontStyle.Bold);
                 dataGridView1.RowTemplate.Height = 35;
 
                 CheckLateReturns();
@@ -60,6 +79,7 @@ namespace LibraryManagement
                 MessageBox.Show("Error loading records: " + ex.Message);
             }
         }
+
         private void SetColumnStyles()
         {
             if (dataGridView1.Columns.Count == 0)
@@ -109,7 +129,7 @@ namespace LibraryManagement
 
                 string status = row.Cells["status"].Value.ToString();
 
-                if (!status.Equals("Returned", StringComparison.OrdinalIgnoreCase))
+                if (!status.Equals("1", StringComparison.OrdinalIgnoreCase))
                 {
                     if (DateTime.TryParse(row.Cells["duedate"].Value?.ToString(), out DateTime dueDate))
                     {
@@ -134,7 +154,7 @@ namespace LibraryManagement
         {
             try
             {
-                // ✅ Select Member
+                //Select Member
                 int memberId;
                 using (SelectMemberForm memberForm = new SelectMemberForm())
                 {
@@ -144,7 +164,7 @@ namespace LibraryManagement
                     memberId = int.Parse(memberForm.SelectedMemberId);
                 }
 
-                // ✅ Select Books
+                //Select Books
                 List<(string Title, string ISBN)> selectedBooks = new();
                 using (SelectBooksForm booksForm = new SelectBooksForm())
                 {
@@ -164,7 +184,7 @@ namespace LibraryManagement
                     return;
                 }
 
-                // ✅ Borrow days
+                //Borrow days
                 string input = Interaction.InputBox(
                     "Enter number of borrow days:", "Borrow Duration", "7");
 
@@ -175,11 +195,11 @@ namespace LibraryManagement
                     return;
                 }
 
-                // ✅ Dates
+                // Dates
                 DateTime borrowDate = DateTime.Now;
                 DateTime dueDate = borrowDate.AddDays(borrowDays);
 
-                // ✅ Call repository (NO SQL here)
+                // Call repository (NO SQL here)
                 foreach (var book in selectedBooks)
                 {
                     _borrowRepo.AddBorrowRecord(
@@ -231,7 +251,7 @@ namespace LibraryManagement
                 string isbn = dt.Rows[0]["isbn"].ToString();
                 string status = dt.Rows[0]["status"].ToString();
 
-                if (status == "Returned")
+                if (status == "1")
                 {
                     MessageBox.Show("This book has already been returned.", "Already Returned", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
