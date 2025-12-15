@@ -30,7 +30,6 @@ namespace LibraryManagement
                 return;
             }
 
-
             string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
 
             try
@@ -38,6 +37,8 @@ namespace LibraryManagement
                 using (var conn = new NpgsqlConnection(connString))
                 {
                     conn.Open();
+
+                    // Check if member exists
                     string checkQuery = "SELECT COUNT(*) FROM member WHERE memberid = @member";
                     using (var checkCmd = new NpgsqlCommand(checkQuery, conn))
                     {
@@ -50,20 +51,22 @@ namespace LibraryManagement
                         }
                     }
 
+                    // Confirm delete
                     if (MessageBox.Show("Are you sure you want to delete this member?",
                         "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
                     {
-                        return; // If user clicks No, cancel the delete
+                        return;
                     }
 
-                    // Proceed to delete
-                    string deleteQuery = "DELETE FROM member WHERE memberid = @member";
+                    // Soft delete: update is_deleted column
+                    string deleteQuery = "UPDATE member SET is_deleted = TRUE WHERE memberid = @member";
                     using (var deleteCmd = new NpgsqlCommand(deleteQuery, conn))
                     {
                         deleteCmd.Parameters.AddWithValue("@member", memberID);
                         deleteCmd.ExecuteNonQuery();
                     }
                 }
+
                 MessageBox.Show("Member deleted successfully!");
                 this.DialogResult = DialogResult.OK;
                 this.Close();
@@ -73,6 +76,7 @@ namespace LibraryManagement
                 MessageBox.Show($"Error deleting member: {ex.Message}");
             }
         }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();

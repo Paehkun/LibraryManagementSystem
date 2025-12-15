@@ -7,8 +7,9 @@ namespace LibraryManagementSystem.Domain.Entities
     {
         public enum BorrowStatus
         {
-            Borrowed = 0,
-            Returned = 1
+            Returned = 0,
+            Borrowed = 1
+            
         }
         public string BorrowId { get; set; }
         public string Title { get; set; }           

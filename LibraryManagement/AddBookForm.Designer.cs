@@ -9,7 +9,7 @@ namespace LibraryManagement
         private System.ComponentModel.IContainer components = null;
         private TextBox txtTitle;
         private TextBox txtAuthor;
-        private TextBox txtCategory;
+        private ComboBox cmbCategory;
         private TextBox txtCopies;
         private TextBox txtISBN;
         private TextBox txtPublisher;
@@ -30,7 +30,7 @@ namespace LibraryManagement
         {
             txtTitle = new TextBox();
             txtAuthor = new TextBox();
-            txtCategory = new TextBox();
+            cmbCategory = new ComboBox();
             txtCopies = new TextBox();
             txtISBN = new TextBox();
             txtPublisher = new TextBox();
@@ -69,14 +69,14 @@ namespace LibraryManagement
             txtAuthor.Size = new Size(198, 23);
             txtAuthor.TabIndex = 5;
             // 
-            // txtCategory
+            // cmbCategory
             // 
-            txtCategory.BackColor = Color.White;
-            txtCategory.Location = new Point(125, 100);
-            txtCategory.Name = "txtCategory";
-            txtCategory.PlaceholderText = "Category";
-            txtCategory.Size = new Size(198, 23);
-            txtCategory.TabIndex = 6;
+            cmbCategory.BackColor = Color.White;
+            cmbCategory.Location = new Point(125, 100);
+            cmbCategory.Name = "cmbCategory";
+            cmbCategory.Size = new Size(198, 23);
+            cmbCategory.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbCategory.TabIndex = 6;
             // 
             // txtCopies
             // 
@@ -247,7 +247,7 @@ namespace LibraryManagement
             Controls.Add(lblCopies);
             Controls.Add(txtTitle);
             Controls.Add(txtAuthor);
-            Controls.Add(txtCategory);
+            Controls.Add(cmbCategory);
             Controls.Add(txtCopies);
             Controls.Add(txtISBN);
             Controls.Add(txtPublisher);

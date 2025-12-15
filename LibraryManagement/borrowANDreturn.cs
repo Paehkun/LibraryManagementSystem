@@ -8,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static LibraryManagementSystem.Domain.Entities.BorrowReturn;
 
 namespace LibraryManagement
 {
@@ -127,28 +128,35 @@ namespace LibraryManagement
                 if (row.Cells["status"].Value == null)
                     continue;
 
-                string status = row.Cells["status"].Value.ToString();
+                int status = Convert.ToInt32(row.Cells["status"].Value);
 
-                if (!status.Equals("1", StringComparison.OrdinalIgnoreCase))
+                if (status == (int)BorrowStatus.Borrowed) // Only borrowed books
                 {
                     if (DateTime.TryParse(row.Cells["duedate"].Value?.ToString(), out DateTime dueDate))
                     {
                         if (dueDate < today)
                         {
-                            // 🔴 Overdue book
+                            // 🔴 Overdue borrowed book
                             row.DefaultCellStyle.BackColor = Color.LightCoral;
                             row.DefaultCellStyle.ForeColor = Color.Black;
                         }
                         else
                         {
-                            // 🟠 Within borrow period
+                            // 🟠 Borrowed but not overdue
                             row.DefaultCellStyle.BackColor = Color.DarkSeaGreen;
                             row.DefaultCellStyle.ForeColor = Color.White;
                         }
                     }
                 }
+                else
+                {
+                    // Returned book
+                    row.DefaultCellStyle.BackColor = Color.White;
+                    row.DefaultCellStyle.ForeColor = Color.Black;
+                }
             }
         }
+
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
@@ -259,7 +267,7 @@ namespace LibraryManagement
 
                 DateTime today = DateTime.Now.Date;
                 string updateQuery = @"UPDATE borrowreturn 
-                                       SET returndate = @returndate, status = 'Returned' 
+                                       SET returndate = @returndate, status = 0
                                        WHERE borrowid = @borrowid";
                 DatabaseHelper.ExecuteNonQuery(updateQuery, new { returndate = today, borrowid = borrowId });
 

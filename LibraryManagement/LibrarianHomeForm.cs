@@ -175,19 +175,63 @@ namespace LibraryManagementSystem
 
             dataGridView1.DataSource = loadborrowedbooks;
             // Hide BaseClass 
-            string[] baseFields = { "CreatedAt", "LastModified", "IsDeleted", "CreateBy", "LastModifiedBy", "Image" , "Id"};
+            string[] baseFields = { "CreatedAt", "LastModified", "IsDeleted", "CreateBy", "LastModifiedBy", "Image", "Id", "ISBN", "Memberid", "Phone", "ReturnDate" };
             foreach (var field in baseFields)
             {
                 if (dataGridView1.Columns[field] != null)
                     dataGridView1.Columns[field].Visible = false;
             }
+            var borrowedBooks = _bookRepo.LoadBorrowedBooks();
+            dataGridView1.DataSource = borrowedBooks;
+
+            // Simple styling
+            dataGridView1.EnableHeadersVisualStyles = false;
+            dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
+            dataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+
+            dataGridView1.RowTemplate.Height = 40;
+            dataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+            dataGridView1.DefaultCellStyle.BackColor = Color.White;
+            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.LightBlue;
+
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView1.BackgroundColor = Color.White;
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.ClearSelection();
+
         }
 
         private void LoadLateReturnedBooks()
         {
+            // Load data
             var lateBooks = _bookRepo.LoadLateReturnedBooks();
-
             dataGridView2.DataSource = lateBooks;
+            string[] baseFields = { "CreatedAt", "LastModified", "IsDeleted", "CreateBy", "LastModifiedBy", "Image", "Id", "ISBN", "Memberid", "Phone", "ReturnDate" };
+            foreach (var field in baseFields)
+            {
+                if (dataGridView2.Columns[field] != null)
+                    dataGridView2.Columns[field].Visible = false;
+            }
+
+            // Simple styling
+            dataGridView2.EnableHeadersVisualStyles = false;
+            dataGridView2.ColumnHeadersDefaultCellStyle.BackColor = Color.DarkRed;
+            dataGridView2.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dataGridView2.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+
+            dataGridView2.RowTemplate.Height = 40;
+            dataGridView2.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+            dataGridView2.DefaultCellStyle.BackColor = Color.White;
+            dataGridView2.AlternatingRowsDefaultCellStyle.BackColor = Color.LightPink;
+
+            dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView2.BackgroundColor = Color.White;
+            dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView2.AllowUserToAddRows = false;
+            dataGridView2.ClearSelection();
+
         }
 
         private void LibrarianHomeForm_Load(object sender, EventArgs e)

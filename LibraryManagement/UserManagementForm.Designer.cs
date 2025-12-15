@@ -28,17 +28,17 @@ namespace LibraryManagementSystem
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             rightPanel = new Panel();
+            topPanel = new Panel();
             btnBack = new Button();
-            btnAddMember = new Button();
             btnDeleteMember = new Button();
+            btnAddMember = new Button();
             btnEditMember = new Button();
+            lblTitle = new Label();
             dgvMembers = new DataGridView();
             txtSearch = new TextBox();
-            lblTitle = new Label();
-            topPanel = new Panel();
             rightPanel.SuspendLayout();
-            ((ISupportInitialize)dgvMembers).BeginInit();
             topPanel.SuspendLayout();
+            ((ISupportInitialize)dgvMembers).BeginInit();
             SuspendLayout();
             // 
             // rightPanel
@@ -52,6 +52,21 @@ namespace LibraryManagementSystem
             rightPanel.Name = "rightPanel";
             rightPanel.Size = new Size(1900, 1100);
             rightPanel.TabIndex = 0;
+            // 
+            // topPanel
+            // 
+            topPanel.BackColor = Color.RoyalBlue;
+            topPanel.Controls.Add(btnBack);
+            topPanel.Controls.Add(btnDeleteMember);
+            topPanel.Controls.Add(btnAddMember);
+            topPanel.Controls.Add(btnEditMember);
+            topPanel.Controls.Add(lblTitle);
+            topPanel.Dock = DockStyle.Top;
+            topPanel.Location = new Point(0, 0);
+            topPanel.Name = "topPanel";
+            topPanel.Padding = new Padding(20, 10, 20, 10);
+            topPanel.Size = new Size(1900, 60);
+            topPanel.TabIndex = 8;
             // 
             // btnBack
             // 
@@ -69,22 +84,6 @@ namespace LibraryManagementSystem
             btnBack.UseVisualStyleBackColor = false;
             btnBack.Click += btnBack_Click_1;
             // 
-            // btnAddMember
-            // 
-            btnAddMember.BackColor = Color.White;
-            btnAddMember.FlatAppearance.BorderSize = 0;
-            btnAddMember.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
-            btnAddMember.FlatStyle = FlatStyle.System;
-            btnAddMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnAddMember.ForeColor = Color.Black;
-            btnAddMember.Location = new Point(355, 12);
-            btnAddMember.Name = "btnAddMember";
-            btnAddMember.Size = new Size(143, 40);
-            btnAddMember.TabIndex = 6;
-            btnAddMember.Text = "➕ Add User";
-            btnAddMember.UseVisualStyleBackColor = false;
-            btnAddMember.Click += btnAddMember_Click_1;
-            // 
             // btnDeleteMember
             // 
             btnDeleteMember.BackColor = Color.White;
@@ -101,6 +100,22 @@ namespace LibraryManagementSystem
             btnDeleteMember.UseVisualStyleBackColor = false;
             btnDeleteMember.Click += btnDeleteMember_Click_1;
             // 
+            // btnAddMember
+            // 
+            btnAddMember.BackColor = Color.White;
+            btnAddMember.FlatAppearance.BorderSize = 0;
+            btnAddMember.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+            btnAddMember.FlatStyle = FlatStyle.System;
+            btnAddMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnAddMember.ForeColor = Color.Black;
+            btnAddMember.Location = new Point(355, 12);
+            btnAddMember.Name = "btnAddMember";
+            btnAddMember.Size = new Size(143, 40);
+            btnAddMember.TabIndex = 6;
+            btnAddMember.Text = "➕ Add User";
+            btnAddMember.UseVisualStyleBackColor = false;
+            btnAddMember.Click += btnAddMember_Click_1;
+            // 
             // btnEditMember
             // 
             btnEditMember.BackColor = Color.White;
@@ -116,6 +131,17 @@ namespace LibraryManagementSystem
             btnEditMember.Text = "✏️ Edit User";
             btnEditMember.UseVisualStyleBackColor = false;
             btnEditMember.Click += btnEditMember_Click_1;
+            // 
+            // lblTitle
+            // 
+            lblTitle.AutoSize = true;
+            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            lblTitle.ForeColor = Color.White;
+            lblTitle.Location = new Point(146, 15);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(152, 32);
+            lblTitle.TabIndex = 2;
+            lblTitle.Text = "👤 User List";
             // 
             // dgvMembers
             // 
@@ -143,7 +169,7 @@ namespace LibraryManagementSystem
             dgvMembers.DefaultCellStyle = dataGridViewCellStyle2;
             dgvMembers.EnableHeadersVisualStyles = false;
             dgvMembers.GridColor = Color.FromArgb(240, 240, 240);
-            dgvMembers.Location = new Point(160, 140);
+            dgvMembers.Location = new Point(345, 138);
             dgvMembers.Name = "dgvMembers";
             dgvMembers.ReadOnly = true;
             dgvMembers.RowTemplate.Height = 45;
@@ -155,38 +181,12 @@ namespace LibraryManagementSystem
             // txtSearch
             // 
             txtSearch.Font = new Font("Segoe UI", 10F);
-            txtSearch.Location = new Point(160, 97);
+            txtSearch.Location = new Point(345, 95);
             txtSearch.Name = "txtSearch";
             txtSearch.PlaceholderText = "Search User 🔍";
             txtSearch.Size = new Size(300, 25);
             txtSearch.TabIndex = 1;
             txtSearch.TextChanged += txtSearch_TextChanged;
-            // 
-            // lblTitle
-            // 
-            lblTitle.AutoSize = true;
-            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            lblTitle.ForeColor = Color.White;
-            lblTitle.Location = new Point(146, 15);
-            lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(152, 32);
-            lblTitle.TabIndex = 2;
-            lblTitle.Text = "👤 User List";
-            // 
-            // topPanel
-            // 
-            topPanel.BackColor = Color.RoyalBlue;
-            topPanel.Controls.Add(btnBack);
-            topPanel.Controls.Add(btnDeleteMember);
-            topPanel.Controls.Add(btnAddMember);
-            topPanel.Controls.Add(btnEditMember);
-            topPanel.Controls.Add(lblTitle);
-            topPanel.Dock = DockStyle.Top;
-            topPanel.Location = new Point(0, 0);
-            topPanel.Name = "topPanel";
-            topPanel.Padding = new Padding(20, 10, 20, 10);
-            topPanel.Size = new Size(1900, 60);
-            topPanel.TabIndex = 8;
             // 
             // UserManagementForm
             // 
@@ -201,9 +201,9 @@ namespace LibraryManagementSystem
             Load += UserManagementForm_Load;
             rightPanel.ResumeLayout(false);
             rightPanel.PerformLayout();
-            ((ISupportInitialize)dgvMembers).EndInit();
             topPanel.ResumeLayout(false);
             topPanel.PerformLayout();
+            ((ISupportInitialize)dgvMembers).EndInit();
             ResumeLayout(false);
         }
         private Button btnAddMember;

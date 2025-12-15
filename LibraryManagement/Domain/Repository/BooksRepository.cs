@@ -85,7 +85,7 @@ namespace LibraryManagementSystem.Domain.Repository
             using (var conn = _db.GetConnection())
             {
                 conn.Open();
-                string query = "SELECT id, title, author, isbn, category, publisher, year, copiesavailable, shelflocation FROM books WHERE isbn = @isbn";
+                string query = "SELECT id, title, author, isbn, category, publisher, year, copiesavailable, shelflocation FROM books WHERE isbn = @isbn ANS is_deleted = FALSE";
 
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {

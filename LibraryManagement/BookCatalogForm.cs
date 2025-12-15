@@ -59,12 +59,13 @@ namespace LibraryManagementSystem
                 using (var conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    using (var cmd = new NpgsqlCommand("SELECT DISTINCT category FROM books ORDER BY category ASC", conn))
+                    using (var cmd = new NpgsqlCommand(
+                        "SELECT category FROM categories ORDER BY id ASC", conn))
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            string cat = reader["category"].ToString();
+                            string cat = reader.GetString(0);
                             if (!string.IsNullOrWhiteSpace(cat))
                                 categories.Add(cat);
                         }
@@ -397,6 +398,8 @@ namespace LibraryManagementSystem
                     SELECT id, image, title, author, isbn, category
                     FROM books
                     WHERE 
+                        is_deleted = FALSE
+                        AND
                         (@search = '' 
                         OR title ILIKE @pattern 
                         OR author ILIKE @pattern 

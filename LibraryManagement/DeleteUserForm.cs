@@ -30,7 +30,6 @@ namespace LibraryManagement
                 return;
             }
 
-
             string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
 
             try
@@ -38,32 +37,36 @@ namespace LibraryManagement
                 using (var conn = new NpgsqlConnection(connString))
                 {
                     conn.Open();
-                    string checkQuery = "SELECT COUNT(*) FROM users WHERE id = @id";
+
+                    // Check if user exists
+                    string checkQuery = "SELECT COUNT(*) FROM users WHERE id = @id AND is_deleted = FALSE";
                     using (var checkCmd = new NpgsqlCommand(checkQuery, conn))
                     {
                         checkCmd.Parameters.AddWithValue("@id", ID);
                         int count = Convert.ToInt32(checkCmd.ExecuteScalar());
                         if (count == 0)
                         {
-                            MessageBox.Show("User with this ID does not exist.");
+                            MessageBox.Show("User with this ID does not exist or is already deleted.");
                             return;
                         }
                     }
 
+                    // Confirm deletion
                     if (MessageBox.Show("Are you sure you want to delete this user?",
                         "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
                     {
-                        return; // If user clicks No, cancel the delete
+                        return;
                     }
 
-                    // Proceed to delete
-                    string deleteQuery = "DELETE FROM users WHERE id = @id";
-                    using (var deleteCmd = new NpgsqlCommand(deleteQuery, conn))
+                    // Mark user as deleted
+                    string updateQuery = "UPDATE users SET is_deleted = TRUE WHERE id = @id";
+                    using (var updateCmd = new NpgsqlCommand(updateQuery, conn))
                     {
-                        deleteCmd.Parameters.AddWithValue("@id", ID);
-                        deleteCmd.ExecuteNonQuery();
+                        updateCmd.Parameters.AddWithValue("@id", ID);
+                        updateCmd.ExecuteNonQuery();
                     }
                 }
+
                 MessageBox.Show("User deleted successfully!");
                 this.DialogResult = DialogResult.OK;
                 this.Close();
@@ -73,6 +76,7 @@ namespace LibraryManagement
                 MessageBox.Show($"Error deleting user: {ex.Message}");
             }
         }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();

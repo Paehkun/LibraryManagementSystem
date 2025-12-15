@@ -8,7 +8,7 @@
         private TextBox txtTitle;
         private TextBox txtAuthor;
         private TextBox txtISBN;
-        private TextBox txtCategory;
+        private ComboBox cmbCategory;
         private TextBox txtPublisher;
         private TextBox txtYear;
         private TextBox txtCopies;
@@ -40,7 +40,7 @@
             txtTitle = new TextBox();
             txtAuthor = new TextBox();
             txtISBN = new TextBox();
-            txtCategory = new TextBox();
+            cmbCategory = new ComboBox();
             txtPublisher = new TextBox();
             txtYear = new TextBox();
             txtCopies = new TextBox();
@@ -97,12 +97,11 @@
             // 
             // txtCategory
             // 
-            txtCategory.BackColor = Color.White;
-            txtCategory.Location = new Point(120, 160);
-            txtCategory.Name = "txtCategory";
-            txtCategory.PlaceholderText = "Category";
-            txtCategory.Size = new Size(168, 23);
-            txtCategory.TabIndex = 4;
+            cmbCategory.BackColor = Color.White;
+            cmbCategory.Location = new Point(120, 160);
+            cmbCategory.Name = "cmbCategory";
+            cmbCategory.Size = new Size(168, 23);
+            cmbCategory.TabIndex = 4;
             // 
             // txtPublisher
             // 
@@ -262,7 +261,7 @@
             Controls.Add(txtTitle);
             Controls.Add(txtAuthor);
             Controls.Add(txtISBN);
-            Controls.Add(txtCategory);
+            Controls.Add(cmbCategory);
             Controls.Add(txtPublisher);
             Controls.Add(txtYear);
             Controls.Add(txtCopies);

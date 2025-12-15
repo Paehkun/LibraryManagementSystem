@@ -68,7 +68,10 @@ namespace LibraryManagementSystem.Domain.Repository
                 string query = @"
                     SELECT memberid, name, email, phone, address, membershipdate
                     FROM member
-                    WHERE (@search = '' 
+                    WHERE 
+                        is_deleted = 'FALSE'
+                        AND
+                        (@search = '' 
                         OR CAST(memberid AS TEXT) ILIKE @pattern
                         OR name ILIKE @pattern 
                         OR email ILIKE @pattern 

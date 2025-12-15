@@ -35,7 +35,7 @@ namespace LibraryManagementSystem
             using (var conn = GetConnection())
             {
                 conn.Open();
-                string query = "SELECT id, title, isbn, category, copiesavailable FROM books ORDER BY id ASC";
+                string query = "SELECT id, title, isbn, category, copiesavailable FROM books WHERE is_deleted = FALSE ORDER BY id ASC";
                 using (var cmd = new NpgsqlCommand(query, conn))
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -89,17 +89,22 @@ namespace LibraryManagementSystem
                 string query = @"
             SELECT memberid, name, email, phone
             FROM member
-            WHERE (@search = '' 
+            WHERE is_deleted = FALSE
+            AND (
+                @search = '' 
                 OR CAST(memberid AS TEXT) ILIKE @pattern
-                OR name ILIKE @pattern 
-                OR email ILIKE @pattern 
-                OR phone ILIKE @pattern) 
+                OR name ILIKE @pattern
+                OR email ILIKE @pattern
+                OR phone ILIKE @pattern
+            )
             ORDER BY memberid ASC";
 
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@search", search);
-                    cmd.Parameters.AddWithValue("@pattern", "%" + search + "%");
+                    // ✅ Ensure search is not null and trimmed
+                    string trimmedSearch = search?.Trim() ?? "";
+                    cmd.Parameters.AddWithValue("@search", trimmedSearch);
+                    cmd.Parameters.AddWithValue("@pattern", "%" + trimmedSearch + "%");
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -110,6 +115,7 @@ namespace LibraryManagementSystem
 
             return dt;
         }
+
 
         public static DataTable GetAllUsers(string search = "")
         {
@@ -120,16 +126,17 @@ namespace LibraryManagementSystem
                 conn.Open();
 
                 string query = @"
-            SELECT id, name, role, username, password, email, phone
-            FROM users
-            WHERE (@search = '' 
-                OR CAST(id AS TEXT) ILIKE @pattern
-                OR name ILIKE @pattern 
-                OR username ILIKE @pattern 
-                OR password ILIKE @pattern
-                OR email ILIKE @pattern
-                OR CAST(phone AS TEXT) ILIKE @pattern) 
-            ORDER BY id ASC";
+    SELECT id, name, role, username, password, email, phone
+    FROM users
+    WHERE is_deleted = FALSE
+      AND (@search = '' 
+        OR CAST(id AS TEXT) ILIKE @pattern
+        OR name ILIKE @pattern 
+        OR username ILIKE @pattern 
+        OR password ILIKE @pattern
+        OR email ILIKE @pattern
+        OR CAST(phone AS TEXT) ILIKE @pattern)
+    ORDER BY id ASC";
 
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
@@ -145,6 +152,7 @@ namespace LibraryManagementSystem
 
             return dt;
         }
+
 
 
         public static void DeleteMember(int memberId)

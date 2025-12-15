@@ -19,6 +19,7 @@ namespace LibraryManagement
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+
             if (!ValidateInputs())
             {
                 MessageBox.Show("Please fill in all fields correctly.");
@@ -30,7 +31,7 @@ namespace LibraryManagement
                 Title = txtTitle.Text.Trim(),
                 Author = txtAuthor.Text.Trim(),
                 ISBN = txtISBN.Text.Trim(),
-                Category = txtCategory.Text.Trim(),
+                Category = cmbCategory.SelectedItem.ToString(),
                 Publisher = txtPublisher.Text.Trim(),
                 Year = int.Parse(txtYear.Text),
                 CopiesAvailable = int.Parse(txtCopies.Text),
@@ -58,7 +59,7 @@ namespace LibraryManagement
                 !string.IsNullOrWhiteSpace(txtTitle.Text) &&
                 !string.IsNullOrWhiteSpace(txtAuthor.Text) &&
                 !string.IsNullOrWhiteSpace(txtISBN.Text) &&
-                !string.IsNullOrWhiteSpace(txtCategory.Text) &&
+                cmbCategory.SelectedIndex > 0 &&
                 !string.IsNullOrWhiteSpace(txtPublisher.Text) &&
                 !string.IsNullOrWhiteSpace(txtShelfLocation.Text) &&
                 !string.IsNullOrWhiteSpace(txtImg.Text) &&
@@ -74,6 +75,24 @@ namespace LibraryManagement
 
         private void AddBookForm_Load(object sender, EventArgs e)
         {
+            cmbCategory.Items.Clear();
+
+            cmbCategory.Items.Add("Select Category"); 
+            cmbCategory.Items.Add("Adventure");
+            cmbCategory.Items.Add("Classic");
+            cmbCategory.Items.Add("Dystopian");
+            cmbCategory.Items.Add("Fantasy");
+            cmbCategory.Items.Add("Fiction");
+            cmbCategory.Items.Add("Horror");
+            cmbCategory.Items.Add("Historical");
+            cmbCategory.Items.Add("Mystery");
+            cmbCategory.Items.Add("Poetry");
+            cmbCategory.Items.Add("Psychological");
+            cmbCategory.Items.Add("Romance");
+            cmbCategory.Items.Add("Science Fiction");
+            cmbCategory.Items.Add("Thriller");
+
+            cmbCategory.SelectedIndex = 0;
 
         }
 

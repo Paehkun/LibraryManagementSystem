@@ -24,11 +24,13 @@ namespace LibraryManagementSystem
 
         private void EditBookForm_Load(object sender, EventArgs e)
         {
+            LoadCategories();
             if (_id > 0)
             {
                 LoadBooks(_id);
                 txtBookId.ReadOnly = false; // prevent editing ID
             }
+            
         }
         private void LoadBooks(int id)
         {
@@ -41,7 +43,10 @@ namespace LibraryManagementSystem
                     txtTitle.Text = book.Title;
                     txtAuthor.Text = book.Author;
                     txtISBN.Text = book.ISBN;
-                    txtCategory.Text = book.Category;
+                    if (!string.IsNullOrEmpty(book.Category) && cmbCategory.Items.Contains(book.Category))
+                        cmbCategory.SelectedItem = book.Category;
+                    else
+                        cmbCategory.SelectedIndex = 0;
                     txtPublisher.Text = book.Publisher;
                     txtYear.Text = book.Year.ToString();
                     txtCopies.Text = book.CopiesAvailable.ToString();
@@ -57,6 +62,29 @@ namespace LibraryManagementSystem
                 MessageBox.Show($"Error loading book: {ex.Message}");
             }
         }
+
+        private void LoadCategories()
+        {
+            cmbCategory.Items.Clear();
+
+            using (var conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                string query = "SELECT category FROM categories ORDER BY id ASC";
+                using (var cmd = new NpgsqlCommand(query, conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        cmbCategory.Items.Add(reader.GetString(0));
+                    }
+                }
+            }
+
+            cmbCategory.Items.Insert(0, "Select Category"); // optional default
+            cmbCategory.SelectedIndex = 0; // show default prompt
+        }
+
 
 
         private void btnLoad_Click(object sender, EventArgs e)
@@ -77,7 +105,7 @@ namespace LibraryManagementSystem
                 string.IsNullOrWhiteSpace(txtTitle.Text) ||
                 string.IsNullOrWhiteSpace(txtAuthor.Text) ||
                 string.IsNullOrWhiteSpace(txtISBN.Text) ||
-                string.IsNullOrWhiteSpace(txtCategory.Text) ||
+                cmbCategory.SelectedIndex == 0 ||
                 string.IsNullOrWhiteSpace(txtPublisher.Text) ||
                 !int.TryParse(txtYear.Text.Trim(), out int year) ||
                 !int.TryParse(txtCopies.Text.Trim(), out int copies) ||
@@ -93,7 +121,7 @@ namespace LibraryManagementSystem
                 Title = txtTitle.Text.Trim(),
                 Author = txtAuthor.Text.Trim(),
                 ISBN = txtISBN.Text.Trim(),
-                Category = txtCategory.Text.Trim(),
+                Category = cmbCategory.SelectedItem.ToString(),
                 Publisher = txtPublisher.Text.Trim(),
                 Year = year,
                 CopiesAvailable = copies,
