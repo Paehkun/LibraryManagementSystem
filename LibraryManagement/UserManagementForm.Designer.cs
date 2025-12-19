@@ -8,208 +8,201 @@ namespace LibraryManagementSystem
     partial class UserManagementForm
     {
         private System.ComponentModel.IContainer components = null;
-        private Panel rightPanel;
-        private Label lblTitle;
-        private DataGridView dgvMembers;
-        private FlowLayoutPanel flowMembers;
-        private TextBox txtSearch;
+        private System.Windows.Forms.Panel topPanel;
+        private System.Windows.Forms.Panel mainPanel;
+        private System.Windows.Forms.Button btnBack;
+        private System.Windows.Forms.Button btnAddUser;
+        private System.Windows.Forms.Button btnEditUser;
+        private System.Windows.Forms.Button btnDeleteUser;
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.DataGridView dgvUsers;
 
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing && (components != null))
-        //    {
-        //        components.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            rightPanel = new Panel();
-            topPanel = new Panel();
-            btnBack = new Button();
-            btnDeleteMember = new Button();
-            btnAddMember = new Button();
-            btnEditMember = new Button();
-            lblTitle = new Label();
-            dgvMembers = new DataGridView();
-            txtSearch = new TextBox();
-            rightPanel.SuspendLayout();
+            topPanel = new System.Windows.Forms.Panel();
+            mainPanel = new System.Windows.Forms.Panel();
+            btnBack = new System.Windows.Forms.Button();
+            lblTitle = new System.Windows.Forms.Label();
+            btnAddUser = new System.Windows.Forms.Button();
+            btnEditUser = new System.Windows.Forms.Button();
+            btnDeleteUser = new System.Windows.Forms.Button();
+            txtSearch = new System.Windows.Forms.TextBox();
+            dgvUsers = new System.Windows.Forms.DataGridView();
+
             topPanel.SuspendLayout();
-            ((ISupportInitialize)dgvMembers).BeginInit();
+            mainPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvUsers).BeginInit();
             SuspendLayout();
-            // 
-            // rightPanel
-            // 
-            rightPanel.BackColor = Color.FromArgb(245, 247, 250);
-            rightPanel.Controls.Add(topPanel);
-            rightPanel.Controls.Add(dgvMembers);
-            rightPanel.Controls.Add(txtSearch);
-            rightPanel.Dock = DockStyle.Fill;
-            rightPanel.Location = new Point(0, 0);
-            rightPanel.Name = "rightPanel";
-            rightPanel.Size = new Size(1900, 1100);
-            rightPanel.TabIndex = 0;
+
             // 
             // topPanel
             // 
-            topPanel.BackColor = Color.RoyalBlue;
+            topPanel.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
             topPanel.Controls.Add(btnBack);
-            topPanel.Controls.Add(btnDeleteMember);
-            topPanel.Controls.Add(btnAddMember);
-            topPanel.Controls.Add(btnEditMember);
             topPanel.Controls.Add(lblTitle);
-            topPanel.Dock = DockStyle.Top;
-            topPanel.Location = new Point(0, 0);
+            topPanel.Controls.Add(btnAddUser);
+            topPanel.Controls.Add(btnEditUser);
+            topPanel.Controls.Add(btnDeleteUser);
+            topPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            topPanel.Location = new System.Drawing.Point(0, 0);
             topPanel.Name = "topPanel";
-            topPanel.Padding = new Padding(20, 10, 20, 10);
-            topPanel.Size = new Size(1900, 60);
-            topPanel.TabIndex = 8;
+            topPanel.Size = new System.Drawing.Size(1920, 70);
+            topPanel.TabIndex = 0;
+
             // 
             // btnBack
             // 
-            btnBack.BackColor = Color.RoyalBlue;
+            btnBack.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
             btnBack.FlatAppearance.BorderSize = 0;
-            btnBack.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
-            btnBack.FlatStyle = FlatStyle.Flat;
-            btnBack.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(3, 4);
+            btnBack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(52, 152, 219);
+            btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnBack.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            btnBack.ForeColor = System.Drawing.Color.White;
+            btnBack.Location = new System.Drawing.Point(20, 15);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(82, 43);
-            btnBack.TabIndex = 7;
+            btnBack.Size = new System.Drawing.Size(100, 40);
+            btnBack.TabIndex = 0;
             btnBack.Text = "⬅️ Back";
             btnBack.UseVisualStyleBackColor = false;
-            btnBack.Click += btnBack_Click_1;
-            // 
-            // btnDeleteMember
-            // 
-            btnDeleteMember.BackColor = Color.White;
-            btnDeleteMember.FlatAppearance.BorderSize = 0;
-            btnDeleteMember.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
-            btnDeleteMember.FlatStyle = FlatStyle.System;
-            btnDeleteMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnDeleteMember.ForeColor = Color.Black;
-            btnDeleteMember.Location = new Point(706, 12);
-            btnDeleteMember.Name = "btnDeleteMember";
-            btnDeleteMember.Size = new Size(143, 40);
-            btnDeleteMember.TabIndex = 4;
-            btnDeleteMember.Text = "🗑️ Delete User";
-            btnDeleteMember.UseVisualStyleBackColor = false;
-            btnDeleteMember.Click += btnDeleteMember_Click_1;
-            // 
-            // btnAddMember
-            // 
-            btnAddMember.BackColor = Color.White;
-            btnAddMember.FlatAppearance.BorderSize = 0;
-            btnAddMember.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
-            btnAddMember.FlatStyle = FlatStyle.System;
-            btnAddMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnAddMember.ForeColor = Color.Black;
-            btnAddMember.Location = new Point(355, 12);
-            btnAddMember.Name = "btnAddMember";
-            btnAddMember.Size = new Size(143, 40);
-            btnAddMember.TabIndex = 6;
-            btnAddMember.Text = "➕ Add User";
-            btnAddMember.UseVisualStyleBackColor = false;
-            btnAddMember.Click += btnAddMember_Click_1;
-            // 
-            // btnEditMember
-            // 
-            btnEditMember.BackColor = Color.White;
-            btnEditMember.FlatAppearance.BorderSize = 0;
-            btnEditMember.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
-            btnEditMember.FlatStyle = FlatStyle.System;
-            btnEditMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnEditMember.ForeColor = Color.Black;
-            btnEditMember.Location = new Point(533, 12);
-            btnEditMember.Name = "btnEditMember";
-            btnEditMember.Size = new Size(143, 40);
-            btnEditMember.TabIndex = 5;
-            btnEditMember.Text = "✏️ Edit User";
-            btnEditMember.UseVisualStyleBackColor = false;
-            btnEditMember.Click += btnEditMember_Click_1;
+            btnBack.Cursor = System.Windows.Forms.Cursors.Hand;
+            btnBack.Click += btnBack_Click;
+
             // 
             // lblTitle
             // 
-            lblTitle.AutoSize = true;
-            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            lblTitle.ForeColor = Color.White;
-            lblTitle.Location = new Point(146, 15);
+            lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
+            lblTitle.ForeColor = System.Drawing.Color.White;
+            lblTitle.Location = new System.Drawing.Point(140, 15);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(152, 32);
-            lblTitle.TabIndex = 2;
-            lblTitle.Text = "👤 User List";
+            lblTitle.Size = new System.Drawing.Size(300, 40);
+            lblTitle.TabIndex = 1;
+            lblTitle.Text = "👤 User Management";
+            lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+
             // 
-            // dgvMembers
+            // btnAddUser
             // 
-            dgvMembers.AllowUserToAddRows = false;
-            dgvMembers.AllowUserToDeleteRows = false;
-            dgvMembers.BackgroundColor = Color.White;
-            dgvMembers.BorderStyle = BorderStyle.None;
-            dgvMembers.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = Color.WhiteSmoke;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = Color.Black;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvMembers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.White;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.Padding = new Padding(10, 8, 10, 8);
-            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(225, 235, 255);
-            dataGridViewCellStyle2.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dgvMembers.DefaultCellStyle = dataGridViewCellStyle2;
-            dgvMembers.EnableHeadersVisualStyles = false;
-            dgvMembers.GridColor = Color.FromArgb(240, 240, 240);
-            dgvMembers.Location = new Point(345, 138);
-            dgvMembers.Name = "dgvMembers";
-            dgvMembers.ReadOnly = true;
-            dgvMembers.RowTemplate.Height = 45;
-            dgvMembers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMembers.Size = new Size(1222, 950);
-            dgvMembers.TabIndex = 0;
-            dgvMembers.CellClick += dgvMembers_CellClick;
+            btnAddUser.BackColor = System.Drawing.Color.FromArgb(46, 204, 113);
+            btnAddUser.FlatAppearance.BorderSize = 0;
+            btnAddUser.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(39, 174, 96);
+            btnAddUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnAddUser.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            btnAddUser.ForeColor = System.Drawing.Color.White;
+            btnAddUser.Location = new System.Drawing.Point(1450, 15);
+            btnAddUser.Name = "btnAddUser";
+            btnAddUser.Size = new System.Drawing.Size(140, 40);
+            btnAddUser.TabIndex = 2;
+            btnAddUser.Text = "➕ Add User";
+            btnAddUser.UseVisualStyleBackColor = false;
+            btnAddUser.Cursor = System.Windows.Forms.Cursors.Hand;
+            btnAddUser.Click += btnAddUser_Click;
+
+            // 
+            // btnEditUser
+            // 
+            btnEditUser.BackColor = System.Drawing.Color.FromArgb(241, 196, 15);
+            btnEditUser.FlatAppearance.BorderSize = 0;
+            btnEditUser.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(243, 156, 18);
+            btnEditUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnEditUser.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            btnEditUser.ForeColor = System.Drawing.Color.White;
+            btnEditUser.Location = new System.Drawing.Point(1610, 15);
+            btnEditUser.Name = "btnEditUser";
+            btnEditUser.Size = new System.Drawing.Size(140, 40);
+            btnEditUser.TabIndex = 3;
+            btnEditUser.Text = "✏️ Edit User";
+            btnEditUser.UseVisualStyleBackColor = false;
+            btnEditUser.Cursor = System.Windows.Forms.Cursors.Hand;
+            btnEditUser.Click += btnEditUser_Click;
+
+            // 
+            // btnDeleteUser
+            // 
+            btnDeleteUser.BackColor = System.Drawing.Color.FromArgb(231, 76, 60);
+            btnDeleteUser.FlatAppearance.BorderSize = 0;
+            btnDeleteUser.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(192, 57, 43);
+            btnDeleteUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnDeleteUser.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            btnDeleteUser.ForeColor = System.Drawing.Color.White;
+            btnDeleteUser.Location = new System.Drawing.Point(1770, 15);
+            btnDeleteUser.Name = "btnDeleteUser";
+            btnDeleteUser.Size = new System.Drawing.Size(140, 40);
+            btnDeleteUser.TabIndex = 4;
+            btnDeleteUser.Text = "🗑️ Delete User";
+            btnDeleteUser.UseVisualStyleBackColor = false;
+            btnDeleteUser.Cursor = System.Windows.Forms.Cursors.Hand;
+            btnDeleteUser.Click += btnDeleteUser_Click;
+
+            // 
+            // mainPanel
+            // 
+            mainPanel.BackColor = System.Drawing.Color.FromArgb(236, 240, 241);
+            mainPanel.Controls.Add(txtSearch);
+            mainPanel.Controls.Add(dgvUsers);
+            mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            mainPanel.Location = new System.Drawing.Point(0, 70);
+            mainPanel.Name = "mainPanel";
+            mainPanel.Size = new System.Drawing.Size(1920, 1010);
+            mainPanel.TabIndex = 1;
+
             // 
             // txtSearch
             // 
-            txtSearch.Font = new Font("Segoe UI", 10F);
-            txtSearch.Location = new Point(345, 95);
+            txtSearch.BackColor = System.Drawing.Color.White;
+            txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            txtSearch.Font = new System.Drawing.Font("Segoe UI", 12F);
+            txtSearch.ForeColor = System.Drawing.Color.FromArgb(52, 73, 94);
+            txtSearch.Location = new System.Drawing.Point(710, 40);
             txtSearch.Name = "txtSearch";
-            txtSearch.PlaceholderText = "Search User 🔍";
-            txtSearch.Size = new Size(300, 25);
-            txtSearch.TabIndex = 1;
+            txtSearch.PlaceholderText = "🔍 Search by Name, Username, or Email...";
+            txtSearch.Size = new System.Drawing.Size(500, 29);
+            txtSearch.TabIndex = 0;
             txtSearch.TextChanged += txtSearch_TextChanged;
+
+            // 
+            // dgvUsers
+            // 
+            dgvUsers.AllowUserToAddRows = false;
+            dgvUsers.AllowUserToDeleteRows = false;
+            dgvUsers.BackgroundColor = System.Drawing.Color.White;
+            dgvUsers.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dgvUsers.Location = new System.Drawing.Point(250, 100);
+            dgvUsers.Name = "dgvUsers";
+            dgvUsers.ReadOnly = true;
+            dgvUsers.RowHeadersVisible = false;
+            dgvUsers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            dgvUsers.Size = new System.Drawing.Size(1420, 860);
+            dgvUsers.TabIndex = 1;
+
             // 
             // UserManagementForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1900, 1100);
-            Controls.Add(rightPanel);
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(1920, 1080);
+            Controls.Add(mainPanel);
+            Controls.Add(topPanel);
             Name = "UserManagementForm";
-            StartPosition = FormStartPosition.CenterScreen;
-            Text = "Library Management - User Management";
-            WindowState = FormWindowState.Maximized;
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            Text = "👤 User Management - Library System";
+            WindowState = System.Windows.Forms.FormWindowState.Maximized;
             Load += UserManagementForm_Load;
-            rightPanel.ResumeLayout(false);
-            rightPanel.PerformLayout();
+
             topPanel.ResumeLayout(false);
-            topPanel.PerformLayout();
-            ((ISupportInitialize)dgvMembers).EndInit();
+            mainPanel.ResumeLayout(false);
+            mainPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvUsers).EndInit();
             ResumeLayout(false);
         }
-        private Button btnAddMember;
-        private Button btnDeleteMember;
-        private Button btnEditMember;
-        private Button btnBack;
-        private Panel topPanel;
     }
 }

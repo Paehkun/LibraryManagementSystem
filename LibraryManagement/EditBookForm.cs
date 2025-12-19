@@ -1,5 +1,6 @@
 ﻿using LibraryManagement.Domain.Model;
 using LibraryManagementSystem.Domain.Repository;
+using LibraryManagement.Domain.Validation;
 using Npgsql;
 using System;
 using System.Windows.Forms;
@@ -19,8 +20,6 @@ namespace LibraryManagementSystem
             _bookRepo = new BookRepository(db);
 
         }
-
-       // private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
 
         private void EditBookForm_Load(object sender, EventArgs e)
         {
@@ -101,17 +100,9 @@ namespace LibraryManagementSystem
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(txtBookId.Text.Trim(), out int bookId) ||
-                string.IsNullOrWhiteSpace(txtTitle.Text) ||
-                string.IsNullOrWhiteSpace(txtAuthor.Text) ||
-                string.IsNullOrWhiteSpace(txtISBN.Text) ||
-                cmbCategory.SelectedIndex == 0 ||
-                string.IsNullOrWhiteSpace(txtPublisher.Text) ||
-                !int.TryParse(txtYear.Text.Trim(), out int year) ||
-                !int.TryParse(txtCopies.Text.Trim(), out int copies) ||
-                string.IsNullOrWhiteSpace(txtShelfLocation.Text))
+            if (!int.TryParse(txtBookId.Text.Trim(), out int bookId))
             {
-                MessageBox.Show("Please fill in all fields correctly.");
+                MessageBox.Show("Please enter a valid Book ID.");
                 return;
             }
 
@@ -123,14 +114,16 @@ namespace LibraryManagementSystem
                 ISBN = txtISBN.Text.Trim(),
                 Category = cmbCategory.SelectedItem.ToString(),
                 Publisher = txtPublisher.Text.Trim(),
-                Year = year,
-                CopiesAvailable = copies,
+                Year = int.TryParse(txtYear.Text.Trim(), out int y) ? y : 0,
+                CopiesAvailable = int.TryParse(txtCopies.Text.Trim(), out int c) ? c : -1,
                 ShelfLocation = txtShelfLocation.Text.Trim(),
-                Image = "" // Or read from a textbox if you have it
+                Image = "" 
             };
 
             try
             {
+                Validator.ValidateBook(book);
+
                 _bookRepo.UpdateBook(book);
                 MessageBox.Show("Book updated successfully!");
                 this.DialogResult = DialogResult.OK;
@@ -138,7 +131,7 @@ namespace LibraryManagementSystem
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error updating book: {ex.Message}");
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

@@ -231,57 +231,46 @@ namespace LibraryManagement
             }
         }
 
-
         private void btnReturnBook_Click(object sender, EventArgs e)
         {
             try
             {
-                string input = Interaction.InputBox("Enter Borrow ID to return:", "Return Book", "");
+                string input = Interaction.InputBox(
+                    "Enter Borrow ID to return:",
+                    "Return Book",
+                    ""
+                );
 
                 if (string.IsNullOrWhiteSpace(input))
                 {
-                    MessageBox.Show("Borrow ID is required!", "Missing Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Borrow ID is required!", "Missing Input",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 string borrowId = input.Trim();
 
-                DataTable dt = DatabaseHelper.ExecuteQuery(
-                    "SELECT isbn, returndate, status FROM borrowreturn WHERE borrowid = @borrowid",
-                    new { borrowid = borrowId });
+                var borrowRepository = new BorrowRepository(new DBConnection());
+                borrowRepository.ReturnBook(borrowId);
 
-                if (dt.Rows.Count == 0)
-                {
-                    MessageBox.Show("No record found for this Borrow ID.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+                MessageBox.Show("Book returned successfully!",
+                    "Success",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
-                string isbn = dt.Rows[0]["isbn"].ToString();
-                string status = dt.Rows[0]["status"].ToString();
-
-                if (status == "1")
-                {
-                    MessageBox.Show("This book has already been returned.", "Already Returned", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-
-                DateTime today = DateTime.Now.Date;
-                string updateQuery = @"UPDATE borrowreturn 
-                                       SET returndate = @returndate, status = 0
-                                       WHERE borrowid = @borrowid";
-                DatabaseHelper.ExecuteNonQuery(updateQuery, new { returndate = today, borrowid = borrowId });
-
-                string updateCopies = "UPDATE books SET copiesavailable = copiesavailable + 1 WHERE isbn = @isbn";
-                DatabaseHelper.ExecuteNonQuery(updateCopies, new { isbn });
-
-                MessageBox.Show("Book returned successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadBorrowRecords();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error returning book: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"Error returning book: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
         }
+
 
         private void btnBack_Click(object sender, EventArgs e)
         {

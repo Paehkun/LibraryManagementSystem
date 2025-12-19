@@ -1,4 +1,5 @@
 ﻿using LibraryManagement.Domain.Model;
+using LibraryManagement.Domain.Validation;
 using LibraryManagementSystem.Domain.Repository;
 using Npgsql;
 using System;
@@ -20,12 +21,6 @@ namespace LibraryManagement
         private void btnSave_Click(object sender, EventArgs e)
         {
 
-            if (!ValidateInputs())
-            {
-                MessageBox.Show("Please fill in all fields correctly.");
-                return;
-            }
-
             var book = new Book
             {
                 Title = txtTitle.Text.Trim(),
@@ -33,14 +28,16 @@ namespace LibraryManagement
                 ISBN = txtISBN.Text.Trim(),
                 Category = cmbCategory.SelectedItem.ToString(),
                 Publisher = txtPublisher.Text.Trim(),
-                Year = int.Parse(txtYear.Text),
-                CopiesAvailable = int.Parse(txtCopies.Text),
+                Year = int.TryParse(txtYear.Text, out int y) ? y : 0,
+                CopiesAvailable = int.TryParse(txtCopies.Text, out int c) ? c : -1,
                 ShelfLocation = txtShelfLocation.Text.Trim(),
                 Image = txtImg.Text.Trim()
             };
 
             try
             {
+                Validator.ValidateBook(book);
+
                 _bookRepo.AddBook(book);
                 MessageBox.Show("Book added successfully!");
                 this.DialogResult = DialogResult.OK;
@@ -48,25 +45,9 @@ namespace LibraryManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}");
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-        private bool ValidateInputs()
-        {
-            int year, copies;
-
-            return
-                !string.IsNullOrWhiteSpace(txtTitle.Text) &&
-                !string.IsNullOrWhiteSpace(txtAuthor.Text) &&
-                !string.IsNullOrWhiteSpace(txtISBN.Text) &&
-                cmbCategory.SelectedIndex > 0 &&
-                !string.IsNullOrWhiteSpace(txtPublisher.Text) &&
-                !string.IsNullOrWhiteSpace(txtShelfLocation.Text) &&
-                !string.IsNullOrWhiteSpace(txtImg.Text) &&
-                int.TryParse(txtYear.Text, out year) &&
-                int.TryParse(txtCopies.Text, out copies);
-        }
-
 
         private void btnCancel_Click(object sender, EventArgs e)
         {

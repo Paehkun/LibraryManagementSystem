@@ -113,29 +113,6 @@ namespace LibraryManagementSystem.Domain.Repository
             }
         }
 
-
-        // ✅ Return book
-        public void ReturnBook(string borrowId)
-        {
-            using (var conn = _db.GetConnection())
-            {
-                conn.Open();
-
-                string updateBorrow = @"
-                    UPDATE borrowreturn
-                    SET returndate = @returndate,
-                        status = 0
-                    WHERE borrowid = @borrowid";
-
-                using (var cmd = new NpgsqlCommand(updateBorrow, conn))
-                {
-                    cmd.Parameters.AddWithValue("@returndate", DateTime.Now.Date);
-                    cmd.Parameters.AddWithValue("@borrowid", borrowId);
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
-
         // ✅ Get borrow record by ID
         public DataRow GetBorrowById(string borrowId)
         {
@@ -187,6 +164,83 @@ namespace LibraryManagementSystem.Domain.Repository
                 }
             }
         }
+
+        // ✅ Return book - REPLACE THIS ENTIRE METHOD
+        public void ReturnBook(string borrowId)
+        {
+            using (var conn = _db.GetConnection())
+            {
+                conn.Open();
+
+                using (var transaction = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        // Get the ISBN and status before updating
+                        string getIsbnQuery = "SELECT isbn, status FROM borrowreturn WHERE borrowid = @borrowid";
+                        string isbn;
+                        int statusValue;
+
+                        using (var cmd = new NpgsqlCommand(getIsbnQuery, conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@borrowid", borrowId);
+                            using (var reader = cmd.ExecuteReader())
+                            {
+                                if (!reader.Read())
+                                {
+                                    throw new Exception("No record found for this Borrow ID.");
+                                }
+
+                                isbn = reader.GetString(reader.GetOrdinal("isbn"));
+                                statusValue = reader.GetInt32(reader.GetOrdinal("status"));
+                            }
+                        }
+
+                        // Check if already returned
+                        BorrowStatus status = (BorrowStatus)statusValue;
+                        if (status == BorrowStatus.Returned)
+                        {
+                            throw new Exception("This book has already been returned.");
+                        }
+
+                        // Update borrow record
+                        string updateBorrow = @"
+                    UPDATE borrowreturn
+                    SET returndate = @returndate,
+                        status = @status
+                    WHERE borrowid = @borrowid";
+
+                        using (var cmd = new NpgsqlCommand(updateBorrow, conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@returndate", DateTime.Now.Date);
+                            cmd.Parameters.AddWithValue("@status", (int)BorrowStatus.Returned);
+                            cmd.Parameters.AddWithValue("@borrowid", borrowId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // Increment book copies
+                        string updateCopies = @"
+                    UPDATE books
+                    SET copiesavailable = copiesavailable + 1
+                    WHERE isbn = @isbn";
+
+                        using (var cmd = new NpgsqlCommand(updateCopies, conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@isbn", isbn);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+
         public DataTable GetReturnedBooks(
     string titleFilter = "",
     string memberFilter = "",

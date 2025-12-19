@@ -1,6 +1,5 @@
 ﻿using LibraryManagement;
 using LibraryManagementSystem.Domain.Repository;
-using Npgsql;
 using System;
 using System.Data;
 using System.Drawing;
@@ -12,167 +11,162 @@ namespace LibraryManagementSystem
     {
         private string username;
         private BookRepository _bookRepo;
+
         public BookManagementForm(string username)
         {
             InitializeComponent();
             DBConnection db = new DBConnection();
             _bookRepo = new BookRepository(db);
             this.username = UserSession.Username;
+
+            StyleDataGridView();
         }
 
         private void BookManagementForm_Load(object sender, EventArgs e)
         {
-            LoadBooks();                // 🟡 Load data first
-            StyleDataGridView();        // 🎨 Column & header style
-            ApplyCardStyle();           // 🪄 Card look even on first load
-            foreach (DataGridViewColumn column in dgvBooks.Columns)
-            {
-                if (!string.IsNullOrEmpty(column.HeaderText))
-                {
-                    column.HeaderText = char.ToUpper(column.HeaderText[0]) + column.HeaderText.Substring(1);
-                }
-            }
-
-            // Adjust specific column widths
-            dgvBooks.Columns["CopiesAvailable"].Width = 150;  // You can adjust this value
-            dgvBooks.Columns["Id"].Width = 60;
-            //dgvBooks.Columns["Title"].Width = 200;
-            dgvBooks.Columns["Author"].Width = 150;
-
-            // Optional: Auto resize to fit content
-            dgvBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            dgvBooks.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-
-            // Format column headers
-            dgvBooks.Columns["id"].HeaderText = "ID";
-            dgvBooks.Columns["title"].HeaderText = "Title";
-            dgvBooks.Columns["author"].HeaderText = "Author";
-            dgvBooks.Columns["isbn"].HeaderText = "ISBN";
-            dgvBooks.Columns["category"].HeaderText = "Category";
-            dgvBooks.Columns["publisher"].HeaderText = "Publisher";
-            dgvBooks.Columns["year"].HeaderText = "Year";
-            dgvBooks.Columns["copiesavailable"].HeaderText = "Copies Available";
-            dgvBooks.Columns["shelflocation"].HeaderText = "Shelf Location";
-
-            // Adjust column widths
-            dgvBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            dgvBooks.Columns["id"].Width = 60;
-            dgvBooks.Columns["title"].Width = 290;
-            dgvBooks.Columns["author"].Width = 220;
-            dgvBooks.Columns["isbn"].Width = 160;
-            dgvBooks.Columns["category"].Width = 120;
-            dgvBooks.Columns["publisher"].Width = 180;
-            dgvBooks.Columns["year"].Width = 80;
-            dgvBooks.Columns["copiesavailable"].Width = 150;
-            dgvBooks.Columns["shelflocation"].Width = 160;
-
-            // Optional: make the text centered for ID and Year
-            dgvBooks.Columns["id"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dgvBooks.Columns["year"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-        }
-
-        private void DgvBooks_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
-            {
-                e.Handled = true;
-                e.PaintBackground(e.ClipBounds, true);
-
-                Rectangle cardRect = e.CellBounds;
-                cardRect.Inflate(-5, -5);
-
-                bool isSelected = (e.State & DataGridViewElementStates.Selected) != 0;
-
-                Color cardColor = isSelected ? Color.FromArgb(230, 240, 255) : e.CellStyle.BackColor;
-                Color borderColor = isSelected ? Color.FromArgb(130, 170, 250) : Color.LightGray;
-
-                using (SolidBrush brush = new SolidBrush(cardColor))
-                using (Pen borderPen = new Pen(borderColor, 1))
-                {
-                    Graphics g = e.Graphics;
-                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-                    int radius = 10;
-                    using (System.Drawing.Drawing2D.GraphicsPath path = GetRoundedRectPath(cardRect, radius))
-                    {
-                        g.FillPath(brush, path);
-                        g.DrawPath(borderPen, path);
-                    }
-                }
-
-                TextRenderer.DrawText(
-                    e.Graphics,
-                    e.FormattedValue?.ToString() ?? string.Empty,
-                    e.CellStyle.Font,
-                    cardRect,
-                    e.CellStyle.ForeColor,
-                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter
-                );
-            }
-        }
-
-        private System.Drawing.Drawing2D.GraphicsPath GetRoundedRectPath(Rectangle rect, int radius)
-        {
-            var path = new System.Drawing.Drawing2D.GraphicsPath();
-            int diameter = radius * 2;
-
-            path.AddArc(rect.X, rect.Y, diameter, diameter, 180, 90);
-            path.AddArc(rect.Right - diameter, rect.Y, diameter, diameter, 270, 90);
-            path.AddArc(rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 0, 90);
-            path.AddArc(rect.X, rect.Bottom - diameter, diameter, diameter, 90, 90);
-            path.CloseFigure();
-
-            return path;
+            LoadBooks();
+            FormatColumns();
         }
 
         private void StyleDataGridView()
         {
             dgvBooks.EnableHeadersVisualStyles = false;
-            dgvBooks.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
-            dgvBooks.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
-            dgvBooks.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dgvBooks.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(52, 152, 219);
+            dgvBooks.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvBooks.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 11, FontStyle.Bold);
             dgvBooks.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dgvBooks.ColumnHeadersHeight = 40;
-            dgvBooks.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            dgvBooks.ColumnHeadersHeight = 45;
 
-            dgvBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgvBooks.RowTemplate.Height = 45;
+            dgvBooks.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+            dgvBooks.DefaultCellStyle.BackColor = Color.White;
+            dgvBooks.DefaultCellStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            dgvBooks.DefaultCellStyle.SelectionBackColor = Color.FromArgb(52, 152, 219);
+            dgvBooks.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgvBooks.DefaultCellStyle.Padding = new Padding(8, 6, 8, 6);
 
-            // Optional column widths
-            dgvBooks.Columns[1].Width = 250;
-            dgvBooks.Columns[2].Width = 200;
-            dgvBooks.Columns[3].Width = 180;
-            dgvBooks.Columns[4].Width = 150;
-            dgvBooks.Columns[5].Width = 150;
-        }
+            dgvBooks.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(236, 240, 241);
 
-        private void ApplyCardStyle()
-        {
             dgvBooks.BackgroundColor = Color.White;
             dgvBooks.BorderStyle = BorderStyle.None;
-            dgvBooks.CellBorderStyle = DataGridViewCellBorderStyle.None;
-            dgvBooks.GridColor = Color.White;
-            dgvBooks.RowHeadersVisible = false;
-
-            dgvBooks.DefaultCellStyle.BackColor = Color.White;
-            dgvBooks.DefaultCellStyle.ForeColor = Color.Black;
-            dgvBooks.DefaultCellStyle.Font = new Font("Segoe UI", 10F);
-            dgvBooks.DefaultCellStyle.SelectionBackColor = Color.FromArgb(230, 240, 255);
-            dgvBooks.DefaultCellStyle.SelectionForeColor = Color.Black;
-            dgvBooks.DefaultCellStyle.Padding = new Padding(12, 10, 12, 10);
-
-            dgvBooks.RowTemplate.Height = 40;
-            dgvBooks.RowTemplate.MinimumHeight = 40;
-            dgvBooks.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-
-            dgvBooks.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 248, 250);
-
+            dgvBooks.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvBooks.GridColor = Color.FromArgb(189, 195, 199);
             dgvBooks.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvBooks.MultiSelect = false;
+            dgvBooks.AllowUserToAddRows = false;
+            dgvBooks.AllowUserToDeleteRows = false;
             dgvBooks.ReadOnly = true;
+            dgvBooks.RowHeadersVisible = false;
+            dgvBooks.MultiSelect = false;
+            dgvBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }
 
-            dgvBooks.CellPainting -= DgvBooks_CellPainting; // avoid double subscription
-            dgvBooks.CellPainting += DgvBooks_CellPainting;
+        private void FormatColumns()
+        {
+            if (dgvBooks.Columns.Count == 0) return;
+
+            // Hide base fields
+            string[] hideColumns = {
+                "CreatedAt", "LastModified", "IsDeleted", "CreateBy",
+                "LastModifiedBy", "Image"
+            };
+
+            foreach (var col in hideColumns)
+            {
+                if (dgvBooks.Columns[col] != null)
+                    dgvBooks.Columns[col].Visible = false;
+            }
+
+            // Format headers
+            if (dgvBooks.Columns["id"] != null)
+            {
+                dgvBooks.Columns["id"].HeaderText = "ID";
+                dgvBooks.Columns["id"].Width = 60;
+                dgvBooks.Columns["id"].DisplayIndex = 0;
+                dgvBooks.Columns["id"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+
+            if (dgvBooks.Columns["title"] != null)
+            {
+                dgvBooks.Columns["title"].HeaderText = "Title";
+                dgvBooks.Columns["title"].Width = 290;
+            }
+
+            if (dgvBooks.Columns["author"] != null)
+            {
+                dgvBooks.Columns["author"].HeaderText = "Author";
+                dgvBooks.Columns["author"].Width = 220;
+            }
+
+            if (dgvBooks.Columns["isbn"] != null)
+            {
+                dgvBooks.Columns["isbn"].HeaderText = "ISBN";
+                dgvBooks.Columns["isbn"].Width = 160;
+            }
+
+            if (dgvBooks.Columns["category"] != null)
+            {
+                dgvBooks.Columns["category"].HeaderText = "Category";
+                dgvBooks.Columns["category"].Width = 120;
+            }
+
+            if (dgvBooks.Columns["publisher"] != null)
+            {
+                dgvBooks.Columns["publisher"].HeaderText = "Publisher";
+                dgvBooks.Columns["publisher"].Width = 180;
+            }
+
+            if (dgvBooks.Columns["year"] != null)
+            {
+                dgvBooks.Columns["year"].HeaderText = "Year";
+                dgvBooks.Columns["year"].Width = 80;
+                dgvBooks.Columns["year"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+
+            if (dgvBooks.Columns["copiesavailable"] != null)
+            {
+                dgvBooks.Columns["copiesavailable"].HeaderText = "Available";
+                dgvBooks.Columns["copiesavailable"].Width = 100;
+                dgvBooks.Columns["copiesavailable"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+
+            if (dgvBooks.Columns["totalcopies"] != null)
+            {
+                dgvBooks.Columns["totalcopies"].HeaderText = "Total";
+                dgvBooks.Columns["totalcopies"].Width = 80;
+                dgvBooks.Columns["totalcopies"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+
+            if (dgvBooks.Columns["shelflocation"] != null)
+            {
+                dgvBooks.Columns["shelflocation"].HeaderText = "Shelf";
+                dgvBooks.Columns["shelflocation"].Width = 120;
+            }
+
+            dgvBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgvBooks.ClearSelection();
+        }
+
+        private void LoadBooks()
+        {
+            dgvBooks.DataSource = _bookRepo.GetAllBooks();
+            FormatColumns();
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            string searchText = txtSearch.Text.Trim();
+
+            try
+            {
+                var searchResults = _bookRepo.BookSearch(searchText);
+                dgvBooks.DataSource = searchResults;
+                FormatColumns();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error searching: {ex.Message}", "Search Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnAddBook_Click(object sender, EventArgs e)
@@ -182,7 +176,6 @@ namespace LibraryManagementSystem
                 if (addBookForm.ShowDialog() == DialogResult.OK)
                 {
                     LoadBooks();
-                    ApplyCardStyle(); // 🔄 Reapply style after refresh
                 }
             }
         }
@@ -197,17 +190,15 @@ namespace LibraryManagementSystem
                     if (editForm.ShowDialog() == DialogResult.OK)
                     {
                         LoadBooks();
-                        ApplyCardStyle(); // 🔄
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Please select a book to edit.");
+                MessageBox.Show("Please select a book to edit.", "No Selection",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
-
 
         private void btnDeleteBook_Click(object sender, EventArgs e)
         {
@@ -216,7 +207,6 @@ namespace LibraryManagementSystem
                 if (deleteForm.ShowDialog() == DialogResult.OK)
                 {
                     LoadBooks();
-                    ApplyCardStyle(); // 🔄
                 }
             }
         }
@@ -234,43 +224,5 @@ namespace LibraryManagementSystem
 
             this.Hide();
         }
-
-        private void LoadBooks()
-        {
-            dgvBooks.DataSource = _bookRepo.GetAllBooks();
-            dgvBooks.ClearSelection();
-
-            // Hide BaseClass 
-            string[] baseFields = { "CreatedAt", "LastModified", "IsDeleted", "CreateBy", "LastModifiedBy", "Image" };
-            foreach (var field in baseFields)
-            {
-                if (dgvBooks.Columns[field] != null)
-                    dgvBooks.Columns[field].Visible = false;
-            }
-
-            // Move ID to left
-            if (dgvBooks.Columns["Id"] != null)
-            {
-                dgvBooks.Columns["Id"].DisplayIndex = 0; // 0 = first column
-            }
-        }
-
-        private void txtSearch_TextChanged(object sender, EventArgs e)
-        {
-            string searchText = txtSearch.Text.Trim();
-
-            try
-            {
-                var searchResults = _bookRepo.BookSearch(searchText);
-                dgvBooks.DataSource = searchResults;
-                dgvBooks.ClearSelection();
-                ApplyCardStyle(); 
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error searching: {ex.Message}");
-            }
-        }
-
     }
 }

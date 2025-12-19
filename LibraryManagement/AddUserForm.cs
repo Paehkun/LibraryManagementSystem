@@ -1,4 +1,6 @@
-﻿using Npgsql;
+﻿using LibraryManagement.Domain.Model;
+using LibraryManagementSystem.Domain.Repository;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,9 +15,12 @@ namespace LibraryManagement
 {
     public partial class AddUserForm : Form
     {
+        private UserRepository _userRepo;
         public AddUserForm()
         {
             InitializeComponent();
+            DBConnection db = new DBConnection();
+            _userRepo = new UserRepository(db);
         }
 
         private void lblMembershipDate_Click(object sender, EventArgs e)
@@ -33,34 +38,27 @@ namespace LibraryManagement
             string role = comboBox1.Text.Trim();
 
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(username) ||
-        string.IsNullOrEmpty(password) || string.IsNullOrEmpty(role) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(phone))
+                string.IsNullOrEmpty(password) || string.IsNullOrEmpty(role) ||
+                string.IsNullOrEmpty(email) || string.IsNullOrEmpty(phone))
             {
                 MessageBox.Show("Please fill in all fields correctly.");
                 return;
             }
 
-            string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
-
             try
             {
-                using (var conn = new NpgsqlConnection(connString))
+                var userRepository = new UserRepository(new DBConnection());
+                var newUser = new Users
                 {
-                    conn.Open();
-                    string query = @"INSERT INTO users (name, username, password, role, email, phone)
-                                     VALUES (@name, @username, @password, @role, @Email, @Phone)";
-                    using (var cmd = new NpgsqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@name", name);
-                        cmd.Parameters.AddWithValue("@username", username);
-                        cmd.Parameters.AddWithValue("@password", password);
-                        cmd.Parameters.AddWithValue("@role", role);
-                        cmd.Parameters.AddWithValue("@Email", email);
-                        cmd.Parameters.AddWithValue("@Phone", phone);
+                    Name = name,
+                    Username = username,
+                    Password = password,
+                    Role = role,
+                    Email = email,
+                    Phone = phone
+                };
 
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
+                userRepository.AddUser(newUser);
                 MessageBox.Show("User added successfully!");
                 this.DialogResult = DialogResult.OK;
                 this.Close();

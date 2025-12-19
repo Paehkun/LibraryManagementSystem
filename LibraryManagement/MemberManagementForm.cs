@@ -1,6 +1,5 @@
 ﻿using LibraryManagement;
 using LibraryManagementSystem.Domain.Repository;
-using Npgsql;
 using System;
 using System.Data;
 using System.Drawing;
@@ -11,65 +10,126 @@ namespace LibraryManagementSystem
     public partial class MemberManagementForm : Form
     {
         private MemberRepository _memberRepo;
-        private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
         private string username;
-        private Font buttonFont = new Font("Segoe UI", 10, FontStyle.Bold);
-        private Color textColor = Color.Black;
+
         public MemberManagementForm(string username)
         {
             InitializeComponent();
             DBConnection db = new DBConnection();
             _memberRepo = new MemberRepository(db);
             this.username = UserSession.Username;
-            dgvMembers.CellClick += dgvMembers_CellClick;
+
+            StyleDataGridView();
         }
 
         private void MemberManagementForm_Load(object sender, EventArgs e)
         {
             LoadMembers();
-            SetupDataGridView();
-            
-            foreach (DataGridViewColumn column in dgvMembers.Columns)
-            {
-                if (!string.IsNullOrEmpty(column.HeaderText))
-                {
-                    column.HeaderText = char.ToUpper(column.HeaderText[0]) + column.HeaderText.Substring(1);
-                }
-            }
-            dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            dgvMembers.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-            // Format column headers
-            dgvMembers.Columns["memberid"].HeaderText = "Member ID";
-            dgvMembers.Columns["name"].HeaderText = "Name";
-            dgvMembers.Columns["email"].HeaderText = "Email";
-            dgvMembers.Columns["phone"].HeaderText = "Phone";
-            dgvMembers.Columns["address"].HeaderText = "Address";
-            dgvMembers.Columns["membershipdate"].HeaderText = "Member Since";
-
-            // Adjust column widths
-            dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            dgvMembers.Columns["memberid"].Width = 60;
-            dgvMembers.Columns["name"].Width = 260;
-            dgvMembers.Columns["email"].Width = 180;
-            dgvMembers.Columns["phone"].Width = 150;
-            dgvMembers.Columns["address"].Width = 120;
-            dgvMembers.Columns["membershipdate"].Width = 180;
-            LoadMembers();
-            SetupDataGridView();
+            FormatColumns();
         }
 
-        private void btnBack_Click(object sender, EventArgs e)
+        private void StyleDataGridView()
         {
-            if (UserSession.Role == "admin")
+            dgvMembers.EnableHeadersVisualStyles = false;
+            dgvMembers.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(52, 152, 219);
+            dgvMembers.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvMembers.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+            dgvMembers.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgvMembers.ColumnHeadersHeight = 45;
+
+            dgvMembers.RowTemplate.Height = 45;
+            dgvMembers.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+            dgvMembers.DefaultCellStyle.BackColor = Color.White;
+            dgvMembers.DefaultCellStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            dgvMembers.DefaultCellStyle.SelectionBackColor = Color.FromArgb(52, 152, 219);
+            dgvMembers.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgvMembers.DefaultCellStyle.Padding = new Padding(8, 6, 8, 6);
+
+            dgvMembers.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(236, 240, 241);
+
+            dgvMembers.BackgroundColor = Color.White;
+            dgvMembers.BorderStyle = BorderStyle.None;
+            dgvMembers.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvMembers.GridColor = Color.FromArgb(189, 195, 199);
+            dgvMembers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvMembers.AllowUserToAddRows = false;
+            dgvMembers.AllowUserToDeleteRows = false;
+            dgvMembers.ReadOnly = true;
+            dgvMembers.RowHeadersVisible = false;
+            dgvMembers.MultiSelect = false;
+            dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }
+
+        private void FormatColumns()
+        {
+            if (dgvMembers.Columns.Count == 0) return;
+
+            // Hide base fields
+            string[] hideColumns = {
+                "CreatedAt", "LastModified", "IsDeleted", "CreateBy", "LastModifiedBy"
+            };
+
+            foreach (var col in hideColumns)
             {
-                new AdminHomeForm(UserSession.Username).Show();
-            }
-            else
-            {
-                new LibrarianHomeForm(UserSession.Username).Show();
+                if (dgvMembers.Columns[col] != null)
+                    dgvMembers.Columns[col].Visible = false;
             }
 
-            this.Hide();
+            // Format headers
+            if (dgvMembers.Columns["memberid"] != null)
+            {
+                dgvMembers.Columns["memberid"].HeaderText = "Member ID";
+                dgvMembers.Columns["memberid"].Width = 100;
+                dgvMembers.Columns["memberid"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+
+            if (dgvMembers.Columns["name"] != null)
+            {
+                dgvMembers.Columns["name"].HeaderText = "Name";
+                dgvMembers.Columns["name"].Width = 250;
+            }
+
+            if (dgvMembers.Columns["email"] != null)
+            {
+                dgvMembers.Columns["email"].HeaderText = "Email";
+                dgvMembers.Columns["email"].Width = 280;
+            }
+
+            if (dgvMembers.Columns["phone"] != null)
+            {
+                dgvMembers.Columns["phone"].HeaderText = "Phone";
+                dgvMembers.Columns["phone"].Width = 150;
+                dgvMembers.Columns["phone"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+
+            if (dgvMembers.Columns["address"] != null)
+            {
+                dgvMembers.Columns["address"].HeaderText = "Address";
+                dgvMembers.Columns["address"].Width = 350;
+            }
+
+            if (dgvMembers.Columns["membershipdate"] != null)
+            {
+                dgvMembers.Columns["membershipdate"].HeaderText = "Member Since";
+                dgvMembers.Columns["membershipdate"].Width = 150;
+                dgvMembers.Columns["membershipdate"].DefaultCellStyle.Format = "yyyy-MM-dd";
+                dgvMembers.Columns["membershipdate"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+
+            dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgvMembers.ClearSelection();
+        }
+
+        private void LoadMembers(string search = "")
+        {
+            DataTable dt = _memberRepo.GetAllMembers(search);
+            dgvMembers.DataSource = dt;
+            FormatColumns();
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            LoadMembers(txtSearch.Text.Trim());
         }
 
         private void btnAddMember_Click(object sender, EventArgs e)
@@ -98,7 +158,8 @@ namespace LibraryManagementSystem
             }
             else
             {
-                MessageBox.Show("Please select a member to edit.");
+                MessageBox.Show("Please select a member to edit.", "No Selection",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -109,184 +170,22 @@ namespace LibraryManagementSystem
                 if (deleteForm.ShowDialog() == DialogResult.OK)
                 {
                     LoadMembers();
-                    ApplyCardStyle(); //
                 }
             }
         }
 
-        private void txtSearch_TextChanged(object sender, EventArgs e)
+        private void btnBack_Click(object sender, EventArgs e)
         {
-            LoadMembers(txtSearch.Text.Trim());
-        }
-
-        //Style and base setup for DataGridView
-        private void SetupDataGridView()
-        {
-            dgvMembers.EnableHeadersVisualStyles = false;
-            dgvMembers.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
-            dgvMembers.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
-            dgvMembers.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dgvMembers.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dgvMembers.ColumnHeadersHeight = 40;
-            dgvMembers.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-
-            dgvMembers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-        }
-
-        private void ApplyCardStyle()
-        {
-            dgvMembers.BackgroundColor = Color.White;
-            dgvMembers.BorderStyle = BorderStyle.None;
-            dgvMembers.CellBorderStyle = DataGridViewCellBorderStyle.None;
-            dgvMembers.GridColor = Color.White;
-            dgvMembers.RowHeadersVisible = false;
-
-            dgvMembers.DefaultCellStyle.BackColor = Color.White;
-            dgvMembers.DefaultCellStyle.ForeColor = Color.Black;
-            dgvMembers.DefaultCellStyle.Font = new Font("Segoe UI", 10F);
-            dgvMembers.DefaultCellStyle.SelectionBackColor = Color.FromArgb(230, 240, 255);
-            dgvMembers.DefaultCellStyle.SelectionForeColor = Color.Black;
-            dgvMembers.DefaultCellStyle.Padding = new Padding(12, 10, 12, 10);
-
-            //dgvMembers.RowTemplate.Height = 90;
-            dgvMembers.RowTemplate.MinimumHeight = 60;
-            dgvMembers.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-
-            dgvMembers.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 248, 250);
-
-            dgvMembers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMembers.MultiSelect = false;
-            dgvMembers.ReadOnly = true;
-
-            dgvMembers.CellPainting -= DgvMembers_CellPainting; // avoid double subscription
-            dgvMembers.CellPainting += DgvMembers_CellPainting;
-        }
-
-        private void DgvMembers_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            if (UserSession.Role == "admin")
             {
-                e.Handled = true;
-                e.PaintBackground(e.ClipBounds, true);
-
-                Rectangle cardRect = e.CellBounds;
-                cardRect.Inflate(-5, -5);
-
-                bool isSelected = (e.State & DataGridViewElementStates.Selected) != 0;
-
-                Color cardColor = isSelected ? Color.FromArgb(230, 240, 255) : e.CellStyle.BackColor;
-                Color borderColor = isSelected ? Color.FromArgb(130, 170, 250) : Color.LightGray;
-
-                using (SolidBrush brush = new SolidBrush(cardColor))
-                using (Pen borderPen = new Pen(borderColor, 1))
-                {
-                    Graphics g = e.Graphics;
-                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-                    int radius = 10;
-                    using (System.Drawing.Drawing2D.GraphicsPath path = GetRoundedRectPath(cardRect, radius))
-                    {
-                        g.FillPath(brush, path);
-                        g.DrawPath(borderPen, path);
-                    }
-                }
-
-                TextRenderer.DrawText(
-                    e.Graphics,
-                    e.FormattedValue?.ToString() ?? string.Empty,
-                    e.CellStyle.Font,
-                    cardRect,
-                    e.CellStyle.ForeColor,
-                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter
-                );
+                new AdminHomeForm(UserSession.Username).Show();
             }
-        }
-        private System.Drawing.Drawing2D.GraphicsPath GetRoundedRectPath(Rectangle rect, int radius)
-        {
-            var path = new System.Drawing.Drawing2D.GraphicsPath();
-            int diameter = radius * 2;
-
-            path.AddArc(rect.X, rect.Y, diameter, diameter, 180, 90);
-            path.AddArc(rect.Right - diameter, rect.Y, diameter, diameter, 270, 90);
-            path.AddArc(rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 0, 90);
-            path.AddArc(rect.X, rect.Bottom - diameter, diameter, diameter, 90, 90);
-            path.CloseFigure();
-
-            return path;
-        }
-
-        private void LoadMembers(string search = "")
-        {
-            DataTable dt = _memberRepo.GetAllMembers(search);
-
-            dgvMembers.Columns.Clear(); 
-            dgvMembers.AutoGenerateColumns = false;
-            dgvMembers.DataSource = dt;
-
-            dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
+            else
             {
-                DataPropertyName = "memberid",
-                HeaderText = "Member ID",
-                Name = "memberid",
-                Width = 100,
-                DefaultCellStyle = { Alignment = DataGridViewContentAlignment.MiddleCenter }
-            });
-
-            dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "name",
-                HeaderText = "Name",
-                Name = "name",
-                Width = 250
-            });
-
-            dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "email",
-                HeaderText = "Email",
-                Name = "email",
-                Width = 250
-            });
-
-            dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "phone",
-                HeaderText = "Phone",
-                Name = "phone",
-                Width = 120
-            });
-
-            dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "address",
-                HeaderText = "Address",
-                Name = "address",
-                Width = 300
-            });
-
-            dgvMembers.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "membershipdate",
-                HeaderText = "Member Since",
-                Name = "membershipdate",
-                Width = 130,
-                DefaultCellStyle = { Format = "yyyy-MM-dd", Alignment = DataGridViewContentAlignment.MiddleCenter }
-            });
-
-            ApplyCardStyle();
-            dgvMembers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvMembers.ColumnHeadersVisible = true;
-            dgvMembers.ClearSelection();
-        }
-
-        private void dgvMembers_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                string col = dgvMembers.Columns[e.ColumnIndex].Name;
-                if (col == "Edit") btnEditMember_Click(sender, e);
-                else if (col == "Delete") btnDeleteMember_Click(sender, e);
+                new LibrarianHomeForm(UserSession.Username).Show();
             }
+
+            this.Hide();
         }
     }
 }

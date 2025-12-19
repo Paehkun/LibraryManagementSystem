@@ -1,9 +1,8 @@
 ﻿using LibraryManagement;
 using LibraryManagementSystem.Domain.Repository;
-using Npgsql;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace LibraryManagementSystem
 {
@@ -15,7 +14,6 @@ namespace LibraryManagementSystem
         private System.Windows.Forms.Timer sidebarTimer;
         private BookRepository _bookRepo;
         private UserRepository _userRepo;
-        string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
 
         public AdminHomeForm(string username = "")
         {
@@ -23,11 +21,15 @@ namespace LibraryManagementSystem
             DBConnection db = new DBConnection();
             _bookRepo = new BookRepository(db);
             _userRepo = new UserRepository(db);
-            this.username = UserSession.Username;          // ✅ assign the parameter to the field
+
+            this.username = UserSession.Username;
+
             FetchFullNameFromDB();
             lblWelcome.Text = $"Welcome, {name}";
+
             SetupSidebarAnimation();
             SetupSidebarButtons();
+            StyleDataGridViews();
         }
 
         private void BtnToggleSidebar_Click(object sender, EventArgs e)
@@ -35,15 +37,14 @@ namespace LibraryManagementSystem
             sidebarExpanded = !sidebarExpanded;
             sidebarTimer.Start();
         }
+
         private void SidebarTimer_Tick(object sender, EventArgs e)
         {
             if (sidebarExpanded)
             {
-                // Expand
                 if (leftPanel.Width < 250)
                 {
-                    leftPanel.Width += 10;
-
+                    leftPanel.Width += 15;
                     if (leftPanel.Width > 150)
                         lblWelcome.Visible = true;
                 }
@@ -54,10 +55,9 @@ namespace LibraryManagementSystem
             }
             else
             {
-                // Collapse
                 if (leftPanel.Width > 70)
                 {
-                    leftPanel.Width -= 10;
+                    leftPanel.Width -= 15;
                     lblWelcome.Visible = false;
                 }
                 else
@@ -66,7 +66,7 @@ namespace LibraryManagementSystem
                 }
             }
 
-            UpdateSidebarButtonText(); // icon-only or full text
+            UpdateSidebarButtonText();
         }
 
         private void UpdateSidebarButtonText()
@@ -93,8 +93,6 @@ namespace LibraryManagementSystem
             }
         }
 
-
-
         private void SetupSidebarAnimation()
         {
             sidebarTimer = new System.Windows.Forms.Timer();
@@ -104,47 +102,81 @@ namespace LibraryManagementSystem
 
         private void SetupSidebarButtons()
         {
-            int btnWidth = 200;
-            int btnHeight = 45;
-            int startY = 80;
-            int spacing = 55;
+            int btnWidth = 220;
+            int btnHeight = 50;
+            int startY = 100;
+            int spacing = 10;
 
-            Button[] buttons =
-            {
-        btnBookManagement,
-        btnMemberRecords,
-        btnUserManagement,
-        btnBookCatalog,
-        btnReports,
-        //btnBorrowReturn,
-        btnLogout
-    };
+            Button[] buttons = {
+                btnBookManagement,
+                btnMemberRecords,
+                btnUserManagement,
+                btnBookCatalog,
+                btnReports,
+                btnLogout
+            };
 
-            string[] texts =
-            {
-        "📖 Book Management",
-        "👥 Member Management",
-        "👥 User Management",
-        "📚 Catalog",
-        "📊 Reports",
-        "🚪 Logout"
-    };
+            string[] texts = {
+                "📖 Book Management",
+                "👥 Member Management",
+                "👥 User Management",
+                "📚 Catalog",
+                "📊 Reports",
+                "🚪 Logout"
+            };
 
             for (int i = 0; i < buttons.Length; i++)
             {
                 var b = buttons[i];
-
                 b.Text = texts[i];
                 b.Size = new Size(btnWidth, btnHeight);
-                b.Location = new Point(20, startY + (i * spacing));
+                b.Location = new Point(15, startY + (i * (btnHeight + spacing)));
                 b.TextAlign = ContentAlignment.MiddleLeft;
-
+                b.Padding = new Padding(15, 0, 0, 0);
+                b.Font = new Font("Segoe UI", 11F, FontStyle.Regular);
                 b.FlatStyle = FlatStyle.Flat;
                 b.FlatAppearance.BorderSize = 0;
-                b.BackColor = Color.White;
-                b.ForeColor = Color.Black;
-                b.FlatAppearance.MouseOverBackColor = Color.FromArgb(240, 240, 240);
+                b.BackColor = Color.FromArgb(41, 128, 185);
+                b.ForeColor = Color.White;
+                b.FlatAppearance.MouseOverBackColor = Color.FromArgb(52, 152, 219);
+                b.Cursor = Cursors.Hand;
             }
+        }
+
+        private void StyleDataGridViews()
+        {
+            StyleDataGridView(dataGridView1, Color.FromArgb(52, 152, 219), Color.FromArgb(236, 240, 241));
+            StyleDataGridView(dataGridView2, Color.FromArgb(231, 76, 60), Color.FromArgb(255, 235, 238));
+        }
+
+        private void StyleDataGridView(DataGridView dgv, Color headerColor, Color alternatingColor)
+        {
+            dgv.EnableHeadersVisualStyles = false;
+            dgv.ColumnHeadersDefaultCellStyle.BackColor = headerColor;
+            dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+            dgv.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgv.ColumnHeadersHeight = 45;
+
+            dgv.RowTemplate.Height = 45;
+            dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+            dgv.DefaultCellStyle.BackColor = Color.White;
+            dgv.DefaultCellStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            dgv.DefaultCellStyle.SelectionBackColor = Color.FromArgb(52, 152, 219);
+            dgv.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgv.AlternatingRowsDefaultCellStyle.BackColor = alternatingColor;
+
+            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgv.BackgroundColor = Color.White;
+            dgv.BorderStyle = BorderStyle.None;
+            dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgv.GridColor = Color.FromArgb(189, 195, 199);
+            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv.AllowUserToAddRows = false;
+            dgv.AllowUserToDeleteRows = false;
+            dgv.ReadOnly = true;
+            dgv.RowHeadersVisible = false;
+            dgv.ClearSelection();
         }
 
         private void FetchFullNameFromDB()
@@ -166,82 +198,54 @@ namespace LibraryManagementSystem
             var stats = _bookRepo.GetDashboardStats();
 
             lblTotalBooksValue.Text = stats.TotalBooks.ToString();
-            lblBookRow.Text = stats.TotalBookRows.ToString();
+            lblBookRowValue.Text = stats.TotalBookRows.ToString();
             lblTotalMembersValue.Text = stats.TotalMembers.ToString();
             lblBorrowedBooksValue.Text = stats.TotalBorrowedBooks.ToString();
             lblLateReturnBooksValue.Text = stats.TotalLateReturnedBooks.ToString();
-            lblLateReturnBooksValue.BringToFront();
         }
+
         private void LoadBorrowedBooks()
         {
-            var loadborrowedbooks = _bookRepo.LoadBorrowedBooks();
-
-            dataGridView1.DataSource = loadborrowedbooks;
-            // Hide BaseClass 
-            string[] baseFields = { "CreatedAt", "LastModified", "IsDeleted", "CreateBy", "LastModifiedBy", "Image", "Id", "ISBN", "Memberid", "Phone", "ReturnDate" };
-            foreach (var field in baseFields)
-            {
-                if (dataGridView1.Columns[field] != null)
-                    dataGridView1.Columns[field].Visible = false;
-            }
             var borrowedBooks = _bookRepo.LoadBorrowedBooks();
             dataGridView1.DataSource = borrowedBooks;
 
-            // Simple styling
-            dataGridView1.EnableHeadersVisualStyles = false;
-            dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
-            dataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            string[] hideColumns = {
+                "CreatedAt", "LastModified", "IsDeleted", "CreateBy",
+                "LastModifiedBy", "Image", "Id", "ISBN", "Memberid",
+                "Phone", "ReturnDate"
+            };
 
-            dataGridView1.RowTemplate.Height = 40;
-            dataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 10);
-            dataGridView1.DefaultCellStyle.BackColor = Color.White;
-            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.LightBlue;
+            foreach (var col in hideColumns)
+            {
+                if (dataGridView1.Columns[col] != null)
+                    dataGridView1.Columns[col].Visible = false;
+            }
 
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView1.BackgroundColor = Color.White;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.AllowUserToAddRows = false;
             dataGridView1.ClearSelection();
-
         }
 
         private void LoadLateReturnedBooks()
         {
-            // Load data
             var lateBooks = _bookRepo.LoadLateReturnedBooks();
             dataGridView2.DataSource = lateBooks;
-            string[] baseFields = { "CreatedAt", "LastModified", "IsDeleted", "CreateBy", "LastModifiedBy", "Image", "Id", "ISBN", "Memberid", "Phone", "ReturnDate" };
-            foreach (var field in baseFields)
+
+            string[] hideColumns = {
+                "CreatedAt", "LastModified", "IsDeleted", "CreateBy",
+                "LastModifiedBy", "Image", "Id", "ISBN", "Memberid",
+                "Phone", "ReturnDate"
+            };
+
+            foreach (var col in hideColumns)
             {
-                if (dataGridView2.Columns[field] != null)
-                    dataGridView2.Columns[field].Visible = false;
+                if (dataGridView2.Columns[col] != null)
+                    dataGridView2.Columns[col].Visible = false;
             }
 
-            // Simple styling
-            dataGridView2.EnableHeadersVisualStyles = false;
-            dataGridView2.ColumnHeadersDefaultCellStyle.BackColor = Color.DarkRed;
-            dataGridView2.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dataGridView2.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dataGridView2.RowTemplate.Height = 40;
-            dataGridView2.DefaultCellStyle.Font = new Font("Segoe UI", 10);
-            dataGridView2.DefaultCellStyle.BackColor = Color.White;
-            dataGridView2.AlternatingRowsDefaultCellStyle.BackColor = Color.LightPink;
-
-            dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView2.BackgroundColor = Color.White;
-            dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView2.AllowUserToAddRows = false;
             dataGridView2.ClearSelection();
-
         }
-
 
         private void AdminHomeForm_Load(object sender, EventArgs e)
         {
-            LoadLateReturnedBooks();
-            LoadBorrowedBooks();
             LoadDashboardData();
             LoadBorrowedBooks();
             LoadLateReturnedBooks();
@@ -251,7 +255,6 @@ namespace LibraryManagementSystem
         {
             BookManagementForm bookManagementForm = new BookManagementForm(username);
             bookManagementForm.Show();
-
             this.Hide();
         }
 
@@ -259,7 +262,6 @@ namespace LibraryManagementSystem
         {
             MemberManagementForm memberManagementForm = new MemberManagementForm(username);
             memberManagementForm.Show();
-
             this.Hide();
         }
 
@@ -267,7 +269,6 @@ namespace LibraryManagementSystem
         {
             UserManagementForm userManagementForm = new UserManagementForm(username);
             userManagementForm.Show();
-
             this.Hide();
         }
 
@@ -302,6 +303,5 @@ namespace LibraryManagementSystem
                 this.Hide();
             }
         }
-
     }
 }

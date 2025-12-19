@@ -61,6 +61,37 @@ namespace LibraryManagementSystem.Domain.Repository
 
             return users;
         }
+        public bool AddUser(Users user)
+        {
+            try
+            {
+                using (var conn = _db.GetConnection())
+                {
+                    conn.Open();
+                    string query = @"INSERT INTO users (name, username, password, role, email, phone)
+                           VALUES (@name, @username, @password, @role, @email, @phone)";
+
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@name", user.Name);
+                        cmd.Parameters.AddWithValue("@username", user.Username);
+                        cmd.Parameters.AddWithValue("@password", user.Password);
+                        cmd.Parameters.AddWithValue("@role", user.Role);
+                        cmd.Parameters.AddWithValue("@email", user.Email);
+                        cmd.Parameters.AddWithValue("@phone", user.Phone);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log or handle error
+                throw new Exception("Error adding user: " + ex.Message);
+            }
+        }
+
         public Users? GetUserByUsername(string username)
         {
             try

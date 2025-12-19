@@ -449,6 +449,81 @@ namespace LibraryManagementSystem.Domain.Repository
             return books;
         }
 
+        // Add these methods to your existing BookRepository class
+
+        // ✅ Get books with pagination and sorting
+        public DataTable GetBooksPaginated(
+            string search = "",
+            string category = "All",
+            int page = 1,
+            int pageSize = 12,
+            string sortBy = "title ASC")
+        {
+            DataTable dt = new DataTable();
+            int offset = (page - 1) * pageSize;
+
+            using (var conn = _db.GetConnection())
+            {
+                conn.Open();
+                string query = $@"
+            SELECT id, image, title, author, isbn, category
+            FROM books
+            WHERE 
+                is_deleted = FALSE
+                AND
+                (@search = '' 
+                OR title ILIKE @pattern 
+                OR author ILIKE @pattern 
+                OR isbn ILIKE @pattern 
+                OR category ILIKE @pattern)
+                AND (@category = 'All' OR category = @category)
+            ORDER BY {sortBy}
+            LIMIT @limit OFFSET @offset";
+
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@search", search);
+                    cmd.Parameters.AddWithValue("@pattern", "%" + search + "%");
+                    cmd.Parameters.AddWithValue("@category", category);
+                    cmd.Parameters.AddWithValue("@limit", pageSize);
+                    cmd.Parameters.AddWithValue("@offset", offset);
+
+                    using (var reader = cmd.ExecuteReader())
+                        dt.Load(reader);
+                }
+            }
+            return dt;
+        }
+
+        // ✅ Get total count of books (for pagination)
+        public int GetBookCount(string search = "", string category = "All")
+        {
+            using (var conn = _db.GetConnection())
+            {
+                conn.Open();
+                string query = @"
+            SELECT COUNT(*)
+            FROM books
+            WHERE 
+                is_deleted = FALSE
+                AND
+                (@search = '' 
+                OR title ILIKE @pattern 
+                OR author ILIKE @pattern 
+                OR isbn ILIKE @pattern 
+                OR category ILIKE @pattern)
+                AND (@category = 'All' OR category = @category)";
+
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@search", search);
+                    cmd.Parameters.AddWithValue("@pattern", "%" + search + "%");
+                    cmd.Parameters.AddWithValue("@category", category);
+
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+        }
 
 
     }
