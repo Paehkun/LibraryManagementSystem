@@ -1,8 +1,9 @@
 ﻿using LibraryManagement.Domain.Model;
-using LibraryManagementSystem.Domain.Repository;
 using LibraryManagement.Domain.Validation;
+using LibraryManagementSystem.Domain.Repository;
 using Npgsql;
 using System;
+using System.Data;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -14,7 +15,7 @@ namespace LibraryManagementSystem
         private BookRepository _bookRepo;
         public EditBookForm(int id)
         {
-            InitializeComponent();       
+            InitializeComponent();
             _id = id;
             DBConnection db = new DBConnection();
             _bookRepo = new BookRepository(db);
@@ -29,38 +30,46 @@ namespace LibraryManagementSystem
                 LoadBooks(_id);
                 txtBookId.ReadOnly = false; // prevent editing ID
             }
-            
+
         }
         private void LoadBooks(int id)
         {
             try
             {
-                Book book = _bookRepo.GetAllBooks().FirstOrDefault(b => b.Id == id);
-                if (book != null)
-                {
-                    txtBookId.Text = book.Id.ToString();
-                    txtTitle.Text = book.Title;
-                    txtAuthor.Text = book.Author;
-                    txtISBN.Text = book.ISBN;
-                    if (!string.IsNullOrEmpty(book.Category) && cmbCategory.Items.Contains(book.Category))
-                        cmbCategory.SelectedItem = book.Category;
-                    else
-                        cmbCategory.SelectedIndex = 0;
-                    txtPublisher.Text = book.Publisher;
-                    txtYear.Text = book.Year.ToString();
-                    txtCopies.Text = book.CopiesAvailable.ToString();
-                    txtShelfLocation.Text = book.ShelfLocation;
-                }
-                else
+                DataTable dt = _bookRepo.GetBookById(id);
+
+                if (dt.Rows.Count == 0)
                 {
                     MessageBox.Show("No book found with this ID.");
+                    return;
                 }
+
+                DataRow row = dt.Rows[0];
+
+                txtBookId.Text = row["id"].ToString();
+                txtTitle.Text = row["title"].ToString();
+                txtAuthor.Text = row["author"].ToString();
+                txtISBN.Text = row["isbn"].ToString();
+
+                string category = row["category"].ToString();
+                if (!string.IsNullOrEmpty(category) && cmbCategory.Items.Contains(category))
+                    cmbCategory.SelectedItem = category;
+                else
+                    cmbCategory.SelectedIndex = 0;
+
+                txtPublisher.Text = row["publisher"].ToString();
+                txtYear.Text = row["year"].ToString();
+                txtCopies.Text = row["copiesavailable"].ToString();
+                txtShelfLocation.Text = row["shelflocation"].ToString();
+                txtImg.Text = row["image"].ToString();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading book: {ex.Message}");
+                MessageBox.Show($"Error loading book: {ex.Message}",
+                    "Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void LoadCategories()
         {
@@ -117,7 +126,7 @@ namespace LibraryManagementSystem
                 Year = int.TryParse(txtYear.Text.Trim(), out int y) ? y : 0,
                 CopiesAvailable = int.TryParse(txtCopies.Text.Trim(), out int c) ? c : -1,
                 ShelfLocation = txtShelfLocation.Text.Trim(),
-                Image = "" 
+                Image = ""
             };
 
             try
@@ -140,7 +149,5 @@ namespace LibraryManagementSystem
         {
             this.Close();
         }
-
-        
     }
 }

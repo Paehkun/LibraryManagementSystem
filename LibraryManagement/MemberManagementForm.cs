@@ -79,7 +79,7 @@ namespace LibraryManagementSystem
             if (dgvMembers.Columns["memberid"] != null)
             {
                 dgvMembers.Columns["memberid"].HeaderText = "Member ID";
-                dgvMembers.Columns["memberid"].Width = 100;
+                dgvMembers.Columns["memberid"].Width = 120;
                 dgvMembers.Columns["memberid"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             }
 

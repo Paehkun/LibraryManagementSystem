@@ -29,180 +29,168 @@ namespace LibraryManagementSystem
 
         private void InitializeComponent()
         {
-            topPanel = new System.Windows.Forms.Panel();
-            mainPanel = new System.Windows.Forms.Panel();
-            btnBack = new System.Windows.Forms.Button();
-            lblTitle = new System.Windows.Forms.Label();
-            btnAddMember = new System.Windows.Forms.Button();
-            btnEditMember = new System.Windows.Forms.Button();
-            btnDeleteMember = new System.Windows.Forms.Button();
-            txtSearch = new System.Windows.Forms.TextBox();
-            dgvMembers = new System.Windows.Forms.DataGridView();
-
+            topPanel = new Panel();
+            btnBack = new Button();
+            lblTitle = new Label();
+            btnAddMember = new Button();
+            btnEditMember = new Button();
+            btnDeleteMember = new Button();
+            mainPanel = new Panel();
+            txtSearch = new TextBox();
+            dgvMembers = new DataGridView();
             topPanel.SuspendLayout();
             mainPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvMembers).BeginInit();
+            ((ISupportInitialize)dgvMembers).BeginInit();
             SuspendLayout();
-
             // 
             // topPanel
             // 
-            topPanel.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
+            topPanel.BackColor = Color.FromArgb(41, 128, 185);
             topPanel.Controls.Add(btnBack);
             topPanel.Controls.Add(lblTitle);
             topPanel.Controls.Add(btnAddMember);
             topPanel.Controls.Add(btnEditMember);
             topPanel.Controls.Add(btnDeleteMember);
-            topPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            topPanel.Location = new System.Drawing.Point(0, 0);
+            topPanel.Dock = DockStyle.Top;
+            topPanel.Location = new Point(0, 0);
             topPanel.Name = "topPanel";
-            topPanel.Size = new System.Drawing.Size(1920, 70);
+            topPanel.Size = new Size(1680, 66);
             topPanel.TabIndex = 0;
-
             // 
             // btnBack
             // 
-            btnBack.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
+            btnBack.BackColor = Color.FromArgb(41, 128, 185);
+            btnBack.Cursor = Cursors.Hand;
             btnBack.FlatAppearance.BorderSize = 0;
-            btnBack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(52, 152, 219);
-            btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            btnBack.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            btnBack.ForeColor = System.Drawing.Color.White;
-            btnBack.Location = new System.Drawing.Point(20, 15);
+            btnBack.FlatAppearance.MouseOverBackColor = Color.FromArgb(52, 152, 219);
+            btnBack.FlatStyle = FlatStyle.Flat;
+            btnBack.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            btnBack.ForeColor = Color.White;
+            btnBack.Location = new Point(18, 14);
             btnBack.Name = "btnBack";
-            btnBack.Size = new System.Drawing.Size(100, 40);
+            btnBack.Size = new Size(88, 38);
             btnBack.TabIndex = 0;
             btnBack.Text = "⬅️ Back";
             btnBack.UseVisualStyleBackColor = false;
-            btnBack.Cursor = System.Windows.Forms.Cursors.Hand;
             btnBack.Click += btnBack_Click;
-
             // 
             // lblTitle
             // 
-            lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            lblTitle.ForeColor = System.Drawing.Color.White;
-            lblTitle.Location = new System.Drawing.Point(140, 15);
+            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            lblTitle.ForeColor = Color.White;
+            lblTitle.Location = new Point(122, 14);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new System.Drawing.Size(350, 40);
+            lblTitle.Size = new Size(306, 38);
             lblTitle.TabIndex = 1;
             lblTitle.Text = "👥 Member Management";
-            lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-
+            lblTitle.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // btnAddMember
             // 
-            btnAddMember.BackColor = System.Drawing.Color.FromArgb(46, 204, 113);
+            btnAddMember.BackColor = Color.FromArgb(46, 204, 113);
+            btnAddMember.Cursor = Cursors.Hand;
             btnAddMember.FlatAppearance.BorderSize = 0;
-            btnAddMember.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(39, 174, 96);
-            btnAddMember.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            btnAddMember.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            btnAddMember.ForeColor = System.Drawing.Color.White;
-            btnAddMember.Location = new System.Drawing.Point(1400, 15);
+            btnAddMember.FlatAppearance.MouseOverBackColor = Color.FromArgb(39, 174, 96);
+            btnAddMember.FlatStyle = FlatStyle.Flat;
+            btnAddMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnAddMember.ForeColor = Color.White;
+            btnAddMember.Location = new Point(1225, 14);
             btnAddMember.Name = "btnAddMember";
-            btnAddMember.Size = new System.Drawing.Size(150, 40);
+            btnAddMember.Size = new Size(131, 38);
             btnAddMember.TabIndex = 2;
             btnAddMember.Text = "➕ Add Member";
             btnAddMember.UseVisualStyleBackColor = false;
-            btnAddMember.Cursor = System.Windows.Forms.Cursors.Hand;
             btnAddMember.Click += btnAddMember_Click;
-
             // 
             // btnEditMember
             // 
-            btnEditMember.BackColor = System.Drawing.Color.FromArgb(241, 196, 15);
+            btnEditMember.BackColor = Color.FromArgb(241, 196, 15);
+            btnEditMember.Cursor = Cursors.Hand;
             btnEditMember.FlatAppearance.BorderSize = 0;
-            btnEditMember.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(243, 156, 18);
-            btnEditMember.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            btnEditMember.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            btnEditMember.ForeColor = System.Drawing.Color.White;
-            btnEditMember.Location = new System.Drawing.Point(1570, 15);
+            btnEditMember.FlatAppearance.MouseOverBackColor = Color.FromArgb(243, 156, 18);
+            btnEditMember.FlatStyle = FlatStyle.Flat;
+            btnEditMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnEditMember.ForeColor = Color.White;
+            btnEditMember.Location = new Point(1374, 14);
             btnEditMember.Name = "btnEditMember";
-            btnEditMember.Size = new System.Drawing.Size(150, 40);
+            btnEditMember.Size = new Size(131, 38);
             btnEditMember.TabIndex = 3;
             btnEditMember.Text = "✏️ Edit Member";
             btnEditMember.UseVisualStyleBackColor = false;
-            btnEditMember.Cursor = System.Windows.Forms.Cursors.Hand;
             btnEditMember.Click += btnEditMember_Click;
-
             // 
             // btnDeleteMember
             // 
-            btnDeleteMember.BackColor = System.Drawing.Color.FromArgb(231, 76, 60);
+            btnDeleteMember.BackColor = Color.FromArgb(231, 76, 60);
+            btnDeleteMember.Cursor = Cursors.Hand;
             btnDeleteMember.FlatAppearance.BorderSize = 0;
-            btnDeleteMember.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(192, 57, 43);
-            btnDeleteMember.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            btnDeleteMember.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            btnDeleteMember.ForeColor = System.Drawing.Color.White;
-            btnDeleteMember.Location = new System.Drawing.Point(1740, 15);
+            btnDeleteMember.FlatAppearance.MouseOverBackColor = Color.FromArgb(192, 57, 43);
+            btnDeleteMember.FlatStyle = FlatStyle.Flat;
+            btnDeleteMember.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnDeleteMember.ForeColor = Color.White;
+            btnDeleteMember.Location = new Point(1522, 14);
             btnDeleteMember.Name = "btnDeleteMember";
-            btnDeleteMember.Size = new System.Drawing.Size(160, 40);
+            btnDeleteMember.Size = new Size(146, 38);
             btnDeleteMember.TabIndex = 4;
             btnDeleteMember.Text = "🗑️ Delete Member";
             btnDeleteMember.UseVisualStyleBackColor = false;
-            btnDeleteMember.Cursor = System.Windows.Forms.Cursors.Hand;
             btnDeleteMember.Click += btnDeleteMember_Click;
-
             // 
             // mainPanel
             // 
-            mainPanel.BackColor = System.Drawing.Color.FromArgb(236, 240, 241);
+            mainPanel.BackColor = Color.FromArgb(236, 240, 241);
             mainPanel.Controls.Add(txtSearch);
             mainPanel.Controls.Add(dgvMembers);
-            mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            mainPanel.Location = new System.Drawing.Point(0, 70);
+            mainPanel.Dock = DockStyle.Fill;
+            mainPanel.Location = new Point(0, 66);
             mainPanel.Name = "mainPanel";
-            mainPanel.Padding = new System.Windows.Forms.Padding(40);
-            mainPanel.Size = new System.Drawing.Size(1920, 1010);
+            mainPanel.Padding = new Padding(35, 38, 35, 38);
+            mainPanel.Size = new Size(1680, 946);
             mainPanel.TabIndex = 1;
-
             // 
             // txtSearch
             // 
-            txtSearch.BackColor = System.Drawing.Color.White;
-            txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            txtSearch.Font = new System.Drawing.Font("Segoe UI", 12F);
-            txtSearch.ForeColor = System.Drawing.Color.FromArgb(52, 73, 94);
-            txtSearch.Location = new System.Drawing.Point(50, 30);
+            txtSearch.BackColor = Color.White;
+            txtSearch.BorderStyle = BorderStyle.FixedSingle;
+            txtSearch.Font = new Font("Segoe UI", 12F);
+            txtSearch.ForeColor = Color.FromArgb(52, 73, 94);
+            txtSearch.Location = new Point(44, 28);
             txtSearch.Name = "txtSearch";
             txtSearch.PlaceholderText = "🔍 Search by Name, Email, or Phone...";
-            txtSearch.Size = new System.Drawing.Size(500, 29);
+            txtSearch.Size = new Size(438, 29);
             txtSearch.TabIndex = 0;
             txtSearch.TextChanged += txtSearch_TextChanged;
-
             // 
             // dgvMembers
             // 
             dgvMembers.AllowUserToAddRows = false;
             dgvMembers.AllowUserToDeleteRows = false;
-            dgvMembers.BackgroundColor = System.Drawing.Color.White;
-            dgvMembers.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dgvMembers.Location = new System.Drawing.Point(50, 80);
+            dgvMembers.BackgroundColor = Color.White;
+            dgvMembers.BorderStyle = BorderStyle.None;
+            dgvMembers.Location = new Point(44, 75);
             dgvMembers.Name = "dgvMembers";
             dgvMembers.ReadOnly = true;
             dgvMembers.RowHeadersVisible = false;
-            dgvMembers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            dgvMembers.Size = new System.Drawing.Size(1820, 880);
+            dgvMembers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvMembers.Size = new Size(1592, 825);
             dgvMembers.TabIndex = 1;
-
             // 
             // MemberManagementForm
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1920, 1080);
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1680, 1012);
             Controls.Add(mainPanel);
             Controls.Add(topPanel);
             Name = "MemberManagementForm";
-            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "👥 Member Management - Library System";
-            WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            WindowState = FormWindowState.Maximized;
             Load += MemberManagementForm_Load;
-
             topPanel.ResumeLayout(false);
             mainPanel.ResumeLayout(false);
             mainPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvMembers).EndInit();
+            ((ISupportInitialize)dgvMembers).EndInit();
             ResumeLayout(false);
         }
     }

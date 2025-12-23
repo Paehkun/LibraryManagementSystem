@@ -72,10 +72,10 @@ namespace LibraryManagement
             // cmbCategory
             // 
             cmbCategory.BackColor = Color.White;
+            cmbCategory.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbCategory.Location = new Point(125, 100);
             cmbCategory.Name = "cmbCategory";
             cmbCategory.Size = new Size(198, 23);
-            cmbCategory.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbCategory.TabIndex = 6;
             // 
             // txtCopies
@@ -148,7 +148,7 @@ namespace LibraryManagement
             // lblTitle
             // 
             lblTitle.AutoSize = true;
-            lblTitle.Location = new Point(66, 23);
+            lblTitle.Location = new Point(20, 23);
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(32, 15);
             lblTitle.TabIndex = 0;
@@ -157,7 +157,7 @@ namespace LibraryManagement
             // lblAuthor
             // 
             lblAuthor.AutoSize = true;
-            lblAuthor.Location = new Point(51, 60);
+            lblAuthor.Location = new Point(20, 60);
             lblAuthor.Name = "lblAuthor";
             lblAuthor.Size = new Size(47, 15);
             lblAuthor.TabIndex = 1;
@@ -166,7 +166,7 @@ namespace LibraryManagement
             // lblCategory
             // 
             lblCategory.AutoSize = true;
-            lblCategory.Location = new Point(39, 100);
+            lblCategory.Location = new Point(20, 103);
             lblCategory.Name = "lblCategory";
             lblCategory.Size = new Size(58, 15);
             lblCategory.TabIndex = 2;
@@ -175,7 +175,7 @@ namespace LibraryManagement
             // lblCopies
             // 
             lblCopies.AutoSize = true;
-            lblCopies.Location = new Point(51, 143);
+            lblCopies.Location = new Point(20, 143);
             lblCopies.Name = "lblCopies";
             lblCopies.Size = new Size(46, 15);
             lblCopies.TabIndex = 3;
@@ -184,7 +184,7 @@ namespace LibraryManagement
             // lblISBN
             // 
             lblISBN.AutoSize = true;
-            lblISBN.Location = new Point(62, 179);
+            lblISBN.Location = new Point(20, 179);
             lblISBN.Name = "lblISBN";
             lblISBN.Size = new Size(35, 15);
             lblISBN.TabIndex = 4;
@@ -193,7 +193,7 @@ namespace LibraryManagement
             // lblPublisher
             // 
             lblPublisher.AutoSize = true;
-            lblPublisher.Location = new Point(36, 220);
+            lblPublisher.Location = new Point(20, 220);
             lblPublisher.Name = "lblPublisher";
             lblPublisher.Size = new Size(59, 15);
             lblPublisher.TabIndex = 5;
@@ -202,7 +202,7 @@ namespace LibraryManagement
             // lblYear
             // 
             lblYear.AutoSize = true;
-            lblYear.Location = new Point(62, 259);
+            lblYear.Location = new Point(20, 259);
             lblYear.Name = "lblYear";
             lblYear.Size = new Size(32, 15);
             lblYear.TabIndex = 6;
@@ -211,7 +211,7 @@ namespace LibraryManagement
             // lblShelfLocation
             // 
             lblShelfLocation.AutoSize = true;
-            lblShelfLocation.Location = new Point(9, 299);
+            lblShelfLocation.Location = new Point(20, 299);
             lblShelfLocation.Name = "lblShelfLocation";
             lblShelfLocation.Size = new Size(85, 15);
             lblShelfLocation.TabIndex = 7;
@@ -229,7 +229,7 @@ namespace LibraryManagement
             // lblimg
             // 
             lblimg.AutoSize = true;
-            lblimg.Location = new Point(26, 336);
+            lblimg.Location = new Point(20, 336);
             lblimg.Name = "lblimg";
             lblimg.Size = new Size(68, 15);
             lblimg.TabIndex = 15;

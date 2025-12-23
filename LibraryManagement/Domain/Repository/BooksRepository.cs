@@ -17,38 +17,94 @@ namespace LibraryManagementSystem.Domain.Repository
             _db = db;
         }
 
-        public List<Book> GetAllBooks()
+        public DataTable GetAllBooks(string search = "")
         {
-            var books = new List<Book>();
+            DataTable dt = new DataTable();
 
             using (var conn = _db.GetConnection())
             {
                 conn.Open();
-                string query = "SELECT id, title, author, isbn, category, publisher, year, copiesavailable, shelflocation FROM books WHERE is_deleted = false ORDER BY id ASC";
+
+                string query = @"
+            SELECT 
+                id,
+                title,
+                author,
+                isbn,
+                category,
+                publisher,
+                year,
+                copiesavailable,
+                shelflocation,
+                image
+            FROM books
+            WHERE 
+                is_deleted = FALSE
+                AND (
+                    @search = ''
+                    OR CAST(id AS TEXT) ILIKE @pattern
+                    OR title ILIKE @pattern
+                    OR author ILIKE @pattern
+                    OR isbn ILIKE @pattern
+                    OR category ILIKE @pattern
+                )
+            ORDER BY id ASC
+        ";
 
                 using (var cmd = new NpgsqlCommand(query, conn))
-                using (var reader = cmd.ExecuteReader())
                 {
-                    while (reader.Read())
+                    cmd.Parameters.AddWithValue("@search", search);
+                    cmd.Parameters.AddWithValue("@pattern", "%" + search + "%");
+
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        var book = new Book
-                        {
-                            Id = reader.GetInt32(0),
-                            Title = reader.GetString(1),
-                            Author = reader.GetString(2),
-                            ISBN = reader.GetString(3),
-                            Category = reader.GetString(4),
-                            Publisher = reader.GetString(5),
-                            Year = reader.GetInt32(6),
-                            CopiesAvailable = reader.GetInt32(7),
-                            ShelfLocation = reader.GetString(8)
-                        };
-                        books.Add(book);
+                        dt.Load(reader);
                     }
                 }
             }
-            return books;
+
+            return dt;
         }
+
+        public DataTable GetBookById(int id)
+        {
+            DataTable dt = new DataTable();
+
+            using (var conn = _db.GetConnection())
+            {
+                conn.Open();
+
+                string query = @"
+            SELECT 
+                id,
+                title,
+                author,
+                isbn,
+                category,
+                publisher,
+                year,
+                copiesavailable,
+                shelflocation,
+                image
+            FROM books
+            WHERE id = @id AND is_deleted = FALSE
+            LIMIT 1
+        ";
+
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        dt.Load(reader);
+                    }
+                }
+            }
+
+            return dt;
+        }
+
 
         public List<Book> GetAllBooksAdd()
         {

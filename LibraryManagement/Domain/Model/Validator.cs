@@ -33,12 +33,14 @@ namespace LibraryManagement.Domain.Validation
             if (book.CopiesAvailable < 0)
                 throw new ArgumentException("Copies available must be 0 or more.");
 
-            if (string.IsNullOrWhiteSpace(book.ShelfLocation))
-                throw new ArgumentException("Shelf location is required.");
+            //if (string.IsNullOrWhiteSpace(book.ShelfLocation))
+                //throw new ArgumentException("Shelf location is required.");
 
-            if (string.IsNullOrWhiteSpace(book.Image))
-                throw new ArgumentException("Image path is required.");
+            //if (string.IsNullOrWhiteSpace(book.Image))
+               // throw new ArgumentException("Image path is required.");
         }
+
+
         //book validation error return
         public static List<string> GetBookValidationErrors(Book book)
         {
@@ -55,8 +57,8 @@ namespace LibraryManagement.Domain.Validation
                 if (string.IsNullOrWhiteSpace(book.Publisher)) errors.Add("Publisher is required.");
                 if (book.Year <= 0) errors.Add("Year must be a positive number.");
                 if (book.CopiesAvailable < 0) errors.Add("Copies available must be 0 or more.");
-                if (string.IsNullOrWhiteSpace(book.ShelfLocation)) errors.Add("Shelf location is required.");
-                if (string.IsNullOrWhiteSpace(book.Image)) errors.Add("Image path is required.");
+                //if (string.IsNullOrWhiteSpace(book.ShelfLocation)) errors.Add("Shelf location is required.");
+                //if (string.IsNullOrWhiteSpace(book.Image)) errors.Add("Image path is required.");
             }
 
             return errors;

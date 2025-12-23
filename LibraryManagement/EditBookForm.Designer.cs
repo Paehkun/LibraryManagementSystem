@@ -57,6 +57,8 @@
             btnLoad = new Button();
             btnSave = new Button();
             btnCancel = new Button();
+            lblimg = new Label();
+            txtImg = new TextBox();
             SuspendLayout();
             // 
             // txtBookId
@@ -95,7 +97,7 @@
             txtISBN.Size = new Size(168, 23);
             txtISBN.TabIndex = 3;
             // 
-            // txtCategory
+            // cmbCategory
             // 
             cmbCategory.BackColor = Color.White;
             cmbCategory.Location = new Point(120, 160);
@@ -225,7 +227,7 @@
             // btnSave
             // 
             btnSave.BackColor = Color.Gainsboro;
-            btnSave.Location = new Point(60, 350);
+            btnSave.Location = new Point(96, 396);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 25);
             btnSave.TabIndex = 10;
@@ -236,7 +238,7 @@
             // btnCancel
             // 
             btnCancel.BackColor = Color.Gainsboro;
-            btnCancel.Location = new Point(170, 350);
+            btnCancel.Location = new Point(210, 396);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 25);
             btnCancel.TabIndex = 11;
@@ -244,10 +246,30 @@
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
             // 
+            // lblimg
+            // 
+            lblimg.AutoSize = true;
+            lblimg.Location = new Point(20, 340);
+            lblimg.Name = "lblimg";
+            lblimg.Size = new Size(68, 15);
+            lblimg.TabIndex = 17;
+            lblimg.Text = "Image Link:";
+            // 
+            // txtImg
+            // 
+            txtImg.BackColor = Color.White;
+            txtImg.Location = new Point(120, 337);
+            txtImg.Name = "txtImg";
+            txtImg.PlaceholderText = "Image URL";
+            txtImg.Size = new Size(198, 23);
+            txtImg.TabIndex = 16;
+            // 
             // EditBookForm
             // 
             BackColor = Color.WhiteSmoke;
-            ClientSize = new Size(330, 400);
+            ClientSize = new Size(403, 451);
+            Controls.Add(lblimg);
+            Controls.Add(txtImg);
             Controls.Add(lblBookId);
             Controls.Add(lblTitle);
             Controls.Add(lblAuthor);
@@ -276,5 +298,7 @@
             ResumeLayout(false);
             PerformLayout();
         }
+        private Label lblimg;
+        private TextBox txtImg;
     }
 }

@@ -148,25 +148,13 @@ namespace LibraryManagementSystem
 
         private void LoadBooks()
         {
-            dgvBooks.DataSource = _bookRepo.GetAllBooks();
+            dgvBooks.DataSource = _bookRepo.GetAllBooks(txtSearch.Text.Trim());
             FormatColumns();
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
-            string searchText = txtSearch.Text.Trim();
-
-            try
-            {
-                var searchResults = _bookRepo.BookSearch(searchText);
-                dgvBooks.DataSource = searchResults;
-                FormatColumns();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error searching: {ex.Message}", "Search Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            LoadBooks();
         }
 
         private void btnAddBook_Click(object sender, EventArgs e)
