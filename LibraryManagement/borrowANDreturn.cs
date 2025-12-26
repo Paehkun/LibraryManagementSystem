@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using static LibraryManagementSystem.Domain.Entities.BorrowReturn;
 
 namespace LibraryManagement
@@ -15,11 +14,7 @@ namespace LibraryManagement
     public partial class borrowANDreturn : Form
     {
         private BorrowRepository _borrowRepo;
-        private int selectedMemberId = -1;
-        private string selectedMemberName = "";
-        private string selectedPhone = "";
         private string username;
-        private List<(string Title, string ISBN)> selectedBooks = new List<(string, string)>();
 
         public borrowANDreturn(string username)
         {
@@ -29,15 +24,134 @@ namespace LibraryManagement
             this.username = UserSession.Username;
 
             StyleDataGridView();
-            ApplyCardStyle();
-
-            this.Load += borrowANDreturn_Load;
         }
 
         private void borrowANDreturn_Load(object sender, EventArgs e)
         {
             LoadBorrowRecords();
-            SetColumnStyles();
+            FormatColumns();
+        }
+
+        private void StyleDataGridView()
+        {
+            dgvBorrowReturn.EnableHeadersVisualStyles = false;
+            dgvBorrowReturn.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(52, 152, 219);
+            dgvBorrowReturn.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvBorrowReturn.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+            dgvBorrowReturn.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgvBorrowReturn.ColumnHeadersHeight = 45;
+
+            dgvBorrowReturn.RowTemplate.Height = 45;
+            dgvBorrowReturn.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+            dgvBorrowReturn.DefaultCellStyle.BackColor = Color.White;
+            dgvBorrowReturn.DefaultCellStyle.ForeColor = Color.FromArgb(52, 73, 94);
+            dgvBorrowReturn.DefaultCellStyle.SelectionBackColor = Color.FromArgb(52, 152, 219);
+            dgvBorrowReturn.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgvBorrowReturn.DefaultCellStyle.Padding = new Padding(8, 6, 8, 6);
+
+            dgvBorrowReturn.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(236, 240, 241);
+
+            dgvBorrowReturn.BackgroundColor = Color.White;
+            dgvBorrowReturn.BorderStyle = BorderStyle.None;
+            dgvBorrowReturn.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvBorrowReturn.GridColor = Color.FromArgb(189, 195, 199);
+            dgvBorrowReturn.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvBorrowReturn.AllowUserToAddRows = false;
+            dgvBorrowReturn.AllowUserToDeleteRows = false;
+            dgvBorrowReturn.ReadOnly = true;
+            dgvBorrowReturn.RowHeadersVisible = false;
+            dgvBorrowReturn.MultiSelect = false;
+            dgvBorrowReturn.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }
+
+        private void FormatColumns()
+        {
+            if (dgvBorrowReturn.Columns.Count == 0) return;
+
+            // Hide columns
+            string[] hideColumns = {
+                "created_at", "last_modified", "is_deleted", "create_by",
+                "last_modified_by", "image", "id"
+            };
+
+            foreach (var col in hideColumns)
+            {
+                if (dgvBorrowReturn.Columns[col] != null)
+                    dgvBorrowReturn.Columns[col].Visible = false;
+            }
+
+            // Format headers
+            if (dgvBorrowReturn.Columns["borrowid"] != null)
+            {
+                dgvBorrowReturn.Columns["borrowid"].HeaderText = "Borrow ID";
+                dgvBorrowReturn.Columns["borrowid"].Width = 120;
+                dgvBorrowReturn.Columns["borrowid"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+
+            if (dgvBorrowReturn.Columns["title"] != null)
+            {
+                dgvBorrowReturn.Columns["title"].HeaderText = "Book Title";
+                dgvBorrowReturn.Columns["title"].Width = 250;
+            }
+
+            if (dgvBorrowReturn.Columns["isbn"] != null)
+            {
+                dgvBorrowReturn.Columns["isbn"].HeaderText = "ISBN";
+                dgvBorrowReturn.Columns["isbn"].Width = 140;
+            }
+
+            if (dgvBorrowReturn.Columns["memberid"] != null)
+            {
+                dgvBorrowReturn.Columns["memberid"].HeaderText = "Member ID";
+                dgvBorrowReturn.Columns["memberid"].Width = 100;
+                dgvBorrowReturn.Columns["memberid"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+
+            if (dgvBorrowReturn.Columns["name"] != null)
+            {
+                dgvBorrowReturn.Columns["name"].HeaderText = "Member Name";
+                dgvBorrowReturn.Columns["name"].Width = 180;
+            }
+
+            if (dgvBorrowReturn.Columns["phone"] != null)
+            {
+                dgvBorrowReturn.Columns["phone"].HeaderText = "Phone";
+                dgvBorrowReturn.Columns["phone"].Width = 130;
+            }
+
+            if (dgvBorrowReturn.Columns["borrowdate"] != null)
+            {
+                dgvBorrowReturn.Columns["borrowdate"].HeaderText = "Borrow Date";
+                dgvBorrowReturn.Columns["borrowdate"].Width = 120;
+                dgvBorrowReturn.Columns["borrowdate"].DefaultCellStyle.Format = "yyyy-MM-dd";
+                dgvBorrowReturn.Columns["borrowdate"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+
+            if (dgvBorrowReturn.Columns["duedate"] != null)
+            {
+                dgvBorrowReturn.Columns["duedate"].HeaderText = "Due Date";
+                dgvBorrowReturn.Columns["duedate"].Width = 120;
+                dgvBorrowReturn.Columns["duedate"].DefaultCellStyle.Format = "yyyy-MM-dd";
+                dgvBorrowReturn.Columns["duedate"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+
+            if (dgvBorrowReturn.Columns["returndate"] != null)
+            {
+                dgvBorrowReturn.Columns["returndate"].HeaderText = "Return Date";
+                dgvBorrowReturn.Columns["returndate"].Width = 120;
+                dgvBorrowReturn.Columns["returndate"].DefaultCellStyle.Format = "yyyy-MM-dd";
+                dgvBorrowReturn.Columns["returndate"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+
+            if (dgvBorrowReturn.Columns["status"] != null)
+            {
+                dgvBorrowReturn.Columns["status"].HeaderText = "Status";
+                dgvBorrowReturn.Columns["status"].Width = 100;
+                dgvBorrowReturn.Columns["status"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+
+            dgvBorrowReturn.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgvBorrowReturn.ClearSelection();
         }
 
         private void LoadBorrowRecords()
@@ -45,124 +159,59 @@ namespace LibraryManagement
             try
             {
                 DataTable dt = _borrowRepo.GetBorrowRecords();
-                dataGridView1.DataSource = dt;
-
-                // ✅ Hide actual DB columns (NOT BaseClass)
-                string[] hideColumns =
-{
-    "created_at",
-    "last_modified",
-    "is_deleted",
-    "create_by",
-    "last_modified_by",
-    "image",
-    "id"
-};
-                foreach (var col in hideColumns)
-                {
-                    if (dataGridView1.Columns.Contains(col))
-                        dataGridView1.Columns[col].Visible = false;
-                }
-
-                // ✅ UI Styling
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                dataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 10);
-                dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                dataGridView1.ColumnHeadersDefaultCellStyle.Font =
-                    new Font("Segoe UI", 10, FontStyle.Bold);
-                dataGridView1.RowTemplate.Height = 35;
-
-                CheckLateReturns();
-                dataGridView1.ClearSelection();
+                dgvBorrowReturn.DataSource = dt;
+                FormatColumns();
+                ApplyStatusColors();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error loading records: " + ex.Message);
+                MessageBox.Show("Error loading records: " + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void SetColumnStyles()
-        {
-            if (dataGridView1.Columns.Count == 0)
-                return;
-
-            dataGridView1.Columns["borrowid"].Width = 120;
-            dataGridView1.Columns["title"].Width = 230;
-            dataGridView1.Columns["isbn"].Width = 140;
-            dataGridView1.Columns["memberid"].Width = 120;
-            dataGridView1.Columns["name"].Width = 180;
-            dataGridView1.Columns["borrowdate"].Width = 150;
-            dataGridView1.Columns["duedate"].Width = 150;
-            dataGridView1.Columns["returndate"].Width = 150;
-            dataGridView1.Columns["status"].Width = 100;
-            dataGridView1.Columns["phone"].Width = 120;
-
-            // ✅ Center alignment
-            dataGridView1.Columns["borrowid"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView1.Columns["memberid"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView1.Columns["status"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            // ✅ Set readable headers
-            dataGridView1.Columns["borrowid"].HeaderText = "Borrow ID";
-            dataGridView1.Columns["title"].HeaderText = "Book Title";
-            dataGridView1.Columns["isbn"].HeaderText = "ISBN";
-            dataGridView1.Columns["memberid"].HeaderText = "Member ID";
-            dataGridView1.Columns["name"].HeaderText = "Name";
-            dataGridView1.Columns["phone"].HeaderText = "Phone";
-            dataGridView1.Columns["borrowdate"].HeaderText = "Borrow Date";
-            dataGridView1.Columns["duedate"].HeaderText = "Due Date";
-            dataGridView1.Columns["returndate"].HeaderText = "Return Date";
-            dataGridView1.Columns["status"].HeaderText = "Status";
-
-            // ✅ Center grid on form
-            int centerX = (this.ClientSize.Width - dataGridView1.Width) / 2;
-            dataGridView1.Location = new Point(centerX, 200);
-        }
-
-        private void CheckLateReturns()
+        private void ApplyStatusColors()
         {
             DateTime today = DateTime.Now.Date;
 
-            foreach (DataGridViewRow row in dataGridView1.Rows)
+            foreach (DataGridViewRow row in dgvBorrowReturn.Rows)
             {
                 if (row.Cells["status"].Value == null)
                     continue;
 
                 int status = Convert.ToInt32(row.Cells["status"].Value);
 
-                if (status == (int)BorrowStatus.Borrowed) // Only borrowed books
+                if (status == (int)BorrowStatus.Borrowed)
                 {
                     if (DateTime.TryParse(row.Cells["duedate"].Value?.ToString(), out DateTime dueDate))
                     {
                         if (dueDate < today)
                         {
-                            // 🔴 Overdue borrowed book
-                            row.DefaultCellStyle.BackColor = Color.LightCoral;
-                            row.DefaultCellStyle.ForeColor = Color.Black;
+                            // Overdue
+                            row.DefaultCellStyle.BackColor = Color.FromArgb(255, 204, 204);
+                            row.DefaultCellStyle.ForeColor = Color.FromArgb(192, 0, 0);
                         }
                         else
                         {
-                            // 🟠 Borrowed but not overdue
-                            row.DefaultCellStyle.BackColor = Color.DarkSeaGreen;
-                            row.DefaultCellStyle.ForeColor = Color.White;
+                            // Borrowed (not overdue)
+                            row.DefaultCellStyle.BackColor = Color.FromArgb(204, 255, 204);
+                            row.DefaultCellStyle.ForeColor = Color.FromArgb(0, 128, 0);
                         }
                     }
                 }
                 else
                 {
-                    // Returned book
+                    // Returned
                     row.DefaultCellStyle.BackColor = Color.White;
-                    row.DefaultCellStyle.ForeColor = Color.Black;
+                    row.DefaultCellStyle.ForeColor = Color.FromArgb(52, 73, 94);
                 }
             }
         }
-
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
             try
             {
-                //Select Member
                 int memberId;
                 using (SelectMemberForm memberForm = new SelectMemberForm())
                 {
@@ -172,7 +221,6 @@ namespace LibraryManagement
                     memberId = int.Parse(memberForm.SelectedMemberId);
                 }
 
-                //Select Books
                 List<(string Title, string ISBN)> selectedBooks = new();
                 using (SelectBooksForm booksForm = new SelectBooksForm())
                 {
@@ -192,7 +240,6 @@ namespace LibraryManagement
                     return;
                 }
 
-                //Borrow days
                 string input = Interaction.InputBox(
                     "Enter number of borrow days:", "Borrow Duration", "7");
 
@@ -203,11 +250,9 @@ namespace LibraryManagement
                     return;
                 }
 
-                // Dates
                 DateTime borrowDate = DateTime.Now;
                 DateTime dueDate = borrowDate.AddDays(borrowDays);
 
-                // Call repository (NO SQL here)
                 foreach (var book in selectedBooks)
                 {
                     _borrowRepo.AddBorrowRecord(
@@ -249,9 +294,7 @@ namespace LibraryManagement
                 }
 
                 string borrowId = input.Trim();
-
-                var borrowRepository = new BorrowRepository(new DBConnection());
-                borrowRepository.ReturnBook(borrowId);
+                _borrowRepo.ReturnBook(borrowId);
 
                 MessageBox.Show("Book returned successfully!",
                     "Success",
@@ -271,7 +314,6 @@ namespace LibraryManagement
             }
         }
 
-
         private void btnBack_Click(object sender, EventArgs e)
         {
             if (UserSession.Role == "admin")
@@ -285,98 +327,5 @@ namespace LibraryManagement
 
             this.Hide();
         }
-
-        private void StyleDataGridView()
-        {
-            dataGridView1.EnableHeadersVisualStyles = false;
-            dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
-            dataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
-            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView1.ColumnHeadersHeight = 40;
-            dataGridView1.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-        }
-
-        private void ApplyCardStyle()
-        {
-            dataGridView1.BackgroundColor = Color.White;
-            dataGridView1.BorderStyle = BorderStyle.None;
-            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None;
-            dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView1.GridColor = Color.White;
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.DefaultCellStyle.BackColor = Color.White;
-            dataGridView1.DefaultCellStyle.ForeColor = Color.Black;
-            dataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 10F);
-            dataGridView1.DefaultCellStyle.SelectionBackColor = Color.FromArgb(230, 240, 255);
-            dataGridView1.DefaultCellStyle.SelectionForeColor = Color.Black;
-            dataGridView1.DefaultCellStyle.Padding = new Padding(12, 10, 12, 10);
-            dataGridView1.RowTemplate.Height = 40;
-            dataGridView1.RowTemplate.MinimumHeight = 40;
-            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 248, 250);
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.MultiSelect = false;
-            dataGridView1.ReadOnly = true;
-
-            dataGridView1.CellPainting -= DgvBooks_CellPainting;
-            dataGridView1.CellPainting += DgvBooks_CellPainting;
-        }
-
-        private void DgvBooks_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
-            {
-                e.Handled = true;
-                e.PaintBackground(e.ClipBounds, true);
-
-                Rectangle cardRect = e.CellBounds;
-                cardRect.Inflate(-5, -5);
-
-                bool isSelected = (e.State & DataGridViewElementStates.Selected) != 0;
-
-                Color cardColor = isSelected ? Color.FromArgb(230, 240, 255) : e.CellStyle.BackColor;
-                Color borderColor = isSelected ? Color.FromArgb(130, 170, 250) : Color.LightGray;
-
-                using (SolidBrush brush = new SolidBrush(cardColor))
-                using (Pen borderPen = new Pen(borderColor, 1))
-                {
-                    Graphics g = e.Graphics;
-                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                    int radius = 10;
-                    using (System.Drawing.Drawing2D.GraphicsPath path = GetRoundedRectPath(cardRect, radius))
-                    {
-                        g.FillPath(brush, path);
-                        g.DrawPath(borderPen, path);
-                    }
-                }
-
-                TextRenderer.DrawText(
-                    e.Graphics,
-                    e.FormattedValue?.ToString() ?? string.Empty,
-                    e.CellStyle.Font,
-                    cardRect,
-                    e.CellStyle.ForeColor,
-                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter
-                );
-            }
-        }
-
-        private System.Drawing.Drawing2D.GraphicsPath GetRoundedRectPath(Rectangle rect, int radius)
-        {
-            var path = new System.Drawing.Drawing2D.GraphicsPath();
-            int diameter = radius * 2;
-
-            path.AddArc(rect.X, rect.Y, diameter, diameter, 180, 90);
-            path.AddArc(rect.Right - diameter, rect.Y, diameter, diameter, 270, 90);
-            path.AddArc(rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 0, 90);
-            path.AddArc(rect.X, rect.Bottom - diameter, diameter, diameter, 90, 90);
-            path.CloseFigure();
-
-            return path;
-        }
-
-        
     }
 }

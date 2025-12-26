@@ -1,4 +1,5 @@
 ﻿using LibraryManagement.Domain.Model;
+using LibraryManagement.Domain.Repository;
 using LibraryManagement.Domain.Validation;
 using LibraryManagementSystem.Domain.Repository;
 using Npgsql;
@@ -13,12 +14,15 @@ namespace LibraryManagementSystem
     {
         private int _id;
         private BookRepository _bookRepo;
+        private CategoryRepository _categoryRepo;
+
         public EditBookForm(int id)
         {
             InitializeComponent();
             _id = id;
             DBConnection db = new DBConnection();
             _bookRepo = new BookRepository(db);
+            _categoryRepo = new CategoryRepository(db);
 
         }
 
@@ -70,28 +74,28 @@ namespace LibraryManagementSystem
             }
         }
 
-
         private void LoadCategories()
         {
             cmbCategory.Items.Clear();
 
-            using (var conn = DatabaseHelper.GetConnection())
+            try
             {
-                conn.Open();
-                string query = "SELECT category FROM categories ORDER BY id ASC";
-                using (var cmd = new NpgsqlCommand(query, conn))
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        cmbCategory.Items.Add(reader.GetString(0));
-                    }
-                }
-            }
+                List<string> categories = _categoryRepo.GetAllCategories();
 
-            cmbCategory.Items.Insert(0, "Select Category"); // optional default
-            cmbCategory.SelectedIndex = 0; // show default prompt
+                foreach (var category in categories)
+                {
+                    cmbCategory.Items.Add(category);
+                }
+
+                cmbCategory.Items.Insert(0, "Select Category");
+                cmbCategory.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading categories: " + ex.Message);
+            }
         }
+
 
 
 

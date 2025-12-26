@@ -14,7 +14,7 @@ namespace LibraryManagement.Domain.Repository
             _db = db;
         }
 
-        // ✅ Get all categories ordered by ID
+        //Get all categories ordered by ID
         public List<string> GetAllCategories()
         {
             List<string> categories = new List<string>();
@@ -39,7 +39,7 @@ namespace LibraryManagement.Domain.Repository
             return categories;
         }
 
-        // ✅ Add a new category
+        //Add a new category
         public void AddCategory(string categoryName, int userId)
         {
             using (var conn = _db.GetConnection())

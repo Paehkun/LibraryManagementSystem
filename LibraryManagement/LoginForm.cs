@@ -1,4 +1,6 @@
 ﻿using LibraryManagement;
+using LibraryManagement.Domain.Model;
+using LibraryManagementSystem.Domain.Repository;
 using Npgsql;
 using System;
 using System.Data;
@@ -8,12 +10,13 @@ namespace LibraryManagementSystem
 {
     public partial class LoginForm : Form
     {
-        // PostgreSQL connection string
-        private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db";
+        private UserRepository _userRepo;
 
         public LoginForm()
         {
             InitializeComponent();
+            DBConnection db = new DBConnection();
+            _userRepo = new UserRepository(db);
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -29,52 +32,23 @@ namespace LibraryManagementSystem
 
             try
             {
-                using (var conn = new NpgsqlConnection(connString))
+                Users? user = _userRepo.Authenticate(username, password);
+                if (user == null)
                 {
-                    conn.Open();
-
-                    string query = "SELECT role FROM users WHERE username = @user AND password = @pass";
-                    using (var cmd = new NpgsqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@user", username);
-                        cmd.Parameters.AddWithValue("@pass", password);
-
-                        var roleObj = cmd.ExecuteScalar();
-
-                        if (roleObj == null)
-                        {
-                            MessageBox.Show("Invalid username or password.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-
-                        string userRole = roleObj.ToString().ToLower();
-
-                        this.Hide(); // Hide login form
-
-
-
-                        UserSession.Username = username;
-                        UserSession.Role = userRole;
-                        Form nextForm;
-
-                        if (userRole == "admin")
-                        {
-                            nextForm = new AdminHomeForm(username);
-                        }
-                        else if (userRole == "librarian")
-                        {
-                            nextForm = new LibrarianHomeForm(username);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Unknown role: " + userRole);
-                            return;
-                        }
-                        this.Hide();
-                        nextForm.FormClosed += (s, args) => this.Close();
-                        nextForm.Show();
-                    }
+                    MessageBox.Show("Invalid username or password.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
+
+                UserSession.Username = user.Username;
+                UserSession.Role = user.Role.ToLower();
+
+                Form nextForm = user.Role.ToLower() == "admin"
+                                ? new AdminHomeForm(user.Username)
+                                : new LibrarianHomeForm(user.Username);
+
+                this.Hide();
+                nextForm.FormClosed += (s, args) => this.Close();
+                nextForm.Show();
             }
             catch (Exception ex)
             {

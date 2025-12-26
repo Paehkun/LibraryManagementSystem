@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using LibraryManagementSystem.Domain.Repository;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,9 +14,12 @@ namespace LibraryManagement
 {
     public partial class DeleteUserForm : Form
     {
+        private UserRepository _userRepo;
         public DeleteUserForm()
         {
             InitializeComponent();
+            DBConnection db = new DBConnection();
+            _userRepo = new UserRepository(db);
         }
 
         private void DeleteUserForm_Load(object sender, EventArgs e)
@@ -30,42 +34,24 @@ namespace LibraryManagement
                 return;
             }
 
-            string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
-
             try
             {
-                using (var conn = new NpgsqlConnection(connString))
+                if (!_userRepo.UserExists(ID))
                 {
-                    conn.Open();
-
-                    // Check if user exists
-                    string checkQuery = "SELECT COUNT(*) FROM users WHERE id = @id AND is_deleted = FALSE";
-                    using (var checkCmd = new NpgsqlCommand(checkQuery, conn))
-                    {
-                        checkCmd.Parameters.AddWithValue("@id", ID);
-                        int count = Convert.ToInt32(checkCmd.ExecuteScalar());
-                        if (count == 0)
-                        {
-                            MessageBox.Show("User with this ID does not exist or is already deleted.");
-                            return;
-                        }
-                    }
-
-                    // Confirm deletion
-                    if (MessageBox.Show("Are you sure you want to delete this user?",
-                        "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
-                    {
-                        return;
-                    }
-
-                    // Mark user as deleted
-                    string updateQuery = "UPDATE users SET is_deleted = TRUE WHERE id = @id";
-                    using (var updateCmd = new NpgsqlCommand(updateQuery, conn))
-                    {
-                        updateCmd.Parameters.AddWithValue("@id", ID);
-                        updateCmd.ExecuteNonQuery();
-                    }
+                    MessageBox.Show("User with this ID does not exist or is already deleted.");
+                    return;
                 }
+
+                if (MessageBox.Show(
+                    "Are you sure you want to delete this user?",
+                    "Confirm Delete",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning) == DialogResult.No)
+                {
+                    return;
+                }
+
+                _userRepo.SoftDeleteUser(ID);
 
                 MessageBox.Show("User deleted successfully!");
                 this.DialogResult = DialogResult.OK;
@@ -76,6 +62,7 @@ namespace LibraryManagement
                 MessageBox.Show($"Error deleting user: {ex.Message}");
             }
         }
+
 
         private void btnCancel_Click(object sender, EventArgs e)
         {

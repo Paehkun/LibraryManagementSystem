@@ -1,4 +1,7 @@
-﻿using Npgsql;
+﻿using LibraryManagement.Domain.Model;
+using LibraryManagementSystem.Domain.Entities;
+using LibraryManagementSystem.Domain.Repository;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,15 +17,19 @@ namespace LibraryManagement
     public partial class EditUserForm : Form
     {
         private int _Id;
-        private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
+        private UserRepository _userRepo;
         public EditUserForm(int Id)
         {
             InitializeComponent();
             _Id = Id;
+            DBConnection db = new DBConnection();
+            _userRepo = new UserRepository(db);
         }
         public EditUserForm()
         {
             InitializeComponent();
+            DBConnection db = new DBConnection();
+            _userRepo = new UserRepository(db);
         }
 
 
@@ -35,7 +42,6 @@ namespace LibraryManagement
             }
         }
 
-        //private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
         private void btnLoad_Click(object sender, EventArgs e)
         {
             if (!int.TryParse(txtID.Text.Trim(), out int id))
@@ -44,40 +50,7 @@ namespace LibraryManagement
                 return;
             }
 
-            try
-            {
-                using (var conn = new NpgsqlConnection(connString))
-                {
-                    conn.Open();
-                    string query = @"SELECT id, name, username, password, role, email, phone FROM users 
-                                     WHERE id = @id";
-                    using (var cmd = new NpgsqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@id", id);
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                txtID.Text = reader["id"].ToString();
-                                txtName.Text = reader["name"].ToString();
-                                txtUsername.Text = reader["username"].ToString();
-                                txtPassword.Text = reader["password"].ToString();
-                                CMRole.Text = reader["role"].ToString();
-                                txtEmail.Text = reader["email"].ToString();
-                                txtPhone.Text = reader["phone"].ToString();
-                            }
-                            else
-                            {
-                                MessageBox.Show("No user found with this ID.");
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading book: {ex.Message}");
-            }
+            LoadMemberData(id);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -96,39 +69,27 @@ namespace LibraryManagement
 
             try
             {
-                using (var conn = new NpgsqlConnection(connString))
+                Users user = new Users
                 {
-                    conn.Open();
-                    string updateQuery = @"UPDATE users 
-                                           SET name = @name, 
-                                               username = @username, 
-                                               password = @password, 
-                                               role = @role,
-                                               email = @email,
-                                               phone = @phone
-                                           WHERE id = @id";
-                    using (var cmd = new NpgsqlCommand(updateQuery, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@name", txtName.Text.Trim());
-                        cmd.Parameters.AddWithValue("@username", txtUsername.Text.Trim());
-                        cmd.Parameters.AddWithValue("@password", txtPassword.Text.Trim());
-                        cmd.Parameters.AddWithValue("@role", CMRole.Text.Trim());
-                        cmd.Parameters.AddWithValue("@id", id);
-                        cmd.Parameters.AddWithValue("@email", txtEmail.Text.Trim());
-                        cmd.Parameters.AddWithValue("@phone", txtPhone.Text.Trim());
+                    Id = id,
+                    Name = txtName.Text.Trim(),
+                    Username = txtUsername.Text.Trim(),
+                    Password = txtPassword.Text.Trim(),
+                    Role = CMRole.Text.Trim(),
+                    Email = txtEmail.Text.Trim(),
+                    Phone = txtPhone.Text.Trim()
+                };
 
-                        int rows = cmd.ExecuteNonQuery();
-                        if (rows > 0)
-                        {
-                            MessageBox.Show("User data updated successfully!");
-                            this.DialogResult = DialogResult.OK;
-                            this.Close();
-                        }
-                        else
-                        {
-                            MessageBox.Show("No user found with this ID.");
-                        }
-                    }
+                if (_userRepo.UserExists(id))
+                {
+                    _userRepo.EditUser(user); // Call repository to update user
+                    MessageBox.Show("User data updated successfully!");
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("No user found with this ID.");
                 }
             }
             catch (Exception ex)
@@ -145,34 +106,21 @@ namespace LibraryManagement
         {
             try
             {
-                using (var conn = new NpgsqlConnection(connString))
-                {
-                    conn.Open();
-                    string query = @"SELECT id, name, username, password, role, email, phone
-                                 FROM users 
-                                 WHERE id = @id";
+                Users? user = _userRepo.GetUserById(id); // Get user from repository
 
-                    using (var cmd = new NpgsqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@id", id);
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                txtID.Text = reader["id"].ToString();
-                                txtName.Text = reader["name"].ToString();
-                                txtUsername.Text = reader["username"].ToString();
-                                txtPassword.Text = reader["password"].ToString();
-                                CMRole.Text = reader["role"].ToString();
-                                txtEmail.Text = reader["email"].ToString();
-                                txtPhone.Text = reader["phone"].ToString();
-                            }
-                            else
-                            {
-                                MessageBox.Show("No user found with this ID.");
-                            }
-                        }
-                    }
+                if (user != null)
+                {
+                    txtID.Text = user.Id.ToString();
+                    txtName.Text = user.Name;
+                    txtUsername.Text = user.Username;
+                    txtPassword.Text = user.Password;
+                    CMRole.Text = user.Role;
+                    txtEmail.Text = user.Email;
+                    txtPhone.Text = user.Phone;
+                }
+                else
+                {
+                    MessageBox.Show("No user found with this ID.");
                 }
             }
             catch (Exception ex)

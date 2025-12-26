@@ -28,7 +28,7 @@ namespace LibraryManagement
 
             try
             {
-                // 🔍 First: Check if the book exists BEFORE asking for confirmation
+                //Check if the book exists BEFORE asking for confirmation
                 bool exists = _bookRepo.BookExists(isbn);
                 if (!exists)
                 {
@@ -36,14 +36,12 @@ namespace LibraryManagement
                     return;
                 }
 
-                // 🟡 Now show confirmation box
                 if (MessageBox.Show("Are you sure you want to delete this book?",
                     "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
                 {
                     return;
                 }
 
-                // 🗑️ Perform soft delete
                 bool deleted = _bookRepo.DeleteBook(isbn);
                 if (deleted)
                 {

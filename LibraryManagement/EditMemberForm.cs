@@ -8,21 +8,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LibraryManagementSystem.Domain.Repository;
 
 namespace LibraryManagement
 {
     public partial class EditMemberForm : Form
     {
         private int _memberId;
-        private string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
+        private MemberRepository _memberRepo;
         public EditMemberForm(int memberId)
         {
             InitializeComponent();
             _memberId = memberId;
+            DBConnection db = new DBConnection();
+            _memberRepo = new MemberRepository(db);
         }
         public EditMemberForm()
         {
             InitializeComponent();
+            DBConnection db = new DBConnection();
+            _memberRepo = new MemberRepository(db);
         }
 
 
@@ -31,60 +36,34 @@ namespace LibraryManagement
             if (_memberId > 0)
             {
                 LoadMemberData(_memberId);
-                txtMemberID.ReadOnly = false; 
+                txtMemberID.ReadOnly = false;
             }
         }
+
         private void lblMembershipDate_Click(object sender, EventArgs e)
         {
 
         }
         private void btnLoad_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(txtMemberID.Text.Trim(), out int memberid))
+            if (!int.TryParse(txtMemberID.Text.Trim(), out int memberId))
             {
                 MessageBox.Show("Please enter a valid Member ID.");
                 return;
             }
 
-            try
+            if (!_memberRepo.MemberExists(memberId))
             {
-                using (var conn = new NpgsqlConnection(connString))
-                {
-                    conn.Open();
-                    string query = @"SELECT memberid, name, email, phone, address, membershipdate FROM member 
-                                     WHERE memberid = @memberid";
-                    using (var cmd = new NpgsqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@memberid", memberid);
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                txtMemberID.Text = reader["memberid"].ToString();
-                                txtName.Text = reader["name"].ToString();
-                                txtEmail.Text = reader["email"].ToString();
-                                txtPhone.Text = reader["phone"].ToString();
-                                txtAddress.Text = reader["address"].ToString();
-                                DateTime membershipDate = Convert.ToDateTime(reader["membershipdate"]);
-                                dtpMembershipDate.Text = membershipDate.ToString("yyyy-MM-dd");
-                            }
-                            else
-                            {
-                                MessageBox.Show("No member found with this ID.");
-                            }
-                        }
-                    }
-                }
+                MessageBox.Show("No member found with this ID.");
+                return;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading book: {ex.Message}");
-            }
+
+            LoadMemberData(memberId);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(txtMemberID.Text.Trim(), out int memberid) ||
+            if (!int.TryParse(txtMemberID.Text.Trim(), out int memberId) ||
                 string.IsNullOrWhiteSpace(txtName.Text) ||
                 string.IsNullOrWhiteSpace(txtEmail.Text) ||
                 string.IsNullOrWhiteSpace(txtPhone.Text) ||
@@ -96,40 +75,21 @@ namespace LibraryManagement
 
             try
             {
-                using (var conn = new NpgsqlConnection(connString))
-                {
-                    conn.Open();
-                    string updateQuery = @"UPDATE member 
-                                           SET name = @name, 
-                                               email = @email, 
-                                               phone = @phone, 
-                                               address = @address 
-                                           WHERE memberid = @memberid";
-                    using (var cmd = new NpgsqlCommand(updateQuery, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@name", txtName.Text.Trim());
-                        cmd.Parameters.AddWithValue("@email", txtEmail.Text.Trim());
-                        cmd.Parameters.AddWithValue("@phone", txtPhone.Text.Trim());
-                        cmd.Parameters.AddWithValue("@address", txtAddress.Text.Trim());
-                        cmd.Parameters.AddWithValue("@memberid", memberid);
+                _memberRepo.EditMember(
+                    memberId,
+                    txtName.Text.Trim(),
+                    txtEmail.Text.Trim(),
+                    txtPhone.Text.Trim(),
+                    txtAddress.Text.Trim()
+                );
 
-                        int rows = cmd.ExecuteNonQuery();
-                        if (rows > 0)
-                        {
-                            MessageBox.Show("Member data updated successfully!");
-                            this.DialogResult = DialogResult.OK;
-                            this.Close();
-                        }
-                        else
-                        {
-                            MessageBox.Show("No member found with this ID.");
-                        }
-                    }
-                }
+                MessageBox.Show("Member data updated successfully!");
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error updating member: {ex.Message}");
+                MessageBox.Show("Error updating member: " + ex.Message);
             }
         }
 
@@ -137,43 +97,30 @@ namespace LibraryManagement
         {
             this.Close();
         }
-        private void LoadMemberData(int memberid)
+        private void LoadMemberData(int memberId)
         {
             try
             {
-                using (var conn = new NpgsqlConnection(connString))
-                {
-                    conn.Open();
-                    string query = @"SELECT memberid, name, email, phone, address, membershipdate 
-                                 FROM member 
-                                 WHERE memberid = @memberid";
+                DataRow member = _memberRepo.GetMemberById(memberId);
 
-                    using (var cmd = new NpgsqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@memberid", memberid);
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                txtMemberID.Text = reader["memberid"].ToString();
-                                txtName.Text = reader["name"].ToString();
-                                txtEmail.Text = reader["email"].ToString();
-                                txtPhone.Text = reader["phone"].ToString();
-                                txtAddress.Text = reader["address"].ToString();
-                                dtpMembershipDate.Value = Convert.ToDateTime(reader["membershipdate"]);
-                            }
-                            else
-                            {
-                                MessageBox.Show("No member found with this ID.");
-                            }
-                        }
-                    }
+                if (member == null)
+                {
+                    MessageBox.Show("No member found with this ID.");
+                    return;
                 }
+
+                txtMemberID.Text = member["memberid"].ToString();
+                txtName.Text = member["name"].ToString();
+                txtEmail.Text = member["email"].ToString();
+                txtPhone.Text = member["phone"].ToString();
+                txtAddress.Text = member["address"].ToString();
+                dtpMembershipDate.Value = Convert.ToDateTime(member["membershipdate"]);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading member: {ex.Message}");
+                MessageBox.Show("Error loading member: " + ex.Message);
             }
         }
+
     }
 }

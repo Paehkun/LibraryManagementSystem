@@ -1,10 +1,28 @@
 ﻿using System.Windows.Forms;
+using System.Drawing;
 
 namespace LibraryManagement
 {
     partial class Report
     {
         private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.Panel topPanel;
+        private System.Windows.Forms.Panel filterPanel;
+        private System.Windows.Forms.Panel mainPanel;
+        private System.Windows.Forms.Button btnBack;
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Label lblMemberName;
+        private System.Windows.Forms.Label lblBookTitle;
+        private System.Windows.Forms.Label lblStartDate;
+        private System.Windows.Forms.Label lblEndDate;
+        private System.Windows.Forms.TextBox txtMemberName;
+        private System.Windows.Forms.TextBox txtBookTitle;
+        private System.Windows.Forms.DateTimePicker dtpStart;
+        private System.Windows.Forms.DateTimePicker dtpEnd;
+        private System.Windows.Forms.Button btnFilter;
+        private System.Windows.Forms.Button btnExportCsv;
+        private System.Windows.Forms.Button btnExportPdf;
+        private System.Windows.Forms.DataGridView dgvReport;
 
         protected override void Dispose(bool disposing)
         {
@@ -17,263 +35,299 @@ namespace LibraryManagement
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            panelTop = new Panel();
-            btnBack = new Button();
-            lblTitle = new Label();
-            panelFilter = new Panel();
-            btnExportPdf = new Button();
-            btnExportCsv = new Button();
-            btnFilter = new Button();
-            dtpEnd = new DateTimePicker();
-            dtpStart = new DateTimePicker();
-            txtBookTitle = new TextBox();
-            txtMemberName = new TextBox();
-            lblEnd = new Label();
-            lblStart = new Label();
-            lblBookTitle = new Label();
-            lblMember = new Label();
-            dgvReport = new DataGridView();
-            panelTop.SuspendLayout();
-            panelFilter.SuspendLayout();
+            topPanel = new System.Windows.Forms.Panel();
+            filterPanel = new System.Windows.Forms.Panel();
+            mainPanel = new System.Windows.Forms.Panel();
+            btnBack = new System.Windows.Forms.Button();
+            lblTitle = new System.Windows.Forms.Label();
+            lblMemberName = new System.Windows.Forms.Label();
+            lblBookTitle = new System.Windows.Forms.Label();
+            lblStartDate = new System.Windows.Forms.Label();
+            lblEndDate = new System.Windows.Forms.Label();
+            txtMemberName = new System.Windows.Forms.TextBox();
+            txtBookTitle = new System.Windows.Forms.TextBox();
+            dtpStart = new System.Windows.Forms.DateTimePicker();
+            dtpEnd = new System.Windows.Forms.DateTimePicker();
+            btnFilter = new System.Windows.Forms.Button();
+            btnExportCsv = new System.Windows.Forms.Button();
+            btnExportPdf = new System.Windows.Forms.Button();
+            dgvReport = new System.Windows.Forms.DataGridView();
+
+            topPanel.SuspendLayout();
+            filterPanel.SuspendLayout();
+            mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvReport).BeginInit();
             SuspendLayout();
+
             // 
-            // panelTop
+            // topPanel
             // 
-            panelTop.BackColor = Color.RoyalBlue;
-            panelTop.Controls.Add(btnBack);
-            panelTop.Controls.Add(lblTitle);
-            panelTop.Dock = DockStyle.Top;
-            panelTop.Location = new Point(0, 0);
-            panelTop.Name = "panelTop";
-            panelTop.Size = new Size(1100, 60);
-            panelTop.TabIndex = 2;
+            topPanel.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
+            topPanel.Controls.Add(btnBack);
+            topPanel.Controls.Add(lblTitle);
+            topPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            topPanel.Location = new System.Drawing.Point(0, 0);
+            topPanel.Name = "topPanel";
+            topPanel.Size = new System.Drawing.Size(1920, 70);
+            topPanel.TabIndex = 0;
+
             // 
             // btnBack
             // 
-            btnBack.BackColor = Color.RoyalBlue;
+            btnBack.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
             btnBack.FlatAppearance.BorderSize = 0;
-            btnBack.FlatStyle = FlatStyle.Flat;
-            btnBack.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(20, 12);
+            btnBack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(52, 152, 219);
+            btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnBack.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            btnBack.ForeColor = System.Drawing.Color.White;
+            btnBack.Location = new System.Drawing.Point(20, 15);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(90, 35);
+            btnBack.Size = new System.Drawing.Size(100, 40);
             btnBack.TabIndex = 0;
-            btnBack.Text = "← Back";
+            btnBack.Text = "⬅️ Back";
             btnBack.UseVisualStyleBackColor = false;
+            btnBack.Cursor = System.Windows.Forms.Cursors.Hand;
             btnBack.Click += btnBack_Click;
+
             // 
             // lblTitle
             // 
-            lblTitle.AutoSize = true;
-            lblTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblTitle.ForeColor = Color.White;
-            lblTitle.Location = new Point(140, 15);
+            lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
+            lblTitle.ForeColor = System.Drawing.Color.White;
+            lblTitle.Location = new System.Drawing.Point(140, 15);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(249, 25);
+            lblTitle.Size = new System.Drawing.Size(400, 40);
             lblTitle.TabIndex = 1;
-            lblTitle.Text = "📊 Report Returned Books";
+            lblTitle.Text = "📊 Returned Books Report";
+            lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+
             // 
-            // panelFilter
+            // filterPanel
             // 
-            panelFilter.BackColor = Color.AliceBlue;
-            panelFilter.Controls.Add(btnExportPdf);
-            panelFilter.Controls.Add(btnExportCsv);
-            panelFilter.Controls.Add(btnFilter);
-            panelFilter.Controls.Add(dtpEnd);
-            panelFilter.Controls.Add(dtpStart);
-            panelFilter.Controls.Add(txtBookTitle);
-            panelFilter.Controls.Add(txtMemberName);
-            panelFilter.Controls.Add(lblEnd);
-            panelFilter.Controls.Add(lblStart);
-            panelFilter.Controls.Add(lblBookTitle);
-            panelFilter.Controls.Add(lblMember);
-            panelFilter.Dock = DockStyle.Top;
-            panelFilter.Location = new Point(0, 60);
-            panelFilter.Name = "panelFilter";
-            panelFilter.Size = new Size(1100, 120);
-            panelFilter.TabIndex = 1;
+            filterPanel.BackColor = System.Drawing.Color.White;
+            filterPanel.Controls.Add(lblMemberName);
+            filterPanel.Controls.Add(txtMemberName);
+            filterPanel.Controls.Add(lblBookTitle);
+            filterPanel.Controls.Add(txtBookTitle);
+            filterPanel.Controls.Add(lblStartDate);
+            filterPanel.Controls.Add(dtpStart);
+            filterPanel.Controls.Add(lblEndDate);
+            filterPanel.Controls.Add(dtpEnd);
+            filterPanel.Controls.Add(btnFilter);
+            filterPanel.Controls.Add(btnExportCsv);
+            filterPanel.Controls.Add(btnExportPdf);
+            filterPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            filterPanel.Location = new System.Drawing.Point(0, 70);
+            filterPanel.Name = "filterPanel";
+            filterPanel.Padding = new System.Windows.Forms.Padding(40, 20, 40, 20);
+            filterPanel.Size = new System.Drawing.Size(1920, 120);
+            filterPanel.TabIndex = 1;
+
             // 
-            // btnExportPdf
+            // lblMemberName
             // 
-            btnExportPdf.BackColor = Color.DarkRed;
-            btnExportPdf.FlatStyle = FlatStyle.Flat;
-            btnExportPdf.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnExportPdf.ForeColor = Color.White;
-            btnExportPdf.Location = new Point(160, 70);
-            btnExportPdf.Name = "btnExportPdf";
-            btnExportPdf.Size = new Size(120, 30);
-            btnExportPdf.TabIndex = 0;
-            btnExportPdf.Text = "⬇️ Export PDF";
-            btnExportPdf.UseVisualStyleBackColor = false;
-            btnExportPdf.Click += btnExportPdf_Click;
-            // 
-            // btnExportCsv
-            // 
-            btnExportCsv.BackColor = Color.ForestGreen;
-            btnExportCsv.FlatStyle = FlatStyle.Flat;
-            btnExportCsv.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnExportCsv.ForeColor = Color.White;
-            btnExportCsv.Location = new Point(20, 70);
-            btnExportCsv.Name = "btnExportCsv";
-            btnExportCsv.Size = new Size(120, 30);
-            btnExportCsv.TabIndex = 1;
-            btnExportCsv.Text = "⬇️ Export CSV";
-            btnExportCsv.UseVisualStyleBackColor = false;
-            btnExportCsv.Click += btnExportCsv_Click;
-            // 
-            // btnFilter
-            // 
-            btnFilter.BackColor = Color.SteelBlue;
-            btnFilter.FlatStyle = FlatStyle.Flat;
-            btnFilter.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnFilter.ForeColor = Color.White;
-            btnFilter.Location = new Point(1000, 16);
-            btnFilter.Name = "btnFilter";
-            btnFilter.Size = new Size(80, 30);
-            btnFilter.TabIndex = 2;
-            btnFilter.Text = "Filter";
-            btnFilter.UseVisualStyleBackColor = false;
-            btnFilter.Click += btnFilter_Click;
-            // 
-            // dtpEnd
-            // 
-            dtpEnd.Location = new Point(810, 18);
-            dtpEnd.Name = "dtpEnd";
-            dtpEnd.Size = new Size(170, 23);
-            dtpEnd.TabIndex = 3;
-            // 
-            // dtpStart
-            // 
-            dtpStart.Location = new Point(610, 18);
-            dtpStart.Name = "dtpStart";
-            dtpStart.Size = new Size(170, 23);
-            dtpStart.TabIndex = 4;
-            // 
-            // txtBookTitle
-            // 
-            txtBookTitle.Location = new Point(340, 18);
-            txtBookTitle.Name = "txtBookTitle";
-            txtBookTitle.Size = new Size(150, 23);
-            txtBookTitle.TabIndex = 5;
+            lblMemberName.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            lblMemberName.ForeColor = System.Drawing.Color.FromArgb(52, 73, 94);
+            lblMemberName.Location = new System.Drawing.Point(50, 25);
+            lblMemberName.Name = "lblMemberName";
+            lblMemberName.Size = new System.Drawing.Size(120, 25);
+            lblMemberName.TabIndex = 0;
+            lblMemberName.Text = "👤 Member:";
+            lblMemberName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+
             // 
             // txtMemberName
             // 
-            txtMemberName.Location = new Point(120, 18);
+            txtMemberName.Font = new System.Drawing.Font("Segoe UI", 10F);
+            txtMemberName.Location = new System.Drawing.Point(170, 25);
             txtMemberName.Name = "txtMemberName";
-            txtMemberName.Size = new Size(150, 23);
-            txtMemberName.TabIndex = 6;
-            // 
-            // lblEnd
-            // 
-            lblEnd.AutoSize = true;
-            lblEnd.Location = new Point(740, 20);
-            lblEnd.Name = "lblEnd";
-            lblEnd.Size = new Size(22, 15);
-            lblEnd.TabIndex = 7;
-            lblEnd.Text = "To:";
-            // 
-            // lblStart
-            // 
-            lblStart.AutoSize = true;
-            lblStart.Location = new Point(550, 20);
-            lblStart.Name = "lblStart";
-            lblStart.Size = new Size(53, 15);
-            lblStart.TabIndex = 8;
-            lblStart.Text = "📅 From:";
+            txtMemberName.PlaceholderText = "Search by member name...";
+            txtMemberName.Size = new System.Drawing.Size(200, 25);
+            txtMemberName.TabIndex = 1;
+
             // 
             // lblBookTitle
             // 
-            lblBookTitle.AutoSize = true;
-            lblBookTitle.Location = new Point(280, 20);
+            lblBookTitle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            lblBookTitle.ForeColor = System.Drawing.Color.FromArgb(52, 73, 94);
+            lblBookTitle.Location = new System.Drawing.Point(400, 25);
             lblBookTitle.Name = "lblBookTitle";
-            lblBookTitle.Size = new Size(52, 15);
-            lblBookTitle.TabIndex = 9;
+            lblBookTitle.Size = new System.Drawing.Size(100, 25);
+            lblBookTitle.TabIndex = 2;
             lblBookTitle.Text = "📚 Book:";
+            lblBookTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+
             // 
-            // lblMember
+            // txtBookTitle
             // 
-            lblMember.AutoSize = true;
-            lblMember.Location = new Point(20, 20);
-            lblMember.Name = "lblMember";
-            lblMember.Size = new Size(90, 15);
-            lblMember.TabIndex = 10;
-            lblMember.Text = "Member Name:";
+            txtBookTitle.Font = new System.Drawing.Font("Segoe UI", 10F);
+            txtBookTitle.Location = new System.Drawing.Point(500, 25);
+            txtBookTitle.Name = "txtBookTitle";
+            txtBookTitle.PlaceholderText = "Search by book title...";
+            txtBookTitle.Size = new System.Drawing.Size(200, 25);
+            txtBookTitle.TabIndex = 3;
+
+            // 
+            // lblStartDate
+            // 
+            lblStartDate.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            lblStartDate.ForeColor = System.Drawing.Color.FromArgb(52, 73, 94);
+            lblStartDate.Location = new System.Drawing.Point(730, 25);
+            lblStartDate.Name = "lblStartDate";
+            lblStartDate.Size = new System.Drawing.Size(80, 25);
+            lblStartDate.TabIndex = 4;
+            lblStartDate.Text = "📅 From:";
+            lblStartDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+
+            // 
+            // dtpStart
+            // 
+            dtpStart.Font = new System.Drawing.Font("Segoe UI", 10F);
+            dtpStart.Location = new System.Drawing.Point(810, 25);
+            dtpStart.Name = "dtpStart";
+            dtpStart.Size = new System.Drawing.Size(180, 25);
+            dtpStart.TabIndex = 5;
+
+            // 
+            // lblEndDate
+            // 
+            lblEndDate.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            lblEndDate.ForeColor = System.Drawing.Color.FromArgb(52, 73, 94);
+            lblEndDate.Location = new System.Drawing.Point(1010, 25);
+            lblEndDate.Name = "lblEndDate";
+            lblEndDate.Size = new System.Drawing.Size(50, 25);
+            lblEndDate.TabIndex = 6;
+            lblEndDate.Text = "To:";
+            lblEndDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+
+            // 
+            // dtpEnd
+            // 
+            dtpEnd.Font = new System.Drawing.Font("Segoe UI", 10F);
+            dtpEnd.Location = new System.Drawing.Point(1060, 25);
+            dtpEnd.Name = "dtpEnd";
+            dtpEnd.Size = new System.Drawing.Size(180, 25);
+            dtpEnd.TabIndex = 7;
+
+            // 
+            // btnFilter
+            // 
+            btnFilter.BackColor = System.Drawing.Color.FromArgb(52, 152, 219);
+            btnFilter.FlatAppearance.BorderSize = 0;
+            btnFilter.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(41, 128, 185);
+            btnFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnFilter.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            btnFilter.ForeColor = System.Drawing.Color.White;
+            btnFilter.Location = new System.Drawing.Point(1270, 22);
+            btnFilter.Name = "btnFilter";
+            btnFilter.Size = new System.Drawing.Size(100, 32);
+            btnFilter.TabIndex = 8;
+            btnFilter.Text = "🔍 Filter";
+            btnFilter.UseVisualStyleBackColor = false;
+            btnFilter.Cursor = System.Windows.Forms.Cursors.Hand;
+            btnFilter.Click += btnFilter_Click;
+
+            // 
+            // btnExportCsv
+            // 
+            btnExportCsv.BackColor = System.Drawing.Color.FromArgb(46, 204, 113);
+            btnExportCsv.FlatAppearance.BorderSize = 0;
+            btnExportCsv.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(39, 174, 96);
+            btnExportCsv.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnExportCsv.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            btnExportCsv.ForeColor = System.Drawing.Color.White;
+            btnExportCsv.Location = new System.Drawing.Point(50, 70);
+            btnExportCsv.Name = "btnExportCsv";
+            btnExportCsv.Size = new System.Drawing.Size(140, 35);
+            btnExportCsv.TabIndex = 9;
+            btnExportCsv.Text = "📥 Export CSV";
+            btnExportCsv.UseVisualStyleBackColor = false;
+            btnExportCsv.Cursor = System.Windows.Forms.Cursors.Hand;
+            btnExportCsv.Click += btnExportCsv_Click;
+
+            // 
+            // btnExportPdf
+            // 
+            btnExportPdf.BackColor = System.Drawing.Color.FromArgb(231, 76, 60);
+            btnExportPdf.FlatAppearance.BorderSize = 0;
+            btnExportPdf.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(192, 57, 43);
+            btnExportPdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnExportPdf.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            btnExportPdf.ForeColor = System.Drawing.Color.White;
+            btnExportPdf.Location = new System.Drawing.Point(210, 70);
+            btnExportPdf.Name = "btnExportPdf";
+            btnExportPdf.Size = new System.Drawing.Size(140, 35);
+            btnExportPdf.TabIndex = 10;
+            btnExportPdf.Text = "📥 Export PDF";
+            btnExportPdf.UseVisualStyleBackColor = false;
+            btnExportPdf.Cursor = System.Windows.Forms.Cursors.Hand;
+            btnExportPdf.Click += btnExportPdf_Click;
+
+            // 
+            // mainPanel
+            // 
+            mainPanel.BackColor = System.Drawing.Color.FromArgb(236, 240, 241);
+            mainPanel.Controls.Add(dgvReport);
+            mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            mainPanel.Location = new System.Drawing.Point(0, 190);
+            mainPanel.Name = "mainPanel";
+            mainPanel.Padding = new System.Windows.Forms.Padding(50);
+            mainPanel.Size = new System.Drawing.Size(1920, 890);
+            mainPanel.TabIndex = 2;
+
             // 
             // dgvReport
             // 
             dgvReport.AllowUserToAddRows = false;
             dgvReport.AllowUserToDeleteRows = false;
-            dgvReport.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvReport.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvReport.BackgroundColor = Color.White;
-            dgvReport.BorderStyle = BorderStyle.None;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = Color.FromArgb(33, 150, 243);
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = Color.White;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvReport.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            dgvReport.ColumnHeadersHeight = 42;
-            dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Window;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 10F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle4.Padding = new Padding(8, 6, 8, 6);
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
-            dgvReport.DefaultCellStyle = dataGridViewCellStyle4;
+            dgvReport.BackgroundColor = System.Drawing.Color.White;
+            dgvReport.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dgvReport.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(52, 152, 219);
+            dgvReport.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            dgvReport.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            dgvReport.ColumnHeadersDefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dgvReport.ColumnHeadersHeight = 45;
+            dgvReport.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10F);
+            dgvReport.DefaultCellStyle.BackColor = System.Drawing.Color.White;
+            dgvReport.DefaultCellStyle.ForeColor = System.Drawing.Color.FromArgb(52, 73, 94);
+            dgvReport.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(52, 152, 219);
+            dgvReport.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+            dgvReport.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            dgvReport.AlternatingRowsDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(236, 240, 241);
             dgvReport.EnableHeadersVisualStyles = false;
-            dgvReport.GridColor = Color.LightGray;
-            dgvReport.Location = new Point(320, 180);
+            dgvReport.GridColor = System.Drawing.Color.FromArgb(189, 195, 199);
+            dgvReport.Location = new System.Drawing.Point(50, 30);
             dgvReport.Name = "dgvReport";
             dgvReport.ReadOnly = true;
             dgvReport.RowHeadersVisible = false;
-            dgvReport.Size = new Size(480, 500);
+            dgvReport.RowTemplate.Height = 45;
+            dgvReport.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            dgvReport.Size = new System.Drawing.Size(1820, 810);
             dgvReport.TabIndex = 0;
+            dgvReport.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvReport.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+
             // 
             // Report
             // 
-            ClientSize = new Size(1100, 700);
-            Controls.Add(dgvReport);
-            Controls.Add(panelFilter);
-            Controls.Add(panelTop);
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(1920, 1080);
+            Controls.Add(mainPanel);
+            Controls.Add(filterPanel);
+            Controls.Add(topPanel);
             Name = "Report";
-            StartPosition = FormStartPosition.CenterScreen;
-            Text = "Report - Returned Books";
-            WindowState = FormWindowState.Maximized;
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            Text = "📊 Returned Books Report - Library System";
+            WindowState = System.Windows.Forms.FormWindowState.Maximized;
             Load += Report_Load;
-            panelTop.ResumeLayout(false);
-            panelTop.PerformLayout();
-            panelFilter.ResumeLayout(false);
-            panelFilter.PerformLayout();
+
+            topPanel.ResumeLayout(false);
+            filterPanel.ResumeLayout(false);
+            filterPanel.PerformLayout();
+            mainPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvReport).EndInit();
             ResumeLayout(false);
         }
-
-
-        private System.Windows.Forms.Panel panelTop;
-        private System.Windows.Forms.Button btnBack;
-        private System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.Panel panelFilter;
-        private System.Windows.Forms.Label lblBookTitle;
-        private System.Windows.Forms.Label lblMember;
-        private System.Windows.Forms.TextBox txtBookTitle;
-        private System.Windows.Forms.TextBox txtMemberName;
-        private System.Windows.Forms.Label lblStart;
-        private System.Windows.Forms.Label lblEnd;
-        private System.Windows.Forms.DateTimePicker dtpStart;
-        private System.Windows.Forms.DateTimePicker dtpEnd;
-        private System.Windows.Forms.Button btnFilter;
-        private System.Windows.Forms.Button btnExportCsv;
-        private System.Windows.Forms.Button btnExportPdf;
-        private System.Windows.Forms.DataGridView dgvReport;
     }
 }

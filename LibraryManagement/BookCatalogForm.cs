@@ -19,7 +19,6 @@ namespace LibraryManagementSystem
         private static readonly HttpClient httpClient = new HttpClient();
         private readonly string cacheDir = Path.Combine(Application.StartupPath, "image_cache");
 
-        // Pagination variables
         private int currentPage = 1;
         private int itemsPerPage = 12;
         private int totalPages = 1;
@@ -66,14 +65,14 @@ namespace LibraryManagementSystem
                 "36",
                 "48"
             });
-            cmbItemsPerPage.SelectedIndex = 0; // Default to 12
+            cmbItemsPerPage.SelectedIndex = 0;
             cmbItemsPerPage.SelectedIndexChanged += async (s, e) => await OnItemsPerPageChanged();
         }
 
         private async Task OnItemsPerPageChanged()
         {
             itemsPerPage = int.Parse(cmbItemsPerPage.SelectedItem.ToString());
-            currentPage = 1; // Reset to first page
+            currentPage = 1;
             await LoadBooks(currentSearch);
         }
 
@@ -98,27 +97,31 @@ namespace LibraryManagementSystem
             Button btnFirst = new Button
             {
                 Text = "⏮ First",
-                Width = 80,
-                Height = 35,
-                Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                BackColor = Color.SteelBlue,
+                Width = 90,
+                Height = 38,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                BackColor = Color.FromArgb(52, 152, 219),
                 ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
             };
+            btnFirst.FlatAppearance.BorderSize = 0;
             btnFirst.Click += async (s, e) => await GoToPage(1);
             paginationPanel.Controls.Add(btnFirst);
 
             Button btnPrev = new Button
             {
                 Text = "◀ Prev",
-                Width = 80,
-                Height = 35,
-                Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                BackColor = Color.SteelBlue,
+                Width = 90,
+                Height = 38,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                BackColor = Color.FromArgb(52, 152, 219),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Margin = new Padding(5, 0, 5, 0)
+                Margin = new Padding(8, 0, 8, 0),
+                Cursor = Cursors.Hand
             };
+            btnPrev.FlatAppearance.BorderSize = 0;
             btnPrev.Click += async (s, e) => await GoToPage(currentPage - 1);
             paginationPanel.Controls.Add(btnPrev);
 
@@ -126,37 +129,41 @@ namespace LibraryManagementSystem
             {
                 Name = "lblPageInfo",
                 Text = "Page 1 of 1",
-                Font = new Font("Segoe UI", 10, FontStyle.Regular),
+                Font = new Font("Segoe UI", 11, FontStyle.Regular),
                 AutoSize = true,
-                Margin = new Padding(10, 8, 10, 0),
-                ForeColor = Color.Black
+                Margin = new Padding(15, 10, 15, 0),
+                ForeColor = Color.FromArgb(52, 73, 94)
             };
             paginationPanel.Controls.Add(lblPageInfo);
 
             Button btnNext = new Button
             {
                 Text = "Next ▶",
-                Width = 80,
-                Height = 35,
-                Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                BackColor = Color.SteelBlue,
+                Width = 90,
+                Height = 38,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                BackColor = Color.FromArgb(52, 152, 219),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Margin = new Padding(5, 0, 5, 0)
+                Margin = new Padding(8, 0, 8, 0),
+                Cursor = Cursors.Hand
             };
+            btnNext.FlatAppearance.BorderSize = 0;
             btnNext.Click += async (s, e) => await GoToPage(currentPage + 1);
             paginationPanel.Controls.Add(btnNext);
 
             Button btnLast = new Button
             {
                 Text = "Last ⏭",
-                Width = 80,
-                Height = 35,
-                Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                BackColor = Color.SteelBlue,
+                Width = 90,
+                Height = 38,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                BackColor = Color.FromArgb(52, 152, 219),
                 ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
             };
+            btnLast.FlatAppearance.BorderSize = 0;
             btnLast.Click += async (s, e) => await GoToPage(totalPages);
             paginationPanel.Controls.Add(btnLast);
         }
@@ -176,10 +183,12 @@ namespace LibraryManagementSystem
                     if (btn.Text.Contains("First") || btn.Text.Contains("Prev"))
                     {
                         btn.Enabled = currentPage > 1;
+                        btn.BackColor = currentPage > 1 ? Color.FromArgb(52, 152, 219) : Color.Gray;
                     }
                     else if (btn.Text.Contains("Next") || btn.Text.Contains("Last"))
                     {
                         btn.Enabled = currentPage < totalPages;
+                        btn.BackColor = currentPage < totalPages ? Color.FromArgb(52, 152, 219) : Color.Gray;
                     }
                 }
             }
@@ -198,7 +207,7 @@ namespace LibraryManagementSystem
             await LoadBooks();
         }
 
-        private void btn_back_Click(object sender, EventArgs e)
+        private void btnBack_Click(object sender, EventArgs e)
         {
             if (UserSession.Role == "admin")
             {
@@ -232,14 +241,16 @@ namespace LibraryManagementSystem
                     Button btnAll = new Button
                     {
                         Text = "View All",
-                        Width = 110,
-                        Height = 40,
-                        Font = new Font("Segoe UI", 9, FontStyle.Regular),
-                        BackColor = Color.SteelBlue,
+                        Width = 120,
+                        Height = 42,
+                        Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                        BackColor = Color.FromArgb(46, 204, 113),
                         ForeColor = Color.White,
                         FlatStyle = FlatStyle.Flat,
-                        Margin = new Padding(3)
+                        Margin = new Padding(5),
+                        Cursor = Cursors.Hand
                     };
+                    btnAll.FlatAppearance.BorderSize = 0;
                     btnAll.Click += async (s, e) =>
                     {
                         currentCategory = "All";
@@ -253,14 +264,16 @@ namespace LibraryManagementSystem
                         Button btn = new Button
                         {
                             Text = cat,
-                            Width = 110,
-                            Height = 40,
-                            Font = new Font("Segoe UI", 9, FontStyle.Regular),
-                            BackColor = Color.CadetBlue,
+                            Width = 120,
+                            Height = 42,
+                            Font = new Font("Segoe UI", 10, FontStyle.Regular),
+                            BackColor = Color.FromArgb(52, 152, 219),
                             ForeColor = Color.White,
                             FlatStyle = FlatStyle.Flat,
-                            Margin = new Padding(3)
+                            Margin = new Padding(5),
+                            Cursor = Cursors.Hand
                         };
+                        btn.FlatAppearance.BorderSize = 0;
                         btn.Click += async (s, e) =>
                         {
                             currentCategory = cat;
@@ -291,21 +304,19 @@ namespace LibraryManagementSystem
             Label loadingLabel = new Label
             {
                 Text = "Loading books...",
-                Font = new Font("Segoe UI", 11, FontStyle.Italic),
+                Font = new Font("Segoe UI", 12, FontStyle.Italic),
                 ForeColor = Color.Gray,
                 AutoSize = true,
-                Margin = new Padding(20)
+                Margin = new Padding(30)
             };
             flowPanel.Controls.Add(loadingLabel);
             flowPanel.Refresh();
 
-            // Use repository to get count
             totalBooks = _bookRepo.GetBookCount(search, currentCategory);
             totalPages = (int)Math.Ceiling((double)totalBooks / itemsPerPage);
 
             if (totalPages == 0) totalPages = 1;
 
-            // Use repository to get paginated data
             DataTable dt = _bookRepo.GetBooksPaginated(
                 search,
                 currentCategory,
@@ -320,10 +331,10 @@ namespace LibraryManagementSystem
                 flowPanel.Controls.Add(new Label
                 {
                     Text = "No books found.",
-                    Font = new Font("Segoe UI", 11, FontStyle.Italic),
+                    Font = new Font("Segoe UI", 12, FontStyle.Italic),
                     ForeColor = Color.Gray,
                     AutoSize = true,
-                    Margin = new Padding(20)
+                    Margin = new Padding(30)
                 });
                 UpdatePaginationControls();
                 return;
@@ -358,18 +369,24 @@ namespace LibraryManagementSystem
         {
             Panel card = new Panel
             {
-                Width = 250,
-                Height = 330,
+                Width = 260,
+                Height = 350,
                 BackColor = Color.White,
-                Margin = new Padding(10),
-                BorderStyle = BorderStyle.FixedSingle
+                Margin = new Padding(12),
+                BorderStyle = BorderStyle.None
+            };
+
+            card.Paint += (s, e) =>
+            {
+                e.Graphics.DrawRectangle(new Pen(Color.FromArgb(189, 195, 199), 1),
+                    0, 0, card.Width - 1, card.Height - 1);
             };
 
             PictureBox pic = new PictureBox
             {
-                Width = 220,
-                Height = 180,
-                Location = new Point(15, 10),
+                Width = 230,
+                Height = 190,
+                Location = new Point(15, 15),
                 SizeMode = PictureBoxSizeMode.Zoom,
                 BorderStyle = BorderStyle.None,
                 Image = img
@@ -379,11 +396,12 @@ namespace LibraryManagementSystem
             {
                 Text = row["title"].ToString(),
                 Font = new Font("Segoe UI", 11, FontStyle.Bold),
-                ForeColor = Color.FromArgb(30, 60, 90),
+                ForeColor = Color.FromArgb(52, 73, 94),
                 AutoSize = false,
-                Width = 220,
-                Height = 30,
-                Location = new Point(15, 200)
+                Width = 230,
+                Height = 35,
+                Location = new Point(15, 215),
+                TextAlign = ContentAlignment.TopLeft
             };
 
             Label lblAuthor = new Label
@@ -392,34 +410,35 @@ namespace LibraryManagementSystem
                 Font = new Font("Segoe UI", 9, FontStyle.Italic),
                 ForeColor = Color.Gray,
                 AutoSize = false,
-                Width = 220,
-                Height = 25,
-                Location = new Point(15, 235)
+                Width = 230,
+                Height = 22,
+                Location = new Point(15, 255)
             };
 
             Label lblCategory = new Label
             {
                 Text = row["category"].ToString(),
                 Font = new Font("Segoe UI", 9, FontStyle.Regular),
-                ForeColor = Color.DimGray,
+                ForeColor = Color.FromArgb(52, 152, 219),
                 AutoSize = false,
-                Width = 220,
+                Width = 230,
                 Height = 20,
-                Location = new Point(15, 260)
+                Location = new Point(15, 280)
             };
 
             Button btnDetails = new Button
             {
                 Text = "View Details",
                 Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                BackColor = Color.SteelBlue,
+                BackColor = Color.FromArgb(52, 152, 219),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Width = 110,
-                Height = 30,
-                Location = new Point(15, 285)
+                Width = 120,
+                Height = 32,
+                Location = new Point(15, 305),
+                Cursor = Cursors.Hand
             };
-
+            btnDetails.FlatAppearance.BorderSize = 0;
             btnDetails.Click += (s, e) => ShowBookDetails(row, img);
 
             card.Controls.Add(pic);
@@ -455,7 +474,7 @@ namespace LibraryManagementSystem
             {
                 Text = row["title"].ToString(),
                 Font = new Font("Segoe UI", 14, FontStyle.Bold),
-                ForeColor = Color.FromArgb(30, 60, 90),
+                ForeColor = Color.FromArgb(52, 73, 94),
                 AutoSize = false,
                 Width = detailsForm.ClientSize.Width - 40,
                 Location = new Point(20, 370),
@@ -466,7 +485,7 @@ namespace LibraryManagementSystem
             {
                 Text = $"By: {row["author"]}",
                 Font = new Font("Segoe UI", 11, FontStyle.Italic),
-                ForeColor = Color.DimGray,
+                ForeColor = Color.Gray,
                 AutoSize = false,
                 Width = detailsForm.ClientSize.Width - 40,
                 Location = new Point(20, 410),
@@ -477,7 +496,7 @@ namespace LibraryManagementSystem
             {
                 Text = $"ISBN: {row["isbn"]}",
                 Font = new Font("Segoe UI", 11, FontStyle.Regular),
-                ForeColor = Color.Black,
+                ForeColor = Color.FromArgb(52, 73, 94),
                 AutoSize = false,
                 Width = detailsForm.ClientSize.Width - 40,
                 Location = new Point(20, 450),
@@ -488,7 +507,7 @@ namespace LibraryManagementSystem
             {
                 Text = $"Category: {row["category"]}",
                 Font = new Font("Segoe UI", 11, FontStyle.Regular),
-                ForeColor = Color.Black,
+                ForeColor = Color.FromArgb(52, 73, 94),
                 AutoSize = false,
                 Width = detailsForm.ClientSize.Width - 40,
                 Location = new Point(20, 490),
@@ -498,14 +517,16 @@ namespace LibraryManagementSystem
             Button btnClose = new Button
             {
                 Text = "Close",
-                BackColor = Color.SteelBlue,
+                BackColor = Color.FromArgb(52, 152, 219),
                 ForeColor = Color.White,
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
                 FlatStyle = FlatStyle.Flat,
                 Width = 100,
                 Height = 35,
-                Location = new Point((detailsForm.ClientSize.Width - 100) / 2, 520)
+                Location = new Point((detailsForm.ClientSize.Width - 100) / 2, 520),
+                Cursor = Cursors.Hand
             };
+            btnClose.FlatAppearance.BorderSize = 0;
             btnClose.Click += (s, e) => detailsForm.Close();
 
             detailsForm.Controls.Add(pic);

@@ -109,12 +109,27 @@ namespace LibraryManagementSystem.Domain.Repository
                 }
             }
         }
-        public void DeleteMember(int memberId)
+        public bool MemberExists(int memberId)
         {
             using (var conn = _db.GetConnection())
             {
                 conn.Open();
-                string query = "DELETE FROM member WHERE memberid = @id";
+
+                string query = "SELECT COUNT(*) FROM member WHERE memberid = @id AND is_deleted = FALSE";
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", memberId);
+                    return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+                }
+            }
+        }
+        public void SoftDeleteMember(int memberId)
+        {
+            using (var conn = _db.GetConnection())
+            {
+                conn.Open();
+
+                string query = "UPDATE member SET is_deleted = TRUE WHERE memberid = @id";
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@id", memberId);

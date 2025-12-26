@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using LibraryManagementSystem.Domain.Repository;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,11 +12,16 @@ using System.Windows.Forms;
 
 namespace LibraryManagement
 {
+    
     public partial class DeleteMemberForm : Form
     {
+        private MemberRepository _memberRepo;
         public DeleteMemberForm()
         {
             InitializeComponent();
+            DBConnection db = new DBConnection();
+            _memberRepo = new MemberRepository(db);
+
         }
 
         private void DeleteMemberForm_Load(object sender, EventArgs e)
@@ -30,42 +36,22 @@ namespace LibraryManagement
                 return;
             }
 
-            string connString = "Host=localhost;Port=5432;Username=postgres;Password=db123;Database=library_db;";
-
             try
             {
-                using (var conn = new NpgsqlConnection(connString))
+
+                if (!_memberRepo.MemberExists(memberID))
                 {
-                    conn.Open();
-
-                    // Check if member exists
-                    string checkQuery = "SELECT COUNT(*) FROM member WHERE memberid = @member";
-                    using (var checkCmd = new NpgsqlCommand(checkQuery, conn))
-                    {
-                        checkCmd.Parameters.AddWithValue("@member", memberID);
-                        int count = Convert.ToInt32(checkCmd.ExecuteScalar());
-                        if (count == 0)
-                        {
-                            MessageBox.Show("Member with this ID does not exist.");
-                            return;
-                        }
-                    }
-
-                    // Confirm delete
-                    if (MessageBox.Show("Are you sure you want to delete this member?",
-                        "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
-                    {
-                        return;
-                    }
-
-                    // Soft delete: update is_deleted column
-                    string deleteQuery = "UPDATE member SET is_deleted = TRUE WHERE memberid = @member";
-                    using (var deleteCmd = new NpgsqlCommand(deleteQuery, conn))
-                    {
-                        deleteCmd.Parameters.AddWithValue("@member", memberID);
-                        deleteCmd.ExecuteNonQuery();
-                    }
+                    MessageBox.Show("Member with this ID does not exist.");
+                    return;
                 }
+
+                if (MessageBox.Show("Are you sure you want to delete this member?",
+                    "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                {
+                    return;
+                }
+
+                _memberRepo.SoftDeleteMember(memberID);
 
                 MessageBox.Show("Member deleted successfully!");
                 this.DialogResult = DialogResult.OK;
@@ -76,6 +62,7 @@ namespace LibraryManagement
                 MessageBox.Show($"Error deleting member: {ex.Message}");
             }
         }
+
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
